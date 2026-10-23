@@ -124,7 +124,10 @@ button.primary { background: var(--accent-bg); color: var(--accent-text); border
 .messages li.ok { color: var(--ok); }
 
 .flow { position: relative; height: calc(24 * 1.55em); overflow: hidden; }
-#flow.flow { height: var(--flow-h, calc(24 * 1.55em)); }
+/* Der Ablauf füllt die Karte: Ihre Höhe bestimmt nur, wie viel er mindestens bekommt. Wird die Karte durch die Spalte rechts
+   (Bildschirm und Register) höher, wächst der Ablauf mit; die Hinweiszeile bleibt am unteren Rand. */
+.flow-card { display: flex; flex-direction: column; }
+.flow-card #flow.flow { flex: 1 1 var(--flow-h, calc(24 * 1.55em)); height: auto; min-height: 120px; }
 #disasm.flow { height: calc(18 * 1.55em); }
 .flow .row { display: flex; gap: 10px; padding: 0 4px; white-space: pre; cursor: pointer; border-radius: 3px; }
 .flow .row:hover { background: var(--surface-2); }

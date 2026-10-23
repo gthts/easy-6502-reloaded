@@ -143,5 +143,13 @@ export function createFlow(root, machine, { onToggleBp, onJump, ui }) {
     if (act) root.scrollTop = Math.max(0, act.offsetTop - (root.clientHeight - act.offsetHeight) / 2);
   }
 
+  // Ändert sich die Höhe des Fensters (Ziehen, Fenstergröße), die aktive Zeile wieder in die Mitte rücken
+  if (typeof ResizeObserver === 'function') {
+    new ResizeObserver(() => {
+      const act = root.querySelector('.row.active');
+      if (act) root.scrollTop = Math.max(0, act.offsetTop - (root.clientHeight - act.offsetHeight) / 2);
+    }).observe(root);
+  }
+
   return { update, refreshLabels: () => fillLabelSelect(ui.select, machine) };
 }
