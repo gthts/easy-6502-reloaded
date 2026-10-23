@@ -1,0 +1,22 @@
+# Easy 6502 Reloaded
+
+Eine Lern- und Entwicklungsumgebung für die 6502-Assemblersprache im Browser.
+Abgeleitet von [Easy 6502](https://skilldrick.github.io/easy6502/) (Nick Morgan)
+und dem [6502 Assembler und Simulator](https://itema-as.github.io/6502js/)
+(Stian Soreng, Nick Morgan, Torkild Ulvøy Resheim).
+
+Status: Planung. Den Fortschritt verfolgt [TODO.md](TODO.md).
+
+## Ziele
+
+- Ein zentraler Emulator statt vieler Einzelinstanzen
+- Ablaufansicht, Disassemblierung, Monitor und Haltepunkte, unabhängig voneinander und von der Emulatorschleife entkoppelt
+- Ein einklappbares Lehrbuch mit Kapitelmarken und Beispielen, die sich per Knopfdruck in den Editor übernehmen lassen
+- Eine Referenz (Adressierungsarten, Befehle, Opcodes) mit Sprungmarken
+- Viele Beispielprogramme
+- Keine Fremdbibliotheken, keine Bauwerkzeuge: reines HTML, CSS und JavaScript, lauffähig auf GitHub Pages
+
+## Lizenz
+
+GNU General Public License v3 (siehe [LICENSE](LICENSE)); Lehrtexte nach CC BY 4.0.
+Einzelheiten und Herkunftsnachweise in [NOTICE.md](NOTICE.md).
