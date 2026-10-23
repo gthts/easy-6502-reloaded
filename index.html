@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Easy 6502 Reloaded</title>
+  <link rel="stylesheet" href="src/ui/styles.css">
+  <script type="module" src="src/ui/main.js"></script>
+</head>
+<body>
+<header class="topbar">
+  <h1 class="brand">Easy 6502 Reloaded</h1>
+  <div class="toolbar" role="toolbar">
+    <button id="btn-assemble" type="button" data-i18n="btn.assemble"></button>
+    <button id="btn-run" type="button" class="primary" data-i18n="btn.run"></button>
+    <button id="btn-step" type="button" data-i18n="btn.step"></button>
+    <button id="btn-over" type="button" data-i18n="btn.stepOver"></button>
+    <button id="btn-out" type="button" data-i18n="btn.stepOut"></button>
+    <button id="btn-reset" type="button" data-i18n="btn.reset"></button>
+    <label class="field"><span data-i18n="speed.label"></span>
+      <select id="speed"></select>
+    </label>
+  </div>
+  <div class="spacer"></div>
+  <label class="field"><span data-i18n="theme.label"></span>
+    <select id="theme">
+      <option value="auto" data-i18n="theme.auto"></option>
+      <option value="light" data-i18n="theme.light"></option>
+      <option value="dark" data-i18n="theme.dark"></option>
+    </select>
+  </label>
+  <label class="field"><span data-i18n="lang.label"></span>
+    <select id="lang"></select>
+  </label>
+</header>
+
+<main id="app">
+  <aside id="panel-left" class="side side-l" aria-labelledby="title-left">
+    <div class="side-head">
+      <h2 id="title-left" data-i18n="panel.tutorial"></h2>
+      <button type="button" class="tog" data-toggle="left" data-i18n-title="panel.collapse" data-i18n-label="panel.collapse" aria-expanded="true">‹</button>
+    </div>
+    <div class="side-body"><p class="muted" data-i18n="placeholder.tutorial"></p></div>
+    <div class="rail-label" aria-hidden="true" data-i18n="panel.tutorial"></div>
+  </aside>
+  <div class="splitter" id="split-left" role="separator" aria-orientation="vertical" tabindex="0" data-i18n-label="panel.resize"></div>
+
+  <section class="center">
+    <article class="card">
+      <h2 data-i18n="panel.editor"></h2>
+      <textarea id="source" spellcheck="false" autocapitalize="off" autocomplete="off" wrap="off"></textarea>
+      <ul id="messages" class="messages" aria-live="polite"></ul>
+    </article>
+
+    <div class="pair">
+      <article class="card">
+        <h2 data-i18n="panel.flow"></h2>
+        <div id="flow" class="mono flow" aria-label="Execution"></div>
+        <p class="muted small" data-i18n="flow.bpHint"></p>
+      </article>
+      <div class="stack">
+        <article class="card">
+          <h2 data-i18n="panel.screen"></h2>
+          <div id="screen-wrap" class="screen-wrap" tabindex="0">
+            <canvas id="screen" width="32" height="32" role="img" data-i18n-label="screen.label"></canvas>
+          </div>
+          <p class="muted small" data-i18n="screen.hint"></p>
+        </article>
+        <article class="card">
+          <h2 data-i18n="panel.registers"></h2>
+          <dl id="regs" class="mono regs"></dl>
+        </article>
+      </div>
+    </div>
+
+    <article class="card">
+      <h2 data-i18n="panel.monitor"></h2>
+      <div class="monitor-bar">
+        <label class="field"><span data-i18n="monitor.goto"></span>
+          <input id="mon-goto" class="mono" size="9" spellcheck="false" autocomplete="off" data-i18n-placeholder="monitor.gotoHint" value="$0200">
+        </label>
+        <button id="mon-prev" type="button" data-i18n-title="monitor.prev" data-i18n-label="monitor.prev">▲</button>
+        <button id="mon-next" type="button" data-i18n-title="monitor.next" data-i18n-label="monitor.next">▼</button>
+      </div>
+      <div id="monitor" class="mono monitor" tabindex="0"></div>
+    </article>
+  </section>
+
+  <div class="splitter" id="split-right" role="separator" aria-orientation="vertical" tabindex="0" data-i18n-label="panel.resize"></div>
+  <aside id="panel-right" class="side side-r" aria-labelledby="title-right">
+    <div class="side-head">
+      <button type="button" class="tog" data-toggle="right" data-i18n-title="panel.collapse" data-i18n-label="panel.collapse" aria-expanded="true">›</button>
+      <h2 id="title-right" data-i18n="panel.reference"></h2>
+    </div>
+    <div class="side-body"><p class="muted" data-i18n="placeholder.reference"></p></div>
+    <div class="rail-label" aria-hidden="true" data-i18n="panel.reference"></div>
+  </aside>
+</main>
+
+<footer class="statusbar"><span id="status"></span><span class="spacer"></span><span id="status-right" class="mono"></span></footer>
+</body>
+</html>

@@ -88,14 +88,15 @@ export class Machine {
    * Läuft höchstens `maxInstructions` Instruktionen oder bis ein Haltegrund eintritt.
    * Ein Haltepunkt gilt vor Ausführung der Instruktion an dieser Adresse; der erste Schritt
    * eines Laufs wird nie von einem Haltepunkt an der Startadresse verhindert.
+   * @param {boolean} [skipStartBreak=true]  Haltepunkt an der Startadresse beim ersten Schritt ignorieren
    * @param {(m:Machine)=>boolean} [until]  zusätzliche Abbruchbedingung nach jeder Instruktion
    * @returns {'budget'|'breakpoint'|'brk'|'illegal'|'until'}
    */
-  run(maxInstructions, until = null) {
+  run(maxInstructions, until = null, skipStartBreak = true) {
     this.stopReason = null;
     const cpu = this.cpu;
     const bps = this.breakpoints;
-    let first = true;
+    let first = skipStartBreak;
     for (let i = 0; i < maxInstructions; i++) {
       if (!first && bps.size && bps.has(cpu.pc)) { this.stopReason = 'breakpoint'; return 'breakpoint'; }
       first = false;

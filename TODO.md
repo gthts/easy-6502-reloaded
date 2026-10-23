@@ -34,11 +34,14 @@ Legende: `[ ]` offen · `[~]` in Arbeit · `[x]` erledigt. Jeder Abschnitt ist e
 - [ ] Datums-, Zahlen- und Hexformate unabhängig von der Sprache halten
 
 ## M2 – Oberfläche: Rahmen
-- [ ] Aufteilung Lehrbuch · Arbeitsfläche · Referenz, jeweils ein-/ausklappbar und in der Größe veränderbar
-- [ ] Anordnung wählbar (Bereiche tauschen, Referenz unten oder seitlich)
-- [ ] Bildschirm 32×32 mit 16 Farben wie in beiden Vorlagen; Pfeiltasten über `$FF`
-- [ ] Tastaturbedienung und Barrierefreiheit (Fokus, ARIA, Kontrast)
-- [ ] Zustand (Anordnung, Thema) im Browserspeicher
+- [x] Aufteilung Lehrbuch · Arbeitsfläche · Referenz, Seitenleisten ein-/ausklappbar und in der Breite ziehbar (auch per Pfeiltasten); Mitte: Quelltext, Ablauf + Bildschirm/Register, Monitor (Entwurf B2)
+- [ ] Anordnung wählbar (Bereiche tauschen, Referenz unten oder seitlich) – zurückgestellt
+- [x] Bildschirm 32×32 mit 16 Farben; Tasten über `$FF` (W A S D, Pfeiltasten), Zufallszahl über `$FE`
+- [~] Tastaturbedienung und Barrierefreiheit: Trennlinien und Monitor per Tastatur bedienbar, Beschriftungen übersetzt; Prüfung auf Kontrast und Screenreader steht aus
+- [x] Laufzeit-Zeitgeber der Maschine getrennt vom Zeichnen der Ansichten; Geschwindigkeit 1/s bis maximal
+- [x] Hell/Dunkel/Automatisch, Sprachwahl (Englisch/Deutsch)
+- [ ] Ansicht für schmale Bildschirme prüfen (Seitenleisten als Schubladen sind angelegt)
+- [x] Zustand (Anordnung, Darstellung, Sprache, Geschwindigkeit, Quelltext) im Browserspeicher, mit Rückfall ohne Speicher
 
 ## M3 – Quelltexteditor
 - [ ] Zeilennummern
@@ -50,19 +53,19 @@ Legende: `[ ]` offen · `[~]` in Arbeit · `[x]` erledigt. Jeder Abschnitt ist e
 - [ ] Rückgängig/Wiederholen, Einrücken, Tabulator
 
 ## M4 – Ablaufansicht und Disassemblierung
-- [ ] Ablaufansicht: aktive Instruktion hervorgehoben, ca. 10 Instruktionen davor und danach, Marken des Quelltextes eingeblendet
-- [ ] Entkoppelt von der Emulatorschleife (eigener Aktualisierungstakt)
-- [ ] Haltepunkte per Klick oder per Auswahl einer Marke
+- [x] Ablaufansicht: aktive Instruktion hervorgehoben, 10 Instruktionen davor und danach, Marken eingeblendet
+- [x] Entkoppelt von der Emulatorschleife (Zeichnen über requestAnimationFrame)
+- [~] Haltepunkte per Klick auf die Zeile (fertig); per Auswahl einer Marke steht aus
 - [ ] „Springe zu“: Adresse, Marke aus Liste oder Verschieben der hervorgehobenen Zeile (naher Sprung)
 - [ ] Disassemblierfenster (frei wählbarer Bereich) bleibt zusätzlich bestehen
-- [ ] Register-, Flag- und Stapelanzeige; Register per Eingabe änderbar
+- [~] Register- und Flaganzeige fertig; Stapelanzeige und Änderung per Eingabe stehen aus
 
 ## M5 – Monitor
-- [ ] Immer aktiv, unabhängig von der Hauptschleife
-- [ ] 16 Zeilen × 16 Bytes, Blättern, Springen zu Adresse oder Marke
+- [x] Immer aktiv, unabhängig von der Hauptschleife
+- [x] 16 Zeilen × 16 Bytes, Blättern (Rad, Tasten, Knöpfe), Springen zu Adresse oder Marke
 - [ ] Bytefolge suchen (hexadezimal und Text)
 - [ ] Überschreiben von Hexwerten direkt im Feld
-- [ ] Geänderte Bytes kurz hervorheben
+- [x] Geänderte Bytes kurz hervorheben
 
 ## M6 – Lehrbuch
 - [ ] Inhaltsformat festlegen (Markdown unter `content/`, einfacher eigener Umsetzer)

@@ -241,3 +241,12 @@ test('Funktionstest von Klaus Dormann', { skip: !dormann }, () => {
   }
   assert.equal(m.cpu.pc.toString(16), '3469', `Fehlerfalle bei $${m.cpu.pc.toString(16)}`);
 });
+
+test('Jeder englische Schlüssel existiert auch auf Deutsch und umgekehrt', async () => {
+  const { en } = await import('../src/i18n/en.js');
+  const { de } = await import('../src/i18n/de.js');
+  assert.deepEqual(Object.keys(en).filter((k) => !(k in de)), []);
+  assert.deepEqual(Object.keys(de).filter((k) => !(k in en)), []);
+  const ph = (s) => (s.match(/\{\w+\}/g) ?? []).sort().join();
+  for (const k of Object.keys(en)) assert.equal(ph(de[k]), ph(en[k]), `Platzhalter in ${k}`);
+});
