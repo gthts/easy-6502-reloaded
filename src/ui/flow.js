@@ -138,6 +138,9 @@ export function createFlow(root, machine, { onToggleBp, onJump, ui }) {
     before.forEach((i) => push(i, false));
     after.forEach((i, k) => push(i, k === 0));
     root.replaceChildren(frag);
+    // feste Höhe: die aktive Zeile in die Mitte rücken, statt das Feld wachsen oder schrumpfen zu lassen
+    const act = root.querySelector('.row.active');
+    if (act) root.scrollTop = Math.max(0, act.offsetTop - (root.clientHeight - act.offsetHeight) / 2);
   }
 
   return { update, refreshLabels: () => fillLabelSelect(ui.select, machine) };

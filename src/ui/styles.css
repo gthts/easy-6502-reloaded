@@ -123,7 +123,8 @@ button.primary { background: var(--accent-bg); color: var(--accent-text); border
 .messages li.err { color: var(--danger); }
 .messages li.ok { color: var(--ok); }
 
-.flow { min-height: 21em; overflow: hidden; }
+.flow { position: relative; height: calc(24 * 1.55em); overflow: hidden; }
+#disasm.flow { height: calc(21 * 1.55em); }
 .flow .row { display: flex; gap: 10px; padding: 0 4px; white-space: pre; cursor: pointer; border-radius: 3px; }
 .flow .row:hover { background: var(--surface-2); }
 .flow .row.active { background: var(--warn-bg); color: var(--warn-text); }
