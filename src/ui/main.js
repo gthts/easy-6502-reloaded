@@ -10,6 +10,8 @@ import { Runner, SPEEDS } from './runner.js';
 import { createRegisters } from './registers.js';
 import { createFlow } from './flow.js';
 import { createMonitor } from './monitor.js';
+import { createEditor } from './editor.js';
+import { createFiles } from './files.js';
 
 const $ = (id) => document.getElementById(id);
 
@@ -35,6 +37,9 @@ let lastResult = null; // letztes erfolgreiches Übersetzungsergebnis
 let sourceDirty = true;
 let lastErrors = [];
 let lastAssembled = null;
+let assembledSource = null; // Quelltext des letzten erfolgreichen Übersetzens
+let errorSource = null; // Quelltext, zu dem die Fehlerliste gehört
+let errorList = [];
 
 // ---- Sprache und Darstellung ------------------------------------------------------
 
@@ -81,7 +86,11 @@ const screen = createScreen($('screen'), $('screen-wrap'), machine.mem);
 const regs = createRegisters($('regs'), machine);
 const flow = createFlow($('flow'), machine, (addr) => { machine.toggleBreakpoint(addr); rev++; });
 const monitor = createMonitor($('monitor'), $('mon-goto'), $('mon-prev'), $('mon-next'), machine);
-const runner = new Runner(machine, () => { updateButtons(); updateStatus(); });
+const runner = new Runner(machine, () => {
+  updateButtons();
+  updateStatus();
+  if (!runner.running) editor.reveal(addrToLine.get(machine.cpu.pc));
+});
 runner.speed = SPEEDS[store.get('speed', 4)] ?? 1000;
 speedSel.value = String(Math.max(0, SPEEDS.indexOf(runner.speed)));
 speedSel.addEventListener('change', () => { runner.speed = SPEEDS[Number(speedSel.value)]; store.set('speed', Number(speedSel.value)); });
@@ -92,38 +101,77 @@ machine.mem.onRead = (addr) => (addr === 0xfe ? (Math.random() * 256) | 0 : unde
 
 // ---- Quelltext ---------------------------------------------------------------
 
-const source = $('source');
-source.value = store.get('source', SAMPLE);
-source.addEventListener('input', () => { sourceDirty = true; store.set('source', source.value); });
-source.addEventListener('keydown', (e) => {
-  if (e.key === 'Tab' && !e.ctrlKey && !e.altKey) {
-    e.preventDefault();
-    const { selectionStart: s, selectionEnd: en } = source;
-    source.setRangeText('  ', s, en, 'end');
-    source.dispatchEvent(new Event('input'));
-  }
+let addrToLine = new Map();
+
+const editor = createEditor({
+  textarea: $('source'),
+  layer: $('layer'),
+  gutter: $('gutter'),
+  onChange: () => {
+    const text = editor.getValue();
+    sourceDirty = text !== assembledSource;
+    lastErrors = text === errorSource ? errorList : [];
+    renderMessages();
+    store.set('source', editor.getValue());
+  },
+  onGutterClick: (line) => {
+    runner.pause();
+    if (sourceDirty && !assemble()) return;
+    const entry = machine.lineMap.find((l) => l.line === line && l.size > 0);
+    if (!entry) return;
+    machine.toggleBreakpoint(entry.addr);
+    rev++;
+  },
 });
+editor.setValue(store.get('source', SAMPLE));
+const files = createFiles({
+  editor,
+  slotSel: $('slot'), saveSlotBtn: $('slot-save'), loadSlotBtn: $('slot-load'),
+  openBtn: $('file-open'), fileInput: $('file-input'), saveFileBtn: $('file-save'),
+  dropTarget: $('editor'), note: $('editor-note'),
+});
+
+function updateMarkers() {
+  const errs = new Map(lastErrors.map((e) => [e.line, t(e.key, e.params)]));
+  editor.setErrors(errs);
+  if (sourceDirty) {
+    editor.setBreakpoints(new Set());
+    editor.setActive(0);
+    return;
+  }
+  const bps = new Set();
+  for (const a of machine.breakpoints) {
+    const l = machine.lineMap.find((x) => x.addr === a && x.size > 0);
+    if (l) bps.add(l.line);
+  }
+  editor.setBreakpoints(bps);
+  editor.setActive(addrToLine.get(machine.cpu.pc) ?? 0);
+}
 
 function renderMessages() {
   const ul = $('messages');
   ul.replaceChildren();
-  const add = (cls, text) => { const li = document.createElement('li'); li.className = cls; li.textContent = text; ul.append(li); };
+  const add = (cls, text) => { const li = document.createElement('li'); li.className = cls; li.textContent = text; ul.append(li); return li; };
   if (lastErrors.length) {
     add('err', t('status.errors', { n: lastErrors.length }));
-    for (const e of lastErrors) add('err', t('msg.line', { line: e.line, message: t(e.key, e.params) }));
-  } else if (lastAssembled) {
+    for (const e of lastErrors) add('err', t('msg.line', { line: e.line, message: t(e.key, e.params) })).dataset.line = String(e.line);
+  } else if (lastAssembled && !sourceDirty) {
     add('ok', t('status.assembled', { bytes: lastAssembled.bytes, addr: `$${hex4(lastAssembled.addr)}` }));
   }
 }
 
 function assemble() {
-  const result = machine.assembleAndLoad(source.value);
+  const result = machine.assembleAndLoad(editor.getValue());
   lastErrors = result.ok ? [] : result.errors;
+  errorList = lastErrors;
+  errorSource = result.ok ? null : editor.getValue();
   if (result.ok) {
     lastResult = result;
     const bytes = result.segments.reduce((n, s) => n + s.bytes.length, 0);
     lastAssembled = { bytes, addr: machine.entry };
     sourceDirty = false;
+    assembledSource = editor.getValue();
+    addrToLine = new Map(machine.lineMap.filter((l) => l.size > 0).map((l) => [l.addr, l.line]));
     screen.redrawAll();
   }
   rev++;
@@ -164,6 +212,7 @@ const stepper = (fn) => () => {
   if (machine.cpu.halted) return;
   fn();
   rev++;
+  editor.reveal(addrToLine.get(machine.cpu.pc));
   updateStatus();
   updateButtons();
 };
@@ -175,6 +224,11 @@ $('btn-reset').addEventListener('click', resetProgram);
 function updateButtons() {
   $('btn-run').textContent = runner.running ? t('btn.pause') : t('btn.run');
 }
+
+$('messages').addEventListener('click', (e) => {
+  const li = e.target.closest('li[data-line]');
+  if (li) editor.goto(Number(li.dataset.line));
+});
 
 function updateStatus() {
   let key = 'status.idle';
@@ -195,6 +249,7 @@ function retranslate() {
   layout.refresh();
   regs.retranslate();
   renderMessages();
+  files.labelSlots();
   updateButtons();
   updateStatus();
 }
@@ -210,6 +265,7 @@ function frame(now) {
   screen.draw();
   regs.update();
   flow.update(rev);
+  updateMarkers();
   monitor.update(now);
   $('status-right').textContent = `PC $${hex4(machine.cpu.pc)}`;
   requestAnimationFrame(frame);

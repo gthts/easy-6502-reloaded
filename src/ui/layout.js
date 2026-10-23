@@ -16,8 +16,8 @@ export function initLayout() {
   };
 
   function apply() {
-    app.style.setProperty('--lw', `${state.lw}px`);
-    app.style.setProperty('--rw', `${state.rw}px`);
+    app.style.setProperty('--lw', state.lc ? 'var(--rail)' : `${state.lw}px`);
+    app.style.setProperty('--rw', state.rc ? 'var(--rail)' : `${state.rw}px`);
     app.classList.toggle('lc', state.lc);
     app.classList.toggle('rc', state.rc);
     for (const [name, s] of Object.entries(sides)) {

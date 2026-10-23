@@ -46,9 +46,27 @@
   <div class="splitter" id="split-left" role="separator" aria-orientation="vertical" tabindex="0" data-i18n-label="panel.resize"></div>
 
   <section class="center">
-    <article class="card">
-      <h2 data-i18n="panel.editor"></h2>
-      <textarea id="source" spellcheck="false" autocapitalize="off" autocomplete="off" wrap="off"></textarea>
+    <article class="card" id="editor-card">
+      <div class="card-head">
+        <h2 data-i18n="panel.editor"></h2>
+        <div class="card-tools">
+          <label class="field"><span data-i18n="editor.slot"></span><select id="slot"></select></label>
+          <button id="slot-save" type="button" data-i18n="editor.slotSave"></button>
+          <button id="slot-load" type="button" data-i18n="editor.slotLoad"></button>
+          <span class="sep" aria-hidden="true"></span>
+          <button id="file-open" type="button" data-i18n="editor.fileOpen"></button>
+          <button id="file-save" type="button" data-i18n="editor.fileSave"></button>
+          <input id="file-input" type="file" accept=".asm,.s,.txt,text/plain" hidden>
+        </div>
+      </div>
+      <div class="editor" id="editor">
+        <div class="gutter" id="gutter" aria-hidden="true"><div class="gutter-in"></div></div>
+        <div class="ed-main">
+          <pre class="layer" id="layer" aria-hidden="true"><code></code></pre>
+          <textarea id="source" spellcheck="false" autocapitalize="off" autocomplete="off" wrap="off" data-i18n-label="editor.label"></textarea>
+        </div>
+      </div>
+      <p id="editor-note" class="muted small" aria-live="polite"></p>
       <ul id="messages" class="messages" aria-live="polite"></ul>
     </article>
 

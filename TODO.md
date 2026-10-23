@@ -44,13 +44,15 @@ Legende: `[ ]` offen · `[~]` in Arbeit · `[x]` erledigt. Jeder Abschnitt ist e
 - [x] Zustand (Anordnung, Darstellung, Sprache, Geschwindigkeit, Quelltext) im Browserspeicher, mit Rückfall ohne Speicher
 
 ## M3 – Quelltexteditor
-- [ ] Zeilennummern
-- [ ] Syntaxhervorhebung (eigene Umsetzung, ohne Bibliothek)
-- [ ] Fehlermarkierung nach dem Assemblieren
-- [ ] Haltepunkte im Zeilenrand
-- [ ] Speichern/Laden als Datei (Herunterladen, Dateiauswahl, Ziehen und Ablegen)
-- [ ] Mehrere Schnellspeicherplätze im Browserspeicher (benannt, mit Zeitstempel)
-- [ ] Rückgängig/Wiederholen, Einrücken, Tabulator
+- [x] Zeilennummern
+- [x] Syntaxhervorhebung (eigene Umsetzung, ohne Bibliothek; mit Tests)
+- [x] Fehlermarkierung nach dem Übersetzen (Zeile, Randmarke, Meldung anklickbar)
+- [x] Haltepunkte im Zeilenrand; aktive Zeile hervorgehoben und beim Schritt sichtbar gehalten
+- [x] Speichern/Laden als Datei (Herunterladen, Dateiauswahl, Ziehen und Ablegen, Strg+S); Herunterladen noch nicht von Hand geprüft
+- [x] 5 Schnellspeicherplätze im Browserspeicher (Titel aus erster Zeile, Zeitstempel, Rückfrage beim Überschreiben)
+- [ ] Schnellspeicherplätze umbenennen, Anzahl wählbar
+- [x] Rückgängig/Wiederholen (auch nach Laden), Einrücken mehrerer Zeilen, Tabulator, Einrückung bei Enter
+- [ ] Suchen/Ersetzen, Kommentieren per Tastenkürzel, Bildschirmleser-Hinweise für den Editor
 
 ## M4 – Ablaufansicht und Disassemblierung
 - [x] Ablaufansicht: aktive Instruktion hervorgehoben, 10 Instruktionen davor und danach, Marken eingeblendet
