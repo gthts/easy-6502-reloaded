@@ -5,7 +5,7 @@ Abgeleitet von [Easy 6502](https://skilldrick.github.io/easy6502/) (Nick Morgan)
 und dem [6502 Assembler und Simulator](https://itema-as.github.io/6502js/)
 (Stian Soreng, Nick Morgan, Torkild Ulvøy Resheim).
 
-Status: Kern, Rahmen und Editor (M1 bis M3) lauffähig; Lehrbuch und Referenz folgen. Den Fortschritt verfolgt [TODO.md](TODO.md).
+Status: Kern, Oberfläche, Editor und Lehrbuch (M1 bis M6) lauffähig; Referenz folgt. Den Fortschritt verfolgt [TODO.md](TODO.md).
 
 ## Ziele
 

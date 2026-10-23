@@ -73,16 +73,23 @@ Legende: `[ ]` offen · `[~]` in Arbeit · `[x]` erledigt. Jeder Abschnitt ist e
 - [x] Geänderte Bytes kurz hervorheben
 
 ## M6 – Lehrbuch
-- [ ] Inhaltsformat festlegen (Markdown unter `content/`, einfacher eigener Umsetzer)
-- [ ] Einklappbarer Bereich mit Kapitelmarken, Lesefortschritt, Suche
-- [ ] Beispiele mit „An Emulator senden“ (Quelltext in den Editor übernehmen)
-- [ ] Optional: „Ausführen“ direkt am Beispiel
-- [ ] **Neuer Lehrplan** mit gleichmäßiger Lernkurve (Entwurf unten), Übungsaufgaben je Kapitel
-- [ ] Text aus Easy 6502 überarbeiten (CC BY 4.0, Namensnennung); die Schlange in Teilschritten statt als einen Block
-- [ ] Indexiert-indirekt und indirekt-indiziert in getrennten Kapiteln
-- [ ] Klären, ob die beiden PDF-Übungsblätter im Projektordner („Präsenz 1/2“) als Aufgabenquelle dienen sollen
+- [x] Inhaltsformat: Markdown unter `content/<sprache>/` mit `index.json`; eigener Umsetzer (`src/ui/markdown.js`) mit Codeblöcken, Tabellen, Behältern (`::: hinweis|merke|aufgabe|loesung`); kein innerHTML
+- [x] Einklappbarer Bereich mit Kapitelmarken (Leiste und Auswahl), Lesefortschritt (gelesen = bis zum Ende gescrollt), Volltextsuche, Vor/Zurück
+- [x] Beispiele mit „An Emulator senden“ (Strg+Z holt den alten Quelltext zurück)
+- [x] „Senden und starten“ direkt am Beispiel
+- [x] **Neuer Lehrplan** mit 17 Sachkapiteln und Aufgaben samt aufklappbaren Lösungen je Kapitel (deutsch); alle Codebeispiele werden von `tests/content.test.mjs` übersetzt, Ergebnisse (`expect=`) geprüft
+- [ ] Englische Fassung des Lehrbuchs (`content/en/`); bis dahin zeigt die Oberfläche den deutschen Text
+- [ ] Probelesen: Verständlichkeit, Tempo, Tonfall („du“) mit echten Lernenden prüfen
+- [ ] Querverweise Lehrbuch → Referenz (M7) bei Befehlen
+- [x] Text auf Grundlage von Easy 6502 neu verfasst und umgegliedert (CC BY 4.0, Nennung unter jedem Kapitel und in NOTICE.md); die Schlange ist aus dem Lehrbuch heraus: Kapitel 17 baut ein kleines Spiel in fünf Etappen, die Schlange liegt kommentiert in der Beispielauswahl
+- [x] Indirekt-indiziert `($zp),Y` (Kapitel 14, zuerst) und indiziert-indirekt `($zp,X)` (Kapitel 15) in getrennten Kapiteln
+- [x] Die beiden PDF-Übungsblätter sind als Kapitel 18 und 19 („Übungsaufgaben Präsenz 1/2“) am Ende des Lehrbuchs; Aufgabentexte übernommen, Lösungen ergänzt und geprüft
+- [ ] Urheberlage der Übungsblätter klären (Verfasser nennen, Weitergabe erlaubt?) – **vor der Veröffentlichung**; die PDFs selbst liegen nicht im Git
 
-### Lehrplan – Entwurf
+### Lehrplan – Stand (Kapitel 1 bis 19)
+Einführung · Erstes Programm · Zahlen · Register · Rechnen · Verzweigen · Schleifen · Adressierung I · Adressierung II (Index) · Bits · Stapel · Sprünge und Unterprogramme · Ordnung (Namen, Daten) · Zeiger I · Zeiger II · Eingabe und Zufall · Spiel in Etappen · Präsenz 1 · Präsenz 2
+
+### Lehrplan – ursprünglicher Entwurf
 1. Was ist ein Prozessor? Register, Speicher, Bildschirm
 2. Erstes Programm: `LDA`, `STA`, Bildschirm
 3. Zahlen: hexadezimal, Bits, Flags
@@ -106,9 +113,11 @@ Legende: `[ ]` offen · `[~]` in Arbeit · `[x]` erledigt. Jeder Abschnitt ist e
 - [ ] Opcode-Quelle prüfen und angeben
 
 ## M8 – Beispielprogramme
-- [ ] Katalog mit Beschreibung, Schwierigkeit und Schlagworten
-- [~] 18 Beispiele aus 6502js liegen unter `examples/` und lassen sich alle übersetzen; Urheberlage klären
-- [ ] Laden in den Editor, Warnung bei ungesicherten Änderungen
+- [x] Katalog (`examples/index.json`) mit Titel und Beschreibung (de/en), Gruppe (Kleine Programme, Vorführungen, Spiele) und Stufe; Auswahl über dem Quelltext
+- [ ] Beschreibungen prüfen: sie sind aus den Dateiköpfen abgeleitet, einige Vorführungen noch nicht angesehen
+- [x] 18 Beispiele aus 6502js (darunter die kommentierte Schlange) liegen unter `examples/` und werden getestet
+- [ ] Urheberlage der Beispiele klären (Hinweise im Quelltext, GPL der Quelle)
+- [x] Laden in den Editor (rückgängig mit Strg+Z); [ ] eigene Warnung bei ungesicherten Änderungen nicht nötig, solange Rückgängig und Schnellspeicherplätze reichen
 - [ ] Weitere Vorführungen (Tech-Demos) ergänzen
 
 ## M9 – Veröffentlichung

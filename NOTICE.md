@@ -17,3 +17,9 @@ Sie sind keine Bestandteile der Anwendung und werden nicht ausgeliefert.
 - Die Schrift „C64 Pro Mono“ (Style64) aus 6502js darf nicht verändert oder weiterverteilt werden und wird **nicht** übernommen.
 - Die Opcode-Dokumentation stammt laut 6502js von John Pickens, Bruce Clark und Ed Spittles (6502.org).
 - Beispielprogramme tragen teils Vermerke wie „Submitted by Anonymous“. Die Urheberlage ist vor der Veröffentlichung zu klären (siehe TODO.md).
+
+## Lehrbuch (content/)
+
+- Die Kapitel wurden **neu verfasst** und gegenüber „Easy 6502“ (Nick Morgan, CC BY 4.0) umgegliedert: andere Reihenfolge, kleinere Schritte, eigene Beispiele und Aufgaben. Die Gliederung und viele Beispielideen (zum Beispiel Spiegelmuster mit dem Stapel, `JSR`-Beispiel, Zeigerbeispiele) gehen auf das Original zurück. Namensnennung: Nick Morgan, https://skilldrick.github.io/easy6502/, Lizenz CC BY 4.0.
+- Die Schlange aus dem Original ist nicht mehr Teil des Lehrbuchs; die kommentierte Fassung aus 6502js liegt in der Beispielauswahl.
+- Kapitel 18 und 19 („Übungsaufgaben Präsenz 1/2“) beruhen auf zwei Übungsblättern des Projektinhabers. Die Aufgabentexte sind übernommen, die Lösungen neu geschrieben. Verfasser und Weitergaberechte sind vor der Veröffentlichung zu klären.

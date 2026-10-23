@@ -13,6 +13,8 @@ import { createDisasm } from './disasm.js';
 import { createMonitor } from './monitor.js';
 import { createEditor } from './editor.js';
 import { createFiles } from './files.js';
+import { createTutorial } from './tutorial.js';
+import { createExamples } from './examples.js';
 import { anchorFor, resolveAnchor } from '../core/breakpoints.js';
 
 const $ = (id) => document.getElementById(id);
@@ -165,6 +167,29 @@ const files = createFiles({
   dropTarget: $('editor'), note: $('editor-note'),
 });
 
+// Lehrbuch: Beispiele in den Editor senden
+function sendToEditor(code) {
+  runner.pause();
+  editor.replaceAll(code.endsWith('\n') ? code : code + '\n');
+  $('editor-note').textContent = t('tutorial.sent');
+}
+const tutorial = createTutorial({
+  ui: {
+    select: $('tut-select'), marks: $('tut-marks'), search: $('tut-search'), results: $('tut-results'),
+    scroller: $('tut-scroll'), content: $('tut-content'), prev: $('tut-prev'), next: $('tut-next'), pos: $('tut-pos'), error: $('tut-error'),
+  },
+  onSend: sendToEditor,
+  onSendRun: (code) => { sendToEditor(code); $('btn-run').click(); },
+});
+const examples = createExamples({
+  select: $('example-sel'),
+  onLoad: (name, code) => {
+    runner.pause();
+    editor.replaceAll(code);
+    $('editor-note').textContent = t('examples.loaded', { name });
+  },
+});
+
 function updateMarkers() {
   const errs = new Map(lastErrors.map((e) => [e.line, t(e.key, e.params)]));
   editor.setErrors(errs);
@@ -302,6 +327,8 @@ function retranslate() {
   regs.retranslate();
   renderMessages();
   files.labelSlots();
+  tutorial.reload();
+  examples.relabel();
   flow.refreshLabels();
   disasm.refreshLabels();
   updateButtons();

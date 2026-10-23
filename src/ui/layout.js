@@ -3,12 +3,12 @@ import { store } from './storage.js';
 import { t } from '../i18n/index.js';
 
 const MIN = 180;
-const MAX = 560;
+const MAX = 720;
 
 export function initLayout() {
   const app = document.getElementById('app');
   const narrow = window.matchMedia('(max-width: 900px)').matches;
-  const state = { lw: 280, rw: 300, lc: narrow, rc: narrow, ...store.get('layout', {}) };
+  const state = { lw: 440, rw: 300, lc: narrow, rc: narrow, ...store.get('layout', {}) };
 
   const sides = {
     left: { el: document.getElementById('panel-left'), key: 'l', cls: 'lc', arrow: ['‹', '›'] },

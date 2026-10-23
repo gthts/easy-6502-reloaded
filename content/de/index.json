@@ -1,0 +1,23 @@
+{
+  "chapters": [
+    "01-einfuehrung.md",
+    "02-erstes-programm.md",
+    "03-zahlen.md",
+    "04-register.md",
+    "05-rechnen.md",
+    "06-verzweigen.md",
+    "07-schleifen.md",
+    "08-adressierung-1.md",
+    "09-adressierung-2.md",
+    "10-bits.md",
+    "11-stapel.md",
+    "12-spruenge.md",
+    "13-ordnung.md",
+    "14-zeiger-1.md",
+    "15-zeiger-2.md",
+    "16-eingabe.md",
+    "17-spiel.md",
+    "18-praesenz-1.md",
+    "19-praesenz-2.md"
+  ]
+}

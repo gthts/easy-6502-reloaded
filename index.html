@@ -52,7 +52,26 @@
       <h2 id="title-left" data-i18n="panel.tutorial"></h2>
       <button type="button" class="tog" data-toggle="left" data-i18n-title="panel.collapse" data-i18n-label="panel.collapse" aria-expanded="true">‹</button>
     </div>
-    <div class="side-body"><p class="muted" data-i18n="placeholder.tutorial"></p></div>
+    <div class="side-body tut">
+      <div class="tut-nav">
+        <select id="tut-select" data-i18n-label="tutorial.chapter"></select>
+        <div id="tut-marks" class="marks" role="group" data-i18n-label="tutorial.marks"></div>
+        <input id="tut-search" type="search" spellcheck="false" autocomplete="off" data-i18n-placeholder="tutorial.search" data-i18n-label="tutorial.search">
+        <ul id="tut-results" class="tut-results"></ul>
+      </div>
+      <div id="tut-scroll" class="tut-scroll">
+        <p id="tut-error" class="err-text" hidden data-i18n="tutorial.loadError"></p>
+        <article id="tut-content" class="prose"></article>
+        <div class="tut-pager">
+          <button id="tut-prev" type="button" data-i18n-title="tutorial.prev" data-i18n-label="tutorial.prev">‹</button>
+          <span id="tut-pos" class="muted"></span>
+          <button id="tut-next" type="button" data-i18n-title="tutorial.next" data-i18n-label="tutorial.next">›</button>
+        </div>
+        <p class="muted small credit"><span data-i18n="tutorial.credit"></span>
+          <a href="https://skilldrick.github.io/easy6502/" target="_blank" rel="noopener noreferrer">Easy 6502</a> ·
+          <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">CC BY 4.0</a></p>
+      </div>
+    </div>
     <div class="rail-label" aria-hidden="true" data-i18n="panel.tutorial"></div>
   </aside>
   <div class="splitter" id="split-left" role="separator" aria-orientation="vertical" tabindex="0" data-i18n-label="panel.resize"></div>
@@ -65,6 +84,8 @@
           <label class="field"><span data-i18n="editor.slot"></span><select id="slot"></select></label>
           <button id="slot-save" type="button" data-i18n="editor.slotSave"></button>
           <button id="slot-load" type="button" data-i18n="editor.slotLoad"></button>
+          <span class="sep" aria-hidden="true"></span>
+          <select id="example-sel" data-i18n-label="examples.label" data-i18n-title="examples.label"></select>
           <span class="sep" aria-hidden="true"></span>
           <button id="file-open" type="button" data-i18n="editor.fileOpen"></button>
           <button id="file-save" type="button" data-i18n="editor.fileSave"></button>
