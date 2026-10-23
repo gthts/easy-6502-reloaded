@@ -9,7 +9,7 @@ Legende: `[ ]` offen · `[~]` in Arbeit · `[x]` erledigt. Jeder Abschnitt ist e
 - [x] Entscheidung: GPL v3 für den Code, CC BY 4.0 für übernommene Lehrtexte
 - [~] Vorläufig: Emulator im Hauptfaden, Ansichten entkoppelt (eigene Aktualisierungstakte); Web Worker bleibt Option, falls die Leistung nicht reicht
 - [x] Entscheidung: Lokalisierung von Anfang an vorsehen; Ausgangssprache Englisch, Deutsch zusätzlich (siehe Abschnitt Lokalisierung)
-- [~] Ordnerstruktur: `src/{core,i18n}` und `tests/` angelegt; `index.html`, `src/{ui,tutorial,reference}`, `content/` folgen
+- [~] Ordnerstruktur: `src/{core,i18n,ui}`, `tests/`, `tools/` und `index.html` angelegt; `src/{tutorial,reference}` und `content/` folgen
 - [ ] Gestaltungsgrundlagen (Farben, Schrift, helles/dunkles Thema)
 
 ## M1 – Kern (ohne Oberfläche, mit Prüfläufen)
@@ -19,7 +19,7 @@ Legende: `[ ]` offen · `[~]` in Arbeit · `[x]` erledigt. Jeder Abschnitt ist e
 - [x] Zuordnung Quellzeile ↔ Adresse (`lineMap`)
 - [x] Disassembler (einzelne Adresse, Bereich, rückwärts mit Heuristik und bekannten Anfängen)
 - [x] Ablaufsteuerung (`Machine`): Lauf mit Befehlsbudget, Einzelschritt, Schritt über, Schritt hinaus, Halt bei Haltepunkt/BRK, Ablaufprotokoll
-- [ ] Geschwindigkeitsregelung (Takt/Zeitgeber) gehört zur Oberfläche (M2)
+- [x] Geschwindigkeitsregelung (Zeitgeber der Oberfläche, M2)
 - [x] Prüfläufe: 17 Tests (`npm test`), Funktionstest von Klaus Dormann (GPL v3) besteht; die Binärdatei liegt nicht im Projekt, Pfad über `DORMANN_BIN`
 - [ ] Dormann-Datei und Anleitung für die Prüfung in CI aufnehmen (optional)
 - [ ] Inoffizielle Opcodes: vorerst ausgeschlossen
@@ -28,9 +28,9 @@ Legende: `[ ]` offen · `[~]` in Arbeit · `[x]` erledigt. Jeder Abschnitt ist e
 - [x] Modul `src/i18n` mit Katalogen (`en.js` Ausgangssprache, `de.js`), Platzhalter und Schachtelung
 - [x] Fehlermeldungen des Assemblers als Schlüssel mit Parametern; Namen der Adressierungsarten im Katalog
 - [ ] Alle Texte der Oberfläche über Schlüssel; keine fest eingebauten Zeichenketten in `src/ui`
-- [ ] Sprachwahl in der Oberfläche, Erkennung über `navigator.language`, Speicherung im Browser
+- [x] Sprachwahl in der Oberfläche, Erkennung über `navigator.language`, Speicherung im Browser
 - [ ] Lehrbuch und Referenz je Sprache als eigene Inhaltsdateien (`content/<sprache>/`), Rückfall auf Englisch
-- [ ] Prüfung auf fehlende Schlüssel (Test: jeder Schlüssel in `en` existiert in `de`)
+- [x] Prüfung auf fehlende Schlüssel (Test: jeder Schlüssel in `en` existiert in `de`, gleiche Platzhalter)
 - [ ] Datums-, Zahlen- und Hexformate unabhängig von der Sprache halten
 
 ## M2 – Oberfläche: Rahmen
