@@ -206,6 +206,12 @@ export function createReference({ ui, reveal, onChapter, chapterTitle, onSend, o
     wrap.append(tbl);
     detail.append(wrap);
 
+    // Kurzes Beispiel, mit „An Emulator senden“
+    if (text.example) {
+      detail.append(el('div', 'ref-example-title', t('ref.example')));
+      renderer.renderBlocks(detail, [{ type: 'code', lang: 'asm', info: [`expect=${text.example.expect}`], code: text.example.code }]);
+    }
+
     // Verweis ins Lehrbuch
     const ch = chapterFor(mn);
     const title = chapterTitle?.(ch);

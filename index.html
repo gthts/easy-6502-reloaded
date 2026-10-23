@@ -95,11 +95,24 @@
           <input id="file-input" type="file" accept=".asm,.s,.txt,text/plain" hidden>
         </div>
       </div>
+      <div id="findbar" class="findbar" role="search" hidden>
+        <input id="find-q" type="search" spellcheck="false" autocomplete="off" data-i18n-placeholder="find.query" data-i18n-label="find.query">
+        <button id="find-prev" type="button" data-i18n-title="find.prev" data-i18n-label="find.prev">▲</button>
+        <button id="find-next" type="button" data-i18n-title="find.next" data-i18n-label="find.next">▼</button>
+        <label class="field"><input id="find-case" type="checkbox"><span data-i18n="find.case"></span></label>
+        <input id="find-r" type="text" spellcheck="false" autocomplete="off" data-i18n-placeholder="find.replacement" data-i18n-label="find.replacement">
+        <button id="find-replace" type="button" data-i18n="find.replace"></button>
+        <button id="find-all" type="button" data-i18n="find.replaceAll"></button>
+        <span id="find-count" class="muted small" aria-live="polite"></span>
+        <button id="find-close" type="button" data-i18n-title="find.close" data-i18n-label="find.close">×</button>
+      </div>
+      <p id="editor-help" class="sr-only" data-i18n="editor.help"></p>
       <div class="editor" id="editor">
         <div class="gutter" id="gutter" aria-hidden="true"><div class="gutter-in"></div></div>
         <div class="ed-main">
+          <pre class="layer matches" id="matchlayer" aria-hidden="true"><code></code></pre>
           <pre class="layer" id="layer" aria-hidden="true"><code></code></pre>
-          <textarea id="source" spellcheck="false" autocapitalize="off" autocomplete="off" wrap="off" data-i18n-label="editor.label"></textarea>
+          <textarea id="source" spellcheck="false" autocapitalize="off" autocomplete="off" wrap="off" data-i18n-label="editor.label" aria-describedby="editor-help" aria-keyshortcuts="Control+F Control+H F1 F9 F3"></textarea>
         </div>
       </div>
       <p id="editor-note" class="muted small" aria-live="polite"></p>
@@ -211,7 +224,7 @@
   <div id="about-body" class="prose"></div>
 </dialog>
 
-<footer class="statusbar"><span id="status"></span><span class="spacer"></span><span id="status-right" class="mono"></span></footer>
+<footer class="statusbar"><span id="status" role="status"></span><span class="spacer"></span><span id="status-right" class="mono"></span></footer>
 <noscript><p style="padding:16px;font-family:system-ui,sans-serif">Easy 6502 Reloaded needs JavaScript. / Easy 6502 Reloaded braucht JavaScript.</p></noscript>
 </body>
 </html>

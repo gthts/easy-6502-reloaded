@@ -31,3 +31,22 @@ Die Texte zu Befehlen und Adressierungsarten sind eigens geschrieben. Die Opcode
 ## Seite „Über“
 
 Die Lizenz- und Herkunftsangaben in der Oberfläche (`content/*/about.md`) fassen diese Datei zusammen. Bei Änderungen an einer der beiden Stellen bitte die andere nachführen.
+
+## Beispielprogramme: Verfasser und Rechte laut Quelltext
+
+Stand der Durchsicht der Dateien unter `examples/`. Eine ausdrückliche Lizenz nennt nur „Brick Out“; alle übrigen Dateien enthalten keine Lizenzangabe. Alle stammen aus dem Repository 6502js (GPL v3), das ihre Weitergabe bisher ohne Beanstandung vorsieht.
+
+| Datei | Verfasser laut Quelltext | Hinweis |
+|---|---|---|
+| `alive.asm`, `softsprites.asm` | PJP | keine Lizenzangabe |
+| `calculator.asm` | Sid Liu (2015) | keine Lizenzangabe |
+| `compo-May07-1st.asm` | DMSC (daniel.serpell@gmail.com) | „programmed in ACME“, keine Lizenzangabe |
+| `compo-May07-2nd.asm` | Magnus Wedmark (2007) | keine Lizenzangabe |
+| `compo-May07-3rd.asm` | Blake Ramsdell (2007) | „Copyright (C) 2007 Blake Ramsdell, … a license to do whatever you want with it, just tell me what you did and give me a mention“: die Nennung erfolgt hier und in der Seite „Über“ |
+| `skier.asm` | ern0 (2008) | keine Lizenzangabe |
+| `snake.asm` | kommentierte Fassung des Schlangenbeispiels aus Easy 6502 (Nick Morgan); die Kommentare stammen von einem nicht genannten Lernenden | beruht auf CC BY 4.0 / GPL der Vorlagen |
+| `disco.asm`, `sierpinsky.asm`, `starfield2d.asm` | anonym eingesendet | keine Lizenzangabe |
+| `gameoflife.asm` | anonym eingesendet, nach Rosetta Code | Texte auf Rosetta Code stehen unter GFDL 1.2; Herkunft des Programms nicht geklärt |
+| `byterun.asm`, `colors.asm`, `demoscene.asm`, `fullscreenlogo.asm`, `random.asm`, `spacer.asm` | keine Angabe | – |
+
+Entscheidung: Wo sich die Urheberlage nicht klären ließ, bleiben die Beispiele ohne Lösung bestehen und werden so akzeptiert. Wer Urheber eines Beispiels ist und die Aufnahme nicht wünscht, dessen Beispiel wird auf Hinweis entfernt.

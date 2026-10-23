@@ -16,6 +16,7 @@ import { createFiles } from './files.js';
 import { createTutorial } from './tutorial.js';
 import { createReference } from './reference.js';
 import { createAbout } from './about.js';
+import { createFindBar } from './findbar.js';
 import { initVSplits } from './vsplit.js';
 import { createExamples } from './examples.js';
 import { anchorFor, resolveAnchor } from '../core/breakpoints.js';
@@ -150,6 +151,7 @@ function toggleBp(addr) {
 const editor = createEditor({
   textarea: $('source'),
   layer: $('layer'),
+  matchLayer: $('matchlayer'),
   gutter: $('gutter'),
   onChange: () => {
     const text = editor.getValue();
@@ -163,11 +165,20 @@ const editor = createEditor({
     runner.pause();
     if (sourceDirty && !assemble()) return;
     const entry = machine.lineMap.find((l) => l.line === line && l.size > 0);
-    if (!entry) return;
+    if (!entry) { $('editor-note').textContent = t('editor.bpNone', { line }); return; }
     toggleBp(entry.addr);
+    $('editor-note').textContent = t(machine.breakpoints.has(entry.addr) ? 'editor.bpSet' : 'editor.bpCleared', { line });
   },
 });
 editor.setValue(store.get('source', SAMPLE));
+createFindBar({
+  editor,
+  textarea: $('source'),
+  ui: {
+    bar: $('findbar'), query: $('find-q'), replacement: $('find-r'), caseBox: $('find-case'), count: $('find-count'),
+    prev: $('find-prev'), next: $('find-next'), replaceBtn: $('find-replace'), replaceAllBtn: $('find-all'), closeBtn: $('find-close'),
+  },
+});
 const files = createFiles({
   editor,
   slotSel: $('slot'), saveSlotBtn: $('slot-save'), loadSlotBtn: $('slot-load'),

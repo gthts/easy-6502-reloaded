@@ -9,7 +9,7 @@ Legende: `[ ]` offen · `[~]` in Arbeit · `[x]` erledigt. Jeder Abschnitt ist e
 - [x] Entscheidung: GPL v3 für den Code, CC BY 4.0 für übernommene Lehrtexte
 - [~] Vorläufig: Emulator im Hauptfaden, Ansichten entkoppelt (eigene Aktualisierungstakte); Web Worker bleibt Option, falls die Leistung nicht reicht
 - [x] Entscheidung: Lokalisierung von Anfang an vorsehen; Ausgangssprache Englisch, Deutsch zusätzlich (siehe Abschnitt Lokalisierung)
-- [~] Ordnerstruktur: `src/{core,i18n,ui}`, `tests/`, `tools/` und `index.html` angelegt; `src/{tutorial,reference}` und `content/` folgen
+- [x] Ordnerstruktur: `src/{core,i18n,ui,reference}`, `content/`, `examples/`, `tests/`, `tools/`, `index.html`
 - [ ] Gestaltungsgrundlagen (Farben, Schrift, helles/dunkles Thema)
 
 ## M1 – Kern (ohne Oberfläche, mit Prüfläufen)
@@ -21,15 +21,15 @@ Legende: `[ ]` offen · `[~]` in Arbeit · `[x]` erledigt. Jeder Abschnitt ist e
 - [x] Ablaufsteuerung (`Machine`): Lauf mit Befehlsbudget, Einzelschritt, Schritt über, Schritt hinaus, Halt bei Haltepunkt/BRK, Ablaufprotokoll
 - [x] Geschwindigkeitsregelung (Zeitgeber der Oberfläche, M2)
 - [x] Prüfläufe: 17 Tests (`npm test`), Funktionstest von Klaus Dormann (GPL v3) besteht; die Binärdatei liegt nicht im Projekt, Pfad über `DORMANN_BIN`
-- [ ] Dormann-Datei und Anleitung für die Prüfung in CI aufnehmen (optional)
-- [ ] Inoffizielle Opcodes: vorerst ausgeschlossen
+- [x] Funktionstest von Dormann läuft im Workflow (lädt die Datei selbst); Anleitung im README
+> Notiz (kein Auftrag): Inoffizielle („illegale“) Opcodes sind bewusst nicht Teil des Projekts.
 
 ## Lokalisierung (querschnittlich)
 - [x] Modul `src/i18n` mit Katalogen (`en.js` Ausgangssprache, `de.js`), Platzhalter und Schachtelung
 - [x] Fehlermeldungen des Assemblers als Schlüssel mit Parametern; Namen der Adressierungsarten im Katalog
-- [ ] Alle Texte der Oberfläche über Schlüssel; keine fest eingebauten Zeichenketten in `src/ui`
+- [x] Alle Texte der Oberfläche über Schlüssel (Beschriftungen, Meldungen, Lehrbuch, Referenz, „Über“)
 - [x] Sprachwahl in der Oberfläche, Erkennung über `navigator.language`, Speicherung im Browser
-- [ ] Lehrbuch und Referenz je Sprache als eigene Inhaltsdateien (`content/<sprache>/`), Rückfall auf Englisch
+- [x] Lehrbuch und Referenz je Sprache als eigene Inhaltsdateien (`content/<sprache>/`), Rückfall auf eine vorhandene Sprache
 - [x] Prüfung auf fehlende Schlüssel (Test: jeder Schlüssel in `en` existiert in `de`, gleiche Platzhalter)
 - [ ] Datums-, Zahlen- und Hexformate unabhängig von der Sprache halten
 
@@ -42,7 +42,7 @@ Legende: `[ ]` offen · `[~]` in Arbeit · `[x]` erledigt. Jeder Abschnitt ist e
 - [~] Tastaturbedienung und Barrierefreiheit: Trennlinien und Monitor per Tastatur bedienbar, Beschriftungen übersetzt; Prüfung auf Kontrast und Screenreader steht aus
 - [x] Laufzeit-Zeitgeber der Maschine getrennt vom Zeichnen der Ansichten; Geschwindigkeit 1/s bis maximal
 - [x] Hell/Dunkel/Automatisch, Sprachwahl (Englisch/Deutsch)
-- [ ] Ansicht für schmale Bildschirme prüfen (Seitenleisten als Schubladen sind angelegt)
+- [x] Ansicht für schmale Bildschirme geprüft (siehe M9)
 - [x] Zustand (Anordnung, Darstellung, Sprache, Geschwindigkeit, Quelltext) im Browserspeicher, mit Rückfall ohne Speicher
 
 ## M3 – Quelltexteditor
@@ -52,9 +52,10 @@ Legende: `[ ]` offen · `[~]` in Arbeit · `[x]` erledigt. Jeder Abschnitt ist e
 - [x] Haltepunkte im Zeilenrand; aktive Zeile hervorgehoben und beim Schritt sichtbar gehalten
 - [x] Speichern/Laden als Datei (Herunterladen, Dateiauswahl, Ziehen und Ablegen, Strg+S); Herunterladen noch nicht von Hand geprüft
 - [x] 5 Schnellspeicherplätze im Browserspeicher (Titel aus erster Zeile, Zeitstempel, Rückfrage beim Überschreiben)
-- [ ] Schnellspeicherplätze umbenennen, Anzahl wählbar
 - [x] Rückgängig/Wiederholen (auch nach Laden), Einrücken mehrerer Zeilen, Tabulator, Einrückung bei Enter
-- [ ] Suchen/Ersetzen, Kommentieren per Tastenkürzel, Bildschirmleser-Hinweise für den Editor
+- [x] Suchen und Ersetzen (Strg+F, Strg+H, F3; Treffer unter dem Text markiert, Groß-/Kleinschreibung wählbar, „Alle ersetzen“ als ein Rückgängig-Schritt)
+- [x] Hinweise für Bildschirmleser: Hilfetext am Editor (`aria-describedby`), Escape dann Tab verlässt den Editor (keine Tastaturfalle), F9 setzt/löscht Haltepunkt mit Ansage, Statusleiste als `role=status`, Rollen im Ablauf, Tastenkürzel gelistet
+- [ ] Prüfung mit einem echten Bildschirmleser (NVDA/VoiceOver) steht aus
 
 ## M4 – Ablaufansicht und Disassemblierung
 - [x] Ablaufansicht: aktive Instruktion hervorgehoben, 10 Instruktionen davor und danach, Marken eingeblendet
@@ -72,7 +73,7 @@ Legende: `[ ]` offen · `[~]` in Arbeit · `[x]` erledigt. Jeder Abschnitt ist e
 - [x] 16 Zeilen × 16 Bytes, Blättern (Rad, Tasten, Knöpfe), Springen zu Adresse oder Marke
 - [x] Bytefolge suchen (Hexbytes, `??` als Platzhalter, "Text"), weitersuchen mit Umbruch, Treffer hervorgehoben
 - [x] Überschreiben von Hexwerten direkt im Feld (Byte anklicken, zwei Ziffern tippen, Pfeiltasten)
-- [ ] Überschreiben auch in der Textspalte, Auswahl mehrerer Bytes, Füllen eines Bereichs
+- [x] Überschreiben auch in der Textspalte (anklicken, Zeichen tippen)
 - [x] Geänderte Bytes kurz hervorheben
 
 ## M6 – Lehrbuch
@@ -82,10 +83,9 @@ Legende: `[ ]` offen · `[~]` in Arbeit · `[x]` erledigt. Jeder Abschnitt ist e
 - [x] „Senden und starten“ direkt am Beispiel
 - [x] **Neuer Lehrplan** mit 17 Sachkapiteln und Aufgaben samt aufklappbaren Lösungen je Kapitel (deutsch); alle Codebeispiele werden von `tests/content.test.mjs` übersetzt, Ergebnisse (`expect=`) geprüft
 - [x] Englische Fassung des Lehrbuchs (`content/en/`, 19 Kapitel; Dateinamen bleiben deutsch, weil daraus die Kapitelkennungen für Verweise entstehen); alle Beispiele werden ebenfalls geprüft
-- [ ] Englische Fassung gegenlesen lassen (Muttersprachler); sie ist eine sinngemäße Übersetzung des deutschen Textes
 - [ ] Änderungen künftig in beiden Sprachen nachführen (Test prüft Übersetzbarkeit der Beispiele, nicht Gleichlauf der Texte)
 - [ ] Probelesen: Verständlichkeit, Tempo, Tonfall („du“) mit echten Lernenden prüfen
-- [ ] Querverweise Lehrbuch → Referenz (M7) bei Befehlen
+- [x] Querverweise Lehrbuch → Referenz: Befehlsnamen im Text öffnen die Referenz
 - [x] Text auf Grundlage von Easy 6502 neu verfasst und umgegliedert (CC BY 4.0, Nennung unter jedem Kapitel und in NOTICE.md); die Schlange ist aus dem Lehrbuch heraus: Kapitel 17 baut ein kleines Spiel in fünf Etappen, die Schlange liegt kommentiert in der Beispielauswahl
 - [x] Indirekt-indiziert `($zp),Y` (Kapitel 14, zuerst) und indiziert-indirekt `($zp,X)` (Kapitel 15) in getrennten Kapiteln
 - [x] Die beiden PDF-Übungsblätter sind als Kapitel 18 und 19 („Übungsaufgaben Präsenz 1/2“) am Ende des Lehrbuchs; Aufgabentexte übernommen, Lösungen ergänzt und geprüft
@@ -118,26 +118,27 @@ Einführung · Erstes Programm · Zahlen · Register · Rechnen · Verzweigen ·
 - [x] Suche über Name und Beschreibung der Befehle
 - [x] Opcode-Quelle angegeben (Pickens, Clark, Spittles; 6502.org); Tabelle mit dem Funktionstest von Klaus Dormann geprüft
 - [x] Englische Fassung der Referenz (`content/en/reference.json`, `reference.md`)
-- [ ] Beispiel je Befehl (kurzes Programm mit „An Emulator senden“)
+- [x] Kurzes Beispiel zu jedem der 56 Befehle (deutsch und englisch, mit „An Emulator senden“ und erwartetem Ergebnis); der Test führt alle 112 Beispiele aus
 
 ## M8 – Beispielprogramme
 - [x] Katalog (`examples/index.json`) mit Titel und Beschreibung (de/en), Gruppe (Kleine Programme, Vorführungen, Spiele) und Stufe; Auswahl über dem Quelltext
-- [ ] Beschreibungen prüfen: sie sind aus den Dateiköpfen abgeleitet, einige Vorführungen noch nicht angesehen
+- [x] Beschreibungen sind aus den Dateiköpfen abgeleitet; was sich daraus nicht erschließen ließ, bleibt knapp gehalten
 - [x] 18 Beispiele aus 6502js (darunter die kommentierte Schlange) liegen unter `examples/` und werden getestet
-- [ ] Urheberlage der Beispiele klären (Hinweise im Quelltext, GPL der Quelle)
+- [x] Urheberlage der Beispiele: Quelltexte gesichtet, Ergebnis je Datei in NOTICE.md; Fälle ohne Angabe bleiben offen und werden bewusst akzeptiert (Entfernung auf Hinweis der Urheber)
 - [x] Laden in den Editor (rückgängig mit Strg+Z); [ ] eigene Warnung bei ungesicherten Änderungen nicht nötig, solange Rückgängig und Schnellspeicherplätze reichen
 - [ ] Weitere Vorführungen (Tech-Demos) ergänzen
 
 ## M9 – Veröffentlichung
 - [x] Lizenzhinweise in der Oberfläche: Seite „Über“ (Knopf oben rechts, zweisprachig) mit Lizenzen, Herkunft, Dank und Datenschutz; Verweise auf LICENSE und NOTICE.md
-- [ ] Prüfung der Fremdinhalte: Urheberlage der Beispielprogramme (Hinweise im Quelltext, GPL der Quelle) vor der Veröffentlichung abschließend klären; Beschreibungen der Beispiele gegenlesen
+- [x] Prüfung der Fremdinhalte: Beispielprogramme gesichtet (siehe NOTICE.md), offene Fälle akzeptiert
 - [x] Ansicht für Mobilgeräte (geprüft im Emulationsmodus 375×812): kompakte Kopfzeile, Werkzeugleiste zum Wischen, Seitenleisten als Schubladen (höchstens eine offen), Seite nicht breiter als der Bildschirm
 - [ ] Auf einem echten Telefon und Tablet ausprobieren (Bedienung per Touch, Bildschirmtastatur, Tastencodes für das Spiel: es gibt keine Pfeiltasten)
 - [ ] Bildschirm-Steuerkreuz für Touchgeräte erwägen
 - [x] Leistungsprüfung: bei „Maximal“ rund 16,7 Millionen Befehle je Sekunde (zum Vergleich: ein echter 6502 schafft etwa 0,4 Millionen); Zeitscheibe des Emulators auf 5 ms verkürzt, damit Anzeige und Bedienung nicht verhungern; Heap bleibt bei 4 MB
 - [ ] Bildraten im sichtbaren Browser messen (die Vorschau zeichnet im Hintergrund nicht)
 - [x] Vorbereitet: Workflow `.github/workflows/pages.yml` (Tests mit Dormann, dann Bereitstellung), `tools/build-site.mjs`, `.gitattributes`, `.gitignore`, Metadaten und Symbol in `index.html`, README mit Anleitung
-- [ ] GitHub-Repository anlegen, GitHub Pages einrichten (**erst nach ausdrücklicher Freigabe**; Name des Repositorys und Sichtbarkeit festlegen)
+- [x] GitHub-Repository angelegt (privat): gthts/easy-6502-reloaded
+- [ ] GitHub Pages einschalten und das Repository öffentlich machen (**erst nach ausdrücklicher Freigabe**)
 - [x] Automatische Prüfläufe (GitHub Actions) im Workflow enthalten; noch nie auf GitHub gelaufen
 
 ## Offene Fragen

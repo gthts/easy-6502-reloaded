@@ -14,76 +14,507 @@
     "other": "Sonstiges"
   },
   "modes": {
-    "imp": { "name": "implizit", "text": "Der Befehl braucht keinen Operanden; er steckt im Befehl selbst (zum Beispiel `INX`). Der Befehl ist ein Byte lang." },
-    "acc": { "name": "Akkumulator", "text": "Der Befehl wirkt auf das Register `A`. Man schreibt dafür `A` oder lässt den Operanden weg (`ASL A`)." },
-    "imm": { "name": "unmittelbar", "text": "Die Zahl steht im Befehl: `LDA #$05` lädt die Zahl 5. Das `#` unterscheidet sie von einer Adresse." },
-    "zp": { "name": "Nullseite", "text": "Eine Adresse von `$00` bis `$FF` (die erste Speicherseite). Kürzer und schneller als die absolute Adresse." },
-    "zpx": { "name": "Nullseite,X", "text": "Nullseitenadresse plus `X`. Läuft über, ohne die Seite zu wechseln (`$FF,X` mit `X=5` ergibt `$04`)." },
-    "zpy": { "name": "Nullseite,Y", "text": "Nullseitenadresse plus `Y`. Nur bei `LDX` und `STX` möglich." },
-    "abs": { "name": "absolut", "text": "Eine volle 16-Bit-Adresse (`$0000` bis `$FFFF`). Im Befehl steht erst das niederwertige, dann das höherwertige Byte." },
-    "abx": { "name": "absolut,X", "text": "16-Bit-Adresse plus `X`. Der Takt für einen Seitenwechsel kommt bei lesenden Befehlen dazu." },
-    "aby": { "name": "absolut,Y", "text": "16-Bit-Adresse plus `Y`. Der Takt für einen Seitenwechsel kommt bei lesenden Befehlen dazu." },
-    "ind": { "name": "indirekt", "text": "Nur bei `JMP`: Die Adresse im Befehl zeigt auf zwei Bytes, die zusammen das Sprungziel ergeben. (Der echte 6502 hat hier einen Fehler: Liegt die Adresse bei `$xxFF`, wird das höherwertige Byte aus `$xx00` gelesen. Der Emulator bildet das nach.)" },
-    "izx": { "name": "indiziert-indirekt", "text": "`($nn,X)`: Zu `$nn` wird `X` addiert, dort steht die Adresse des Operanden (zwei Bytes in der Nullseite). Wählt einen Eintrag aus einer Zeigertabelle." },
-    "izy": { "name": "indirekt-indiziert", "text": "`($nn),Y`: In `$nn` und `$nn+1` steht eine Adresse; zu ihr wird `Y` addiert. Die häufigste Zeigerart." },
-    "rel": { "name": "relativ", "text": "Nur bei Verzweigungen: ein Abstand von −128 bis +127 Bytes, gemessen vom nächsten Befehl. Im Quelltext schreibt man eine Marke." }
+    "imp": {
+      "name": "implizit",
+      "text": "Der Befehl braucht keinen Operanden; er steckt im Befehl selbst (zum Beispiel `INX`). Der Befehl ist ein Byte lang."
+    },
+    "acc": {
+      "name": "Akkumulator",
+      "text": "Der Befehl wirkt auf das Register `A`. Man schreibt dafür `A` oder lässt den Operanden weg (`ASL A`)."
+    },
+    "imm": {
+      "name": "unmittelbar",
+      "text": "Die Zahl steht im Befehl: `LDA #$05` lädt die Zahl 5. Das `#` unterscheidet sie von einer Adresse."
+    },
+    "zp": {
+      "name": "Nullseite",
+      "text": "Eine Adresse von `$00` bis `$FF` (die erste Speicherseite). Kürzer und schneller als die absolute Adresse."
+    },
+    "zpx": {
+      "name": "Nullseite,X",
+      "text": "Nullseitenadresse plus `X`. Läuft über, ohne die Seite zu wechseln (`$FF,X` mit `X=5` ergibt `$04`)."
+    },
+    "zpy": {
+      "name": "Nullseite,Y",
+      "text": "Nullseitenadresse plus `Y`. Nur bei `LDX` und `STX` möglich."
+    },
+    "abs": {
+      "name": "absolut",
+      "text": "Eine volle 16-Bit-Adresse (`$0000` bis `$FFFF`). Im Befehl steht erst das niederwertige, dann das höherwertige Byte."
+    },
+    "abx": {
+      "name": "absolut,X",
+      "text": "16-Bit-Adresse plus `X`. Der Takt für einen Seitenwechsel kommt bei lesenden Befehlen dazu."
+    },
+    "aby": {
+      "name": "absolut,Y",
+      "text": "16-Bit-Adresse plus `Y`. Der Takt für einen Seitenwechsel kommt bei lesenden Befehlen dazu."
+    },
+    "ind": {
+      "name": "indirekt",
+      "text": "Nur bei `JMP`: Die Adresse im Befehl zeigt auf zwei Bytes, die zusammen das Sprungziel ergeben. (Der echte 6502 hat hier einen Fehler: Liegt die Adresse bei `$xxFF`, wird das höherwertige Byte aus `$xx00` gelesen. Der Emulator bildet das nach.)"
+    },
+    "izx": {
+      "name": "indiziert-indirekt",
+      "text": "`($nn,X)`: Zu `$nn` wird `X` addiert, dort steht die Adresse des Operanden (zwei Bytes in der Nullseite). Wählt einen Eintrag aus einer Zeigertabelle."
+    },
+    "izy": {
+      "name": "indirekt-indiziert",
+      "text": "`($nn),Y`: In `$nn` und `$nn+1` steht eine Adresse; zu ihr wird `Y` addiert. Die häufigste Zeigerart."
+    },
+    "rel": {
+      "name": "relativ",
+      "text": "Nur bei Verzweigungen: ein Abstand von −128 bis +127 Bytes, gemessen vom nächsten Befehl. Im Quelltext schreibt man eine Marke."
+    }
   },
   "instructions": {
-    "LDA": { "name": "Akkumulator laden", "text": "Kopiert eine Zahl oder den Inhalt einer Speicherzelle in `A`. `Z` wird 1, wenn der Wert 0 ist; `N` wird 1, wenn Bit 7 gesetzt ist." },
-    "LDX": { "name": "X-Register laden", "text": "Wie `LDA`, nur für `X`." },
-    "LDY": { "name": "Y-Register laden", "text": "Wie `LDA`, nur für `Y`." },
-    "STA": { "name": "Akkumulator speichern", "text": "Schreibt `A` in eine Speicherzelle. Verändert keine Flags. In den Bildschirmbereich (`$0200` bis `$05FF`) geschrieben, färbt es einen Punkt." },
-    "STX": { "name": "X-Register speichern", "text": "Wie `STA`, nur für `X`." },
-    "STY": { "name": "Y-Register speichern", "text": "Wie `STA`, nur für `Y`." },
-    "TAX": { "name": "A nach X übertragen", "text": "Kopiert `A` nach `X`. `A` bleibt unverändert." },
-    "TAY": { "name": "A nach Y übertragen", "text": "Kopiert `A` nach `Y`." },
-    "TXA": { "name": "X nach A übertragen", "text": "Kopiert `X` nach `A`." },
-    "TYA": { "name": "Y nach A übertragen", "text": "Kopiert `Y` nach `A`." },
-    "TSX": { "name": "Stapelzeiger nach X", "text": "Kopiert den Stapelzeiger `SP` nach `X`." },
-    "TXS": { "name": "X in den Stapelzeiger", "text": "Kopiert `X` in den Stapelzeiger `SP`. Setzt als einziger Übertragungsbefehl keine Flags." },
-    "PHA": { "name": "A auf den Stapel", "text": "Legt `A` auf den Stapel (`$0100` bis `$01FF`) und verringert `SP` um 1." },
-    "PLA": { "name": "A vom Stapel holen", "text": "Erhöht `SP` um 1 und holt den obersten Wert vom Stapel nach `A`. Setzt `N` und `Z`." },
-    "PHP": { "name": "Flags auf den Stapel", "text": "Legt das Statusregister `P` auf den Stapel. Das Flag `B` ist dabei als 1 abgelegt." },
-    "PLP": { "name": "Flags vom Stapel holen", "text": "Holt das Statusregister vom Stapel. Alle Flags nehmen den abgelegten Wert an." },
-    "ADC": { "name": "Addieren mit Übertrag", "text": "Addiert den Operanden und das Carry-Flag zu `A`. Vor einer einzelnen Addition löscht man das Carry mit `CLC`. Wird das Ergebnis größer als 255, bleibt das niederwertige Byte in `A`, und `C` wird 1. Bei gesetztem Dezimalflag (`SED`) rechnet der Befehl mit zweistelligen Dezimalzahlen (BCD)." },
-    "SBC": { "name": "Subtrahieren mit Übertrag", "text": "Zieht den Operanden von `A` ab, und zwar um ein weiteres 1, wenn das Carry gelöscht ist. Vor einer einzelnen Subtraktion setzt man das Carry mit `SEC`. `C = 0` nach dem Befehl bedeutet: Das Ergebnis war negativ." },
-    "AND": { "name": "Bitweise Und-Verknüpfung", "text": "Verknüpft `A` bitweise mit dem Operanden: Ein Ergebnisbit ist 1, wenn beide Bits 1 sind. Mit einer Maske blendet man Bits aus." },
-    "ORA": { "name": "Bitweise Oder-Verknüpfung", "text": "Ein Ergebnisbit ist 1, wenn mindestens eines der beiden Bits 1 ist. Setzt Bits." },
-    "EOR": { "name": "Bitweise Exklusiv-Oder-Verknüpfung", "text": "Ein Ergebnisbit ist 1, wenn genau eines der beiden Bits 1 ist. Kehrt Bits um." },
-    "BIT": { "name": "Bits testen", "text": "Prüft `A` gegen eine Speicherzelle, ohne `A` zu ändern: `Z` ist 1, wenn `A ∧ Wert` null ergibt; `N` und `V` kopieren die Bits 7 und 6 der Speicherzelle." },
-    "ASL": { "name": "Arithmetisch nach links schieben", "text": "Schiebt alle Bits um eine Stelle nach links; rechts kommt 0 nach, das herausgefallene Bit 7 landet im Carry. Verdoppelt die Zahl." },
-    "LSR": { "name": "Logisch nach rechts schieben", "text": "Schiebt alle Bits um eine Stelle nach rechts; links kommt 0 nach, das herausgefallene Bit 0 landet im Carry. Halbiert die Zahl (abgerundet). `N` wird immer 0." },
-    "ROL": { "name": "Nach links rotieren", "text": "Wie `ASL`, aber das alte Carry kommt rechts hinein (Rotation durch das Carry)." },
-    "ROR": { "name": "Nach rechts rotieren", "text": "Wie `LSR`, aber das alte Carry kommt links hinein." },
-    "INC": { "name": "Speicherzelle erhöhen", "text": "Erhöht den Inhalt einer Speicherzelle um 1. Von 255 geht es auf 0 (ohne Carry)." },
-    "DEC": { "name": "Speicherzelle verringern", "text": "Verringert den Inhalt einer Speicherzelle um 1. Von 0 geht es auf 255." },
-    "INX": { "name": "X erhöhen", "text": "Erhöht `X` um 1. Von 255 geht es auf 0 und setzt dabei `Z`." },
-    "INY": { "name": "Y erhöhen", "text": "Erhöht `Y` um 1." },
-    "DEX": { "name": "X verringern", "text": "Verringert `X` um 1. Von 0 geht es auf 255." },
-    "DEY": { "name": "Y verringern", "text": "Verringert `Y` um 1." },
-    "CMP": { "name": "A vergleichen", "text": "Rechnet `A − Wert`, ohne `A` zu ändern, und setzt nur Flags: `Z` = gleich, `C` = `A` ist größer oder gleich, `N` = Bit 7 der Differenz." },
-    "CPX": { "name": "X vergleichen", "text": "Wie `CMP`, aber mit `X`." },
-    "CPY": { "name": "Y vergleichen", "text": "Wie `CMP`, aber mit `Y`." },
-    "BCC": { "name": "Verzweigen, wenn Carry gelöscht", "text": "Springt, wenn `C = 0`. Nach einem Vergleich: kleiner (ohne Vorzeichen)." },
-    "BCS": { "name": "Verzweigen, wenn Carry gesetzt", "text": "Springt, wenn `C = 1`. Nach einem Vergleich: größer oder gleich (ohne Vorzeichen)." },
-    "BEQ": { "name": "Verzweigen, wenn gleich", "text": "Springt, wenn `Z = 1`, also wenn das letzte Ergebnis 0 war oder beim Vergleich beide Werte gleich waren." },
-    "BNE": { "name": "Verzweigen, wenn ungleich", "text": "Springt, wenn `Z = 0`." },
-    "BMI": { "name": "Verzweigen, wenn negativ", "text": "Springt, wenn `N = 1`, also wenn Bit 7 des letzten Ergebnisses gesetzt ist." },
-    "BPL": { "name": "Verzweigen, wenn positiv", "text": "Springt, wenn `N = 0`." },
-    "BVC": { "name": "Verzweigen, wenn kein Überlauf", "text": "Springt, wenn `V = 0`." },
-    "BVS": { "name": "Verzweigen, wenn Überlauf", "text": "Springt, wenn `V = 1`." },
-    "JMP": { "name": "Springen", "text": "Setzt den Programmzähler auf die Zieladresse, ohne Bedingung. Erreicht den ganzen Speicher. Mit `($nnnn)` liest er das Ziel aus dem Speicher." },
-    "JSR": { "name": "Unterprogramm aufrufen", "text": "Legt die Adresse des letzten Bytes des eigenen Befehls auf den Stapel und springt zum Ziel. `RTS` kehrt dahinter zurück." },
-    "RTS": { "name": "Aus dem Unterprogramm zurückkehren", "text": "Holt die Rückkehradresse vom Stapel, zählt 1 dazu und springt dorthin." },
-    "RTI": { "name": "Aus der Unterbrechung zurückkehren", "text": "Holt erst die Flags, dann die Rückkehradresse vom Stapel. Wird in dieser Umgebung nicht gebraucht, weil es keine Unterbrechungen gibt." },
-    "BRK": { "name": "Unterbrechung auslösen", "text": "Auf einem echten 6502 legt `BRK` die Adresse nach dem Befehl und die Flags auf den Stapel und springt über den Vektor an `$FFFE`. In dieser Umgebung **hält `BRK` das Programm an**; so beendet man ein Programm. Der Befehl `00` steht ohnehin überall, wo der Speicher leer ist." },
-    "NOP": { "name": "Nichts tun", "text": "Tut nichts außer Zeit zu verbrauchen (2 Takte). Nützlich als Platzhalter oder zum Warten." },
-    "CLC": { "name": "Carry löschen", "text": "Setzt das Carry-Flag auf 0. Gehört vor jede einzelne Addition." },
-    "CLD": { "name": "Dezimalmodus ausschalten", "text": "Setzt das Dezimalflag auf 0; `ADC` und `SBC` rechnen wieder binär." },
-    "CLI": { "name": "Unterbrechungssperre aufheben", "text": "Setzt das Flag `I` auf 0. Hat in dieser Umgebung keine Wirkung." },
-    "CLV": { "name": "Überlauf löschen", "text": "Setzt das Überlauf-Flag `V` auf 0." },
-    "SEC": { "name": "Carry setzen", "text": "Setzt das Carry-Flag auf 1. Gehört vor jede einzelne Subtraktion." },
-    "SED": { "name": "Dezimalmodus einschalten", "text": "Setzt das Dezimalflag; `ADC` und `SBC` rechnen dann mit zweistelligen Dezimalzahlen (BCD), zum Beispiel `$19 + $28 = $47`." },
-    "SEI": { "name": "Unterbrechungssperre setzen", "text": "Setzt das Flag `I` auf 1. Hat in dieser Umgebung keine Wirkung." }
+    "LDA": {
+      "name": "Akkumulator laden",
+      "text": "Kopiert eine Zahl oder den Inhalt einer Speicherzelle in `A`. `Z` wird 1, wenn der Wert 0 ist; `N` wird 1, wenn Bit 7 gesetzt ist.",
+      "example": {
+        "code": "LDA #$80      ; A = $80, das oberste Bit setzt N\nBRK",
+        "expect": "A:80,N:1"
+      }
+    },
+    "LDX": {
+      "name": "X-Register laden",
+      "text": "Wie `LDA`, nur für `X`.",
+      "example": {
+        "code": "LDX #$00      ; X = 0, Z wird 1\nBRK",
+        "expect": "X:00,Z:1"
+      }
+    },
+    "LDY": {
+      "name": "Y-Register laden",
+      "text": "Wie `LDA`, nur für `Y`.",
+      "example": {
+        "code": "LDY #$7F      ; Y = $7F\nBRK",
+        "expect": "Y:7F,N:0"
+      }
+    },
+    "STA": {
+      "name": "Akkumulator speichern",
+      "text": "Schreibt `A` in eine Speicherzelle. Verändert keine Flags. In den Bildschirmbereich (`$0200` bis `$05FF`) geschrieben, färbt es einen Punkt.",
+      "example": {
+        "code": "LDA #$01\nSTA $0200     ; weißer Punkt oben links\nBRK",
+        "expect": "$0200:01"
+      }
+    },
+    "STX": {
+      "name": "X-Register speichern",
+      "text": "Wie `STA`, nur für `X`.",
+      "example": {
+        "code": "LDX #$05\nSTX $10       ; Zelle $10 = 5\nBRK",
+        "expect": "$0010:05"
+      }
+    },
+    "STY": {
+      "name": "Y-Register speichern",
+      "text": "Wie `STA`, nur für `Y`.",
+      "example": {
+        "code": "LDY #$06\nSTY $0201     ; blauer Punkt neben dem ersten\nBRK",
+        "expect": "$0201:06"
+      }
+    },
+    "TAX": {
+      "name": "A nach X übertragen",
+      "text": "Kopiert `A` nach `X`. `A` bleibt unverändert.",
+      "example": {
+        "code": "LDA #$2A\nTAX           ; X = A\nBRK",
+        "expect": "A:2A,X:2A"
+      }
+    },
+    "TAY": {
+      "name": "A nach Y übertragen",
+      "text": "Kopiert `A` nach `Y`.",
+      "example": {
+        "code": "LDA #$2B\nTAY           ; Y = A\nBRK",
+        "expect": "A:2B,Y:2B"
+      }
+    },
+    "TXA": {
+      "name": "X nach A übertragen",
+      "text": "Kopiert `X` nach `A`.",
+      "example": {
+        "code": "LDX #$2C\nTXA           ; A = X\nBRK",
+        "expect": "A:2C,X:2C"
+      }
+    },
+    "TYA": {
+      "name": "Y nach A übertragen",
+      "text": "Kopiert `Y` nach `A`.",
+      "example": {
+        "code": "LDY #$2D\nTYA           ; A = Y\nBRK",
+        "expect": "A:2D,Y:2D"
+      }
+    },
+    "TSX": {
+      "name": "Stapelzeiger nach X",
+      "text": "Kopiert den Stapelzeiger `SP` nach `X`.",
+      "example": {
+        "code": "TSX           ; X = SP, zu Beginn $FF\nBRK",
+        "expect": "X:FF,N:1"
+      }
+    },
+    "TXS": {
+      "name": "X in den Stapelzeiger",
+      "text": "Kopiert `X` in den Stapelzeiger `SP`. Setzt als einziger Übertragungsbefehl keine Flags.",
+      "example": {
+        "code": "LDX #$F0\nTXS           ; SP = $F0\nBRK",
+        "expect": "SP:F0"
+      }
+    },
+    "PHA": {
+      "name": "A auf den Stapel",
+      "text": "Legt `A` auf den Stapel (`$0100` bis `$01FF`) und verringert `SP` um 1.",
+      "example": {
+        "code": "LDA #$11\nPHA           ; landet in $01FF\nLDA #$22\nPHA           ; landet in $01FE\nBRK",
+        "expect": "$01FF:11,$01FE:22,SP:FD"
+      }
+    },
+    "PLA": {
+      "name": "A vom Stapel holen",
+      "text": "Erhöht `SP` um 1 und holt den obersten Wert vom Stapel nach `A`. Setzt `N` und `Z`.",
+      "example": {
+        "code": "LDA #$11\nPHA\nLDA #$00\nPLA           ; A = $11 vom Stapel\nBRK",
+        "expect": "A:11"
+      }
+    },
+    "PHP": {
+      "name": "Flags auf den Stapel",
+      "text": "Legt das Statusregister `P` auf den Stapel. Das Flag `B` ist dabei als 1 abgelegt.",
+      "example": {
+        "code": "SEC\nPHP           ; Flags auf den Stapel\nPLA           ; und als Zahl lesen: $35 (C, I, B und das feste Bit)\nBRK",
+        "expect": "A:35"
+      }
+    },
+    "PLP": {
+      "name": "Flags vom Stapel holen",
+      "text": "Holt das Statusregister vom Stapel. Alle Flags nehmen den abgelegten Wert an.",
+      "example": {
+        "code": "LDA #$01\nPHA\nPLP           ; Flags = %00000001, nur C ist gesetzt\nBRK",
+        "expect": "C:1,Z:0"
+      }
+    },
+    "ADC": {
+      "name": "Addieren mit Übertrag",
+      "text": "Addiert den Operanden und das Carry-Flag zu `A`. Vor einer einzelnen Addition löscht man das Carry mit `CLC`. Wird das Ergebnis größer als 255, bleibt das niederwertige Byte in `A`, und `C` wird 1. Bei gesetztem Dezimalflag (`SED`) rechnet der Befehl mit zweistelligen Dezimalzahlen (BCD).",
+      "example": {
+        "code": "CLC           ; Übertrag löschen\nLDA #$15\nADC #$23      ; A = $38\nBRK",
+        "expect": "A:38,C:0"
+      }
+    },
+    "SBC": {
+      "name": "Subtrahieren mit Übertrag",
+      "text": "Zieht den Operanden von `A` ab, und zwar um ein weiteres 1, wenn das Carry gelöscht ist. Vor einer einzelnen Subtraktion setzt man das Carry mit `SEC`. `C = 0` nach dem Befehl bedeutet: Das Ergebnis war negativ.",
+      "example": {
+        "code": "SEC           ; nichts geliehen\nLDA #$50\nSBC #$18      ; A = $38\nBRK",
+        "expect": "A:38,C:1"
+      }
+    },
+    "AND": {
+      "name": "Bitweise Und-Verknüpfung",
+      "text": "Verknüpft `A` bitweise mit dem Operanden: Ein Ergebnisbit ist 1, wenn beide Bits 1 sind. Mit einer Maske blendet man Bits aus.",
+      "example": {
+        "code": "LDA #$DB\nAND #$0F      ; nur das untere Halbbyte bleibt\nBRK",
+        "expect": "A:0B"
+      }
+    },
+    "ORA": {
+      "name": "Bitweise Oder-Verknüpfung",
+      "text": "Ein Ergebnisbit ist 1, wenn mindestens eines der beiden Bits 1 ist. Setzt Bits.",
+      "example": {
+        "code": "LDA #$0A\nORA #$05      ; Bits vereinigen\nBRK",
+        "expect": "A:0F"
+      }
+    },
+    "EOR": {
+      "name": "Bitweise Exklusiv-Oder-Verknüpfung",
+      "text": "Ein Ergebnisbit ist 1, wenn genau eines der beiden Bits 1 ist. Kehrt Bits um.",
+      "example": {
+        "code": "LDA #$FF\nEOR #$0F      ; unteres Halbbyte umkehren\nBRK",
+        "expect": "A:F0,N:1"
+      }
+    },
+    "BIT": {
+      "name": "Bits testen",
+      "text": "Prüft `A` gegen eine Speicherzelle, ohne `A` zu ändern: `Z` ist 1, wenn `A ∧ Wert` null ergibt; `N` und `V` kopieren die Bits 7 und 6 der Speicherzelle.",
+      "example": {
+        "code": "LDA #$C0\nSTA $10\nLDA #$01\nBIT $10        ; $01 und $C0 haben kein gemeinsames Bit: Z=1; N und V kommen aus $C0\nBRK",
+        "expect": "A:01,Z:1,N:1,V:1"
+      }
+    },
+    "ASL": {
+      "name": "Arithmetisch nach links schieben",
+      "text": "Schiebt alle Bits um eine Stelle nach links; rechts kommt 0 nach, das herausgefallene Bit 7 landet im Carry. Verdoppelt die Zahl.",
+      "example": {
+        "code": "LDA #$41\nASL A         ; verdoppeln: $82\nBRK",
+        "expect": "A:82,C:0,N:1"
+      }
+    },
+    "LSR": {
+      "name": "Logisch nach rechts schieben",
+      "text": "Schiebt alle Bits um eine Stelle nach rechts; links kommt 0 nach, das herausgefallene Bit 0 landet im Carry. Halbiert die Zahl (abgerundet). `N` wird immer 0.",
+      "example": {
+        "code": "LDA #$03\nLSR A         ; halbieren: 1, das Bit 0 landet im Carry\nBRK",
+        "expect": "A:01,C:1"
+      }
+    },
+    "ROL": {
+      "name": "Nach links rotieren",
+      "text": "Wie `ASL`, aber das alte Carry kommt rechts hinein (Rotation durch das Carry).",
+      "example": {
+        "code": "SEC\nLDA #$80\nROL A         ; Bit 7 geht ins Carry, das alte Carry nach Bit 0\nBRK",
+        "expect": "A:01,C:1"
+      }
+    },
+    "ROR": {
+      "name": "Nach rechts rotieren",
+      "text": "Wie `LSR`, aber das alte Carry kommt links hinein.",
+      "example": {
+        "code": "SEC\nLDA #$02\nROR A         ; das alte Carry kommt nach Bit 7\nBRK",
+        "expect": "A:81,C:0"
+      }
+    },
+    "INC": {
+      "name": "Speicherzelle erhöhen",
+      "text": "Erhöht den Inhalt einer Speicherzelle um 1. Von 255 geht es auf 0 (ohne Carry).",
+      "example": {
+        "code": "LDA #$FF\nSTA $10\nINC $10       ; $FF + 1 = 0\nBRK",
+        "expect": "$0010:00,Z:1"
+      }
+    },
+    "DEC": {
+      "name": "Speicherzelle verringern",
+      "text": "Verringert den Inhalt einer Speicherzelle um 1. Von 0 geht es auf 255.",
+      "example": {
+        "code": "LDA #$01\nSTA $10\nDEC $10       ; 1 - 1 = 0\nBRK",
+        "expect": "$0010:00,Z:1"
+      }
+    },
+    "INX": {
+      "name": "X erhöhen",
+      "text": "Erhöht `X` um 1. Von 255 geht es auf 0 und setzt dabei `Z`.",
+      "example": {
+        "code": "LDX #$09\nINX\nBRK",
+        "expect": "X:0A"
+      }
+    },
+    "INY": {
+      "name": "Y erhöhen",
+      "text": "Erhöht `Y` um 1.",
+      "example": {
+        "code": "LDY #$FF\nINY           ; läuft auf 0 über\nBRK",
+        "expect": "Y:00,Z:1"
+      }
+    },
+    "DEX": {
+      "name": "X verringern",
+      "text": "Verringert `X` um 1. Von 0 geht es auf 255.",
+      "example": {
+        "code": "LDX #$01\nDEX\nBRK",
+        "expect": "X:00,Z:1"
+      }
+    },
+    "DEY": {
+      "name": "Y verringern",
+      "text": "Verringert `Y` um 1.",
+      "example": {
+        "code": "LDY #$00\nDEY           ; läuft auf $FF zurück\nBRK",
+        "expect": "Y:FF,N:1"
+      }
+    },
+    "CMP": {
+      "name": "A vergleichen",
+      "text": "Rechnet `A − Wert`, ohne `A` zu ändern, und setzt nur Flags: `Z` = gleich, `C` = `A` ist größer oder gleich, `N` = Bit 7 der Differenz.",
+      "example": {
+        "code": "LDA #$10\nCMP #$10      ; gleich: Z=1, C=1\nBRK",
+        "expect": "Z:1,C:1"
+      }
+    },
+    "CPX": {
+      "name": "X vergleichen",
+      "text": "Wie `CMP`, aber mit `X`.",
+      "example": {
+        "code": "LDX #$05\nCPX #$08      ; X ist kleiner: C=0\nBRK",
+        "expect": "Z:0,C:0,N:1"
+      }
+    },
+    "CPY": {
+      "name": "Y vergleichen",
+      "text": "Wie `CMP`, aber mit `Y`.",
+      "example": {
+        "code": "LDY #$09\nCPY #$08      ; Y ist größer: C=1, Z=0\nBRK",
+        "expect": "Z:0,C:1"
+      }
+    },
+    "BCC": {
+      "name": "Verzweigen, wenn Carry gelöscht",
+      "text": "Springt, wenn `C = 0`. Nach einem Vergleich: kleiner (ohne Vorzeichen).",
+      "example": {
+        "code": "CLC\nBCC skip       ; C = 0: springt\nLDA #$01      ; wird übersprungen\nskip:\nLDA #$02\nBRK",
+        "expect": "A:02"
+      }
+    },
+    "BCS": {
+      "name": "Verzweigen, wenn Carry gesetzt",
+      "text": "Springt, wenn `C = 1`. Nach einem Vergleich: größer oder gleich (ohne Vorzeichen).",
+      "example": {
+        "code": "SEC\nBCS skip       ; C = 1: springt\nLDA #$01      ; wird übersprungen\nskip:\nLDA #$02\nBRK",
+        "expect": "A:02"
+      }
+    },
+    "BEQ": {
+      "name": "Verzweigen, wenn gleich",
+      "text": "Springt, wenn `Z = 1`, also wenn das letzte Ergebnis 0 war oder beim Vergleich beide Werte gleich waren.",
+      "example": {
+        "code": "LDA #$00        ; setzt Z\nBEQ skip       ; Z = 1: springt\nLDX #$01      ; wird übersprungen\nskip:\nLDX #$02\nBRK",
+        "expect": "X:02"
+      }
+    },
+    "BNE": {
+      "name": "Verzweigen, wenn ungleich",
+      "text": "Springt, wenn `Z = 0`.",
+      "example": {
+        "code": "LDA #$01\nBNE skip       ; Z = 0: springt\nLDX #$01      ; wird übersprungen\nskip:\nLDX #$02\nBRK",
+        "expect": "X:02"
+      }
+    },
+    "BMI": {
+      "name": "Verzweigen, wenn negativ",
+      "text": "Springt, wenn `N = 1`, also wenn Bit 7 des letzten Ergebnisses gesetzt ist.",
+      "example": {
+        "code": "LDA #$80        ; oberstes Bit gesetzt: N = 1\nBMI skip       ; springt\nLDX #$01      ; wird übersprungen\nskip:\nLDX #$02\nBRK",
+        "expect": "X:02"
+      }
+    },
+    "BPL": {
+      "name": "Verzweigen, wenn positiv",
+      "text": "Springt, wenn `N = 0`.",
+      "example": {
+        "code": "LDA #$01        ; N = 0\nBPL skip       ; springt\nLDX #$01      ; wird übersprungen\nskip:\nLDX #$02\nBRK",
+        "expect": "X:02"
+      }
+    },
+    "BVC": {
+      "name": "Verzweigen, wenn kein Überlauf",
+      "text": "Springt, wenn `V = 0`.",
+      "example": {
+        "code": "CLV\nBVC skip       ; V = 0: springt\nLDX #$01      ; wird übersprungen\nskip:\nLDX #$02\nBRK",
+        "expect": "X:02"
+      }
+    },
+    "BVS": {
+      "name": "Verzweigen, wenn Überlauf",
+      "text": "Springt, wenn `V = 1`.",
+      "example": {
+        "code": "CLC\nLDA #$50\nADC #$50      ; $50 + $50 läuft in den negativen Bereich: V = 1\nBVS skip       ; springt\nLDX #$01      ; wird übersprungen\nskip:\nLDX #$02\nBRK",
+        "expect": "X:02,V:1"
+      }
+    },
+    "JMP": {
+      "name": "Springen",
+      "text": "Setzt den Programmzähler auf die Zieladresse, ohne Bedingung. Erreicht den ganzen Speicher. Mit `($nnnn)` liest er das Ziel aus dem Speicher.",
+      "example": {
+        "code": "JMP skip\nLDA #$01      ; wird übersprungen\nskip:\nLDA #$02\nBRK",
+        "expect": "A:02"
+      }
+    },
+    "JSR": {
+      "name": "Unterprogramm aufrufen",
+      "text": "Legt die Adresse des letzten Bytes des eigenen Befehls auf den Stapel und springt zum Ziel. `RTS` kehrt dahinter zurück.",
+      "example": {
+        "code": "JSR sub        ; Unterprogramm aufrufen\nLDX #$05      ; danach geht es hier weiter\nBRK\n\nsub:\nLDA #$07\nRTS",
+        "expect": "A:07,X:05"
+      }
+    },
+    "RTS": {
+      "name": "Aus dem Unterprogramm zurückkehren",
+      "text": "Holt die Rückkehradresse vom Stapel, zählt 1 dazu und springt dorthin.",
+      "example": {
+        "code": "LDA #$04\nJSR dbl\nBRK\n\ndbl:\nASL A\nRTS            ; zurück hinter den JSR",
+        "expect": "A:08"
+      }
+    },
+    "RTI": {
+      "name": "Aus der Unterbrechung zurückkehren",
+      "text": "Holt erst die Flags, dann die Rückkehradresse vom Stapel. Wird in dieser Umgebung nicht gebraucht, weil es keine Unterbrechungen gibt.",
+      "example": {
+        "code": "LDA #>target   ; Rückkehradresse und Flags auf den Stapel\nPHA\nLDA #<target\nPHA\nLDA #$00\nPHA\nRTI            ; holt Flags und Adresse und springt nach target\nLDX #$01      ; wird übersprungen\ntarget:\nLDX #$02\nBRK",
+        "expect": "X:02"
+      }
+    },
+    "BRK": {
+      "name": "Unterbrechung auslösen",
+      "text": "Auf einem echten 6502 legt `BRK` die Adresse nach dem Befehl und die Flags auf den Stapel und springt über den Vektor an `$FFFE`. In dieser Umgebung **hält `BRK` das Programm an**; so beendet man ein Programm. Der Befehl `00` steht ohnehin überall, wo der Speicher leer ist.",
+      "example": {
+        "code": "LDA #$01\nBRK            ; hier hält das Programm an\nLDA #$02      ; wird nicht mehr ausgeführt",
+        "expect": "A:01"
+      }
+    },
+    "NOP": {
+      "name": "Nichts tun",
+      "text": "Tut nichts außer Zeit zu verbrauchen (2 Takte). Nützlich als Platzhalter oder zum Warten.",
+      "example": {
+        "code": "LDX #$01\nNOP            ; tut nichts\nINX\nBRK",
+        "expect": "X:02"
+      }
+    },
+    "CLC": {
+      "name": "Carry löschen",
+      "text": "Setzt das Carry-Flag auf 0. Gehört vor jede einzelne Addition.",
+      "example": {
+        "code": "SEC\nCLC            ; Carry wieder auf 0\nBRK",
+        "expect": "C:0"
+      }
+    },
+    "CLD": {
+      "name": "Dezimalmodus ausschalten",
+      "text": "Setzt das Dezimalflag auf 0; `ADC` und `SBC` rechnen wieder binär.",
+      "example": {
+        "code": "SED\nCLD            ; wieder binär rechnen\nBRK",
+        "expect": "D:0"
+      }
+    },
+    "CLI": {
+      "name": "Unterbrechungssperre aufheben",
+      "text": "Setzt das Flag `I` auf 0. Hat in dieser Umgebung keine Wirkung.",
+      "example": {
+        "code": "CLI            ; I = 0 (ohne Wirkung in dieser Umgebung)\nBRK",
+        "expect": "I:0"
+      }
+    },
+    "CLV": {
+      "name": "Überlauf löschen",
+      "text": "Setzt das Überlauf-Flag `V` auf 0.",
+      "example": {
+        "code": "CLC\nLDA #$50\nADC #$50      ; V = 1\nCLV            ; V = 0\nBRK",
+        "expect": "V:0"
+      }
+    },
+    "SEC": {
+      "name": "Carry setzen",
+      "text": "Setzt das Carry-Flag auf 1. Gehört vor jede einzelne Subtraktion.",
+      "example": {
+        "code": "SEC            ; Carry auf 1\nBRK",
+        "expect": "C:1"
+      }
+    },
+    "SED": {
+      "name": "Dezimalmodus einschalten",
+      "text": "Setzt das Dezimalflag; `ADC` und `SBC` rechnen dann mit zweistelligen Dezimalzahlen (BCD), zum Beispiel `$19 + $28 = $47`.",
+      "example": {
+        "code": "SED            ; Dezimalmodus\nCLC\nLDA #$19\nADC #$28      ; 19 + 28 = 47 (dezimal gerechnet)\nBRK",
+        "expect": "A:47"
+      }
+    },
+    "SEI": {
+      "name": "Unterbrechungssperre setzen",
+      "text": "Setzt das Flag `I` auf 1. Hat in dieser Umgebung keine Wirkung.",
+      "example": {
+        "code": "CLI\nSEI            ; I = 1 (ohne Wirkung in dieser Umgebung)\nBRK",
+        "expect": "I:1"
+      }
+    }
   }
 }

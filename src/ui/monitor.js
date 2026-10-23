@@ -13,6 +13,7 @@ export function createMonitor(root, ui, machine) {
   let start = 0x0200;
   let cursor = 0x0200;
   let pending = null; // erste eingetippte Hexziffer
+  let textMode = false; // Eingabe in der Textspalte: jede Taste schreibt ihren Zeichencode
   let hit = null; // { addr, len } letzter Fund
   let lastPattern = null;
   const addrCells = [];
@@ -39,8 +40,13 @@ export function createMonitor(root, ui, machine) {
     }
     const asc = document.createElement('span');
     asc.className = 'asc';
+    for (let c = 0; c < COLS; c++) {
+      const s = document.createElement('span');
+      s.dataset.i = String(r * COLS + c);
+      ascCells.push(s);
+      asc.append(s);
+    }
     addrCells.push(a);
-    ascCells.push(asc);
     rowEl.append(a, bytes, asc);
     root.append(rowEl);
   }
@@ -87,8 +93,9 @@ export function createMonitor(root, ui, machine) {
   // ---- Bearbeiten -------------------------------------------------------------------
 
   root.addEventListener('pointerdown', (e) => {
-    const cell = e.target.closest('.bytes span');
+    const cell = e.target.closest('.bytes span, .asc span');
     if (!cell) return;
+    textMode = !!cell.closest('.asc');
     cursor = start + Number(cell.dataset.i);
     pending = null;
     needs = true;
@@ -98,7 +105,14 @@ export function createMonitor(root, ui, machine) {
 
   root.addEventListener('keydown', (e) => {
     if (e.ctrlKey || e.metaKey || e.altKey) return;
-    if (/^[0-9a-fA-F]$/.test(e.key)) {
+    if (textMode && e.key.length === 1 && e.key.charCodeAt(0) <= 0xff) {
+      // Textspalte: das getippte Zeichen wird als Byte geschrieben
+      e.preventDefault();
+      machine.mem.poke(cursor, e.key.charCodeAt(0));
+      moveCursor(1);
+      return;
+    }
+    if (!textMode && /^[0-9a-fA-F]$/.test(e.key)) {
       e.preventDefault();
       if (pending === null) pending = e.key;
       else {
@@ -160,19 +174,24 @@ export function createMonitor(root, ui, machine) {
       if (cell.textContent !== text) cell.textContent = text;
       const cls = [];
       if (flashUntil[i] > now) cls.push('chg');
-      if (addr === cursor) cls.push('cur');
+      if (addr === cursor) cls.push(textMode ? 'cur-soft' : 'cur');
       if (hit && addr >= hit.addr && addr < hit.addr + hit.len) cls.push('hit');
       const c = cls.join(' ');
       if (cell.className !== c) cell.className = c;
     }
-    for (let r = 0; r < ROWS; r++) {
-      addrCells[r].textContent = hex4(start + r * COLS);
-      let s = '';
-      for (let c = 0; c < COLS; c++) {
-        const v = data[start + r * COLS + c];
-        s += v >= 0x20 && v < 0x7f ? String.fromCharCode(v) : '.';
-      }
-      if (ascCells[r].textContent !== s) ascCells[r].textContent = s;
+    for (let r = 0; r < ROWS; r++) addrCells[r].textContent = hex4(start + r * COLS);
+    for (let i = 0; i < SIZE; i++) {
+      const addr = start + i;
+      const v = data[addr];
+      const cell = ascCells[i];
+      const ch = v >= 0x20 && v < 0x7f ? String.fromCharCode(v) : '.';
+      if (cell.textContent !== ch) cell.textContent = ch;
+      const cls = [];
+      if (flashUntil[i] > now) cls.push('chg');
+      if (addr === cursor) cls.push(textMode ? 'cur' : 'cur-soft');
+      if (hit && addr >= hit.addr && addr < hit.addr + hit.len) cls.push('hit');
+      const c = cls.join(' ');
+      if (cell.className !== c) cell.className = c;
     }
     needs = false;
   }

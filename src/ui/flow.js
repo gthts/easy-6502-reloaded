@@ -11,6 +11,8 @@ const CONTEXT = 10;
 export function buildRow(machine, ins, active) {
   const el = document.createElement('div');
   el.className = 'row' + (active ? ' active' : '');
+  el.setAttribute('role', 'listitem');
+  if (active) el.setAttribute('aria-current', 'step');
   el.dataset.addr = String(ins.addr);
   if (active) el.draggable = true;
   const bp = document.createElement('span');
@@ -38,6 +40,7 @@ export function buildRow(machine, ins, active) {
 export function buildLabelRow(name) {
   const el = document.createElement('div');
   el.className = 'lbl';
+  el.setAttribute('role', 'listitem');
   el.textContent = `${name}:`;
   return el;
 }

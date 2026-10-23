@@ -6,8 +6,13 @@ const INDENT = '  ';
 
 import { MNEMONICS } from '../core/opcodes.js';
 
-export function createEditor({ textarea, layer, gutter, onChange, onGutterClick, onHelp }) {
+export function createEditor({ textarea, layer, matchLayer, gutter, onChange, onGutterClick, onHelp }) {
   const layerIn = layer.firstElementChild; // <code>
+  const matchIn = matchLayer.firstElementChild;
+  const listeners = [];
+  let matches = [];
+  let curMatch = -1;
+  let escaped = false; // Escape wurde gedrückt: das nächste Tab verlässt das Feld
   const gutterIn = gutter.firstElementChild;
   let lineEls = [];
   let gutEls = [];
@@ -62,10 +67,39 @@ export function createEditor({ textarea, layer, gutter, onChange, onGutterClick,
     }
   }
 
+  // Treffer der Suche unter dem Text markieren
+  const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  function renderMatches() {
+    if (!matches.length) { matchIn.innerHTML = ''; return; }
+    const lines = textarea.value.split('\n');
+    let offset = 0;
+    let k = 0;
+    const out = [];
+    for (const line of lines) {
+      const end = offset + line.length;
+      let html = '';
+      let pos = offset;
+      while (k < matches.length && matches[k].start < end + 1) {
+        const m = matches[k];
+        if (m.end <= offset) { k++; continue; }
+        const s = Math.max(m.start, offset);
+        const f = Math.min(m.end, end);
+        html += esc(textarea.value.slice(pos, s)) + `<mark${k === curMatch ? ' class="cur"' : ''}>${esc(textarea.value.slice(s, f))}</mark>`;
+        pos = f;
+        if (m.end <= end) k++; else break;
+      }
+      html += esc(textarea.value.slice(pos, end));
+      out.push(`<div class="l">${html}</div>`);
+      offset = end + 1;
+    }
+    matchIn.innerHTML = out.join('');
+  }
+
   function syncScroll() {
     const x = textarea.scrollLeft;
     const y = textarea.scrollTop;
     layerIn.style.transform = `translate(${-x}px, ${-y}px)`;
+    matchIn.style.transform = `translate(${-x}px, ${-y}px)`;
     gutterIn.style.transform = `translateY(${-y}px)`;
   }
 
@@ -74,6 +108,7 @@ export function createEditor({ textarea, layer, gutter, onChange, onGutterClick,
     render();
     syncScroll();
     onChange?.();
+    for (const fn of listeners) fn();
   });
   gutter.addEventListener('click', (e) => {
     const g = e.target.closest('.g');
@@ -136,6 +171,15 @@ export function createEditor({ textarea, layer, gutter, onChange, onGutterClick,
   }
 
   textarea.addEventListener('keydown', (e) => {
+    // Tastaturfalle vermeiden: Escape, dann Tab verlässt das Feld
+    if (e.key === 'Escape') { escaped = true; return; }
+    if (e.key === 'Tab' && escaped) { escaped = false; return; }
+    if (e.key !== 'Shift') escaped = false;
+    if (e.key === 'F9' && !e.ctrlKey && !e.altKey && !e.shiftKey) {
+      e.preventDefault();
+      onGutterClick?.(textarea.value.slice(0, textarea.selectionStart).split('\n').length);
+      return;
+    }
     if (e.key === 'F1' && !e.ctrlKey && !e.altKey && !e.shiftKey) {
       const w = helpWord();
       if (w && onHelp) { e.preventDefault(); onHelp(w); }
@@ -178,6 +222,12 @@ export function createEditor({ textarea, layer, gutter, onChange, onGutterClick,
       syncScroll();
     },
     focus: () => textarea.focus(),
+    onTextChange: (fn) => listeners.push(fn),
+    setMatches(list, current) {
+      matches = list;
+      curMatch = current;
+      renderMatches();
+    },
     setErrors(map) {
       errors = map;
       applyMarkers();

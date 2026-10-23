@@ -14,76 +14,507 @@
     "other": "Other"
   },
   "modes": {
-    "imp": { "name": "implied", "text": "The instruction needs no operand; it is part of the instruction itself (for example `INX`). The instruction is one byte long." },
-    "acc": { "name": "accumulator", "text": "The instruction works on register `A`. Write `A` or leave the operand out (`ASL A`)." },
-    "imm": { "name": "immediate", "text": "The number is part of the instruction: `LDA #$05` loads the number 5. The `#` tells it apart from an address." },
-    "zp": { "name": "zero page", "text": "An address from `$00` to `$FF` (the first page of memory). Shorter and faster than an absolute address." },
-    "zpx": { "name": "zero page,X", "text": "A zero-page address plus `X`. It wraps around without leaving the page (`$FF,X` with `X=5` gives `$04`)." },
-    "zpy": { "name": "zero page,Y", "text": "A zero-page address plus `Y`. Only possible with `LDX` and `STX`." },
-    "abs": { "name": "absolute", "text": "A full 16-bit address (`$0000` to `$FFFF`). In the instruction the low byte comes first, then the high byte." },
-    "abx": { "name": "absolute,X", "text": "A 16-bit address plus `X`. Reading instructions take one extra cycle when a page boundary is crossed." },
-    "aby": { "name": "absolute,Y", "text": "A 16-bit address plus `Y`. Reading instructions take one extra cycle when a page boundary is crossed." },
-    "ind": { "name": "indirect", "text": "Only with `JMP`: the address in the instruction points to two bytes that together form the jump target. (The real 6502 has a bug here: if the address is `$xxFF`, the high byte is read from `$xx00`. The emulator reproduces it.)" },
-    "izx": { "name": "indexed indirect", "text": "`($nn,X)`: `X` is added to `$nn`, and the address of the operand is stored there (two bytes in the zero page). Selects an entry from a table of pointers." },
-    "izy": { "name": "indirect indexed", "text": "`($nn),Y`: `$nn` and `$nn+1` hold an address, and `Y` is added to it. The most common kind of pointer access." },
-    "rel": { "name": "relative", "text": "Only for branches: an offset from −128 to +127 bytes, measured from the next instruction. In the source you write a label." }
+    "imp": {
+      "name": "implied",
+      "text": "The instruction needs no operand; it is part of the instruction itself (for example `INX`). The instruction is one byte long."
+    },
+    "acc": {
+      "name": "accumulator",
+      "text": "The instruction works on register `A`. Write `A` or leave the operand out (`ASL A`)."
+    },
+    "imm": {
+      "name": "immediate",
+      "text": "The number is part of the instruction: `LDA #$05` loads the number 5. The `#` tells it apart from an address."
+    },
+    "zp": {
+      "name": "zero page",
+      "text": "An address from `$00` to `$FF` (the first page of memory). Shorter and faster than an absolute address."
+    },
+    "zpx": {
+      "name": "zero page,X",
+      "text": "A zero-page address plus `X`. It wraps around without leaving the page (`$FF,X` with `X=5` gives `$04`)."
+    },
+    "zpy": {
+      "name": "zero page,Y",
+      "text": "A zero-page address plus `Y`. Only possible with `LDX` and `STX`."
+    },
+    "abs": {
+      "name": "absolute",
+      "text": "A full 16-bit address (`$0000` to `$FFFF`). In the instruction the low byte comes first, then the high byte."
+    },
+    "abx": {
+      "name": "absolute,X",
+      "text": "A 16-bit address plus `X`. Reading instructions take one extra cycle when a page boundary is crossed."
+    },
+    "aby": {
+      "name": "absolute,Y",
+      "text": "A 16-bit address plus `Y`. Reading instructions take one extra cycle when a page boundary is crossed."
+    },
+    "ind": {
+      "name": "indirect",
+      "text": "Only with `JMP`: the address in the instruction points to two bytes that together form the jump target. (The real 6502 has a bug here: if the address is `$xxFF`, the high byte is read from `$xx00`. The emulator reproduces it.)"
+    },
+    "izx": {
+      "name": "indexed indirect",
+      "text": "`($nn,X)`: `X` is added to `$nn`, and the address of the operand is stored there (two bytes in the zero page). Selects an entry from a table of pointers."
+    },
+    "izy": {
+      "name": "indirect indexed",
+      "text": "`($nn),Y`: `$nn` and `$nn+1` hold an address, and `Y` is added to it. The most common kind of pointer access."
+    },
+    "rel": {
+      "name": "relative",
+      "text": "Only for branches: an offset from −128 to +127 bytes, measured from the next instruction. In the source you write a label."
+    }
   },
   "instructions": {
-    "LDA": { "name": "Load accumulator", "text": "Copies a number or the contents of a memory cell into `A`. `Z` becomes 1 if the value is 0; `N` becomes 1 if bit 7 is set." },
-    "LDX": { "name": "Load X register", "text": "Like `LDA`, but for `X`." },
-    "LDY": { "name": "Load Y register", "text": "Like `LDA`, but for `Y`." },
-    "STA": { "name": "Store accumulator", "text": "Writes `A` to a memory cell. Does not change any flags. Written into the screen area (`$0200` to `$05FF`), it colours a pixel." },
-    "STX": { "name": "Store X register", "text": "Like `STA`, but for `X`." },
-    "STY": { "name": "Store Y register", "text": "Like `STA`, but for `Y`." },
-    "TAX": { "name": "Transfer A to X", "text": "Copies `A` to `X`. `A` stays unchanged." },
-    "TAY": { "name": "Transfer A to Y", "text": "Copies `A` to `Y`." },
-    "TXA": { "name": "Transfer X to A", "text": "Copies `X` to `A`." },
-    "TYA": { "name": "Transfer Y to A", "text": "Copies `Y` to `A`." },
-    "TSX": { "name": "Transfer stack pointer to X", "text": "Copies the stack pointer `SP` to `X`." },
-    "TXS": { "name": "Transfer X to stack pointer", "text": "Copies `X` to the stack pointer `SP`. The only transfer instruction that sets no flags." },
-    "PHA": { "name": "Push accumulator", "text": "Puts `A` on the stack (`$0100` to `$01FF`) and decreases `SP` by 1." },
-    "PLA": { "name": "Pull accumulator", "text": "Increases `SP` by 1 and takes the top value from the stack into `A`. Sets `N` and `Z`." },
-    "PHP": { "name": "Push processor status", "text": "Puts the status register `P` on the stack. The flag `B` is stored as 1." },
-    "PLP": { "name": "Pull processor status", "text": "Takes the status register from the stack. All flags take the stored values." },
-    "ADC": { "name": "Add with carry", "text": "Adds the operand and the carry flag to `A`. Before a single addition, clear the carry with `CLC`. If the result exceeds 255, the low byte stays in `A` and `C` becomes 1. With the decimal flag set (`SED`) the instruction works with two-digit decimal numbers (BCD)." },
-    "SBC": { "name": "Subtract with carry", "text": "Subtracts the operand from `A`, and one more if the carry is clear. Before a single subtraction, set the carry with `SEC`. `C = 0` afterwards means the result was negative." },
-    "AND": { "name": "Bitwise AND", "text": "Combines `A` with the operand bit by bit: a result bit is 1 if both bits are 1. With a mask you hide bits." },
-    "ORA": { "name": "Bitwise OR", "text": "A result bit is 1 if at least one of the two bits is 1. Sets bits." },
-    "EOR": { "name": "Bitwise exclusive OR", "text": "A result bit is 1 if exactly one of the two bits is 1. Flips bits." },
-    "BIT": { "name": "Test bits", "text": "Tests `A` against a memory cell without changing `A`: `Z` is 1 if `A ∧ value` is zero; `N` and `V` copy bits 7 and 6 of the memory cell." },
-    "ASL": { "name": "Arithmetic shift left", "text": "Shifts all bits one place to the left; a 0 comes in on the right, the bit pushed out of position 7 lands in the carry. Doubles the number." },
-    "LSR": { "name": "Logical shift right", "text": "Shifts all bits one place to the right; a 0 comes in on the left, the bit pushed out of position 0 lands in the carry. Halves the number (rounded down). `N` is always 0." },
-    "ROL": { "name": "Rotate left", "text": "Like `ASL`, but the old carry comes in on the right (rotation through the carry)." },
-    "ROR": { "name": "Rotate right", "text": "Like `LSR`, but the old carry comes in on the left." },
-    "INC": { "name": "Increment memory", "text": "Increases the contents of a memory cell by 1. From 255 it goes to 0 (without carry)." },
-    "DEC": { "name": "Decrement memory", "text": "Decreases the contents of a memory cell by 1. From 0 it goes to 255." },
-    "INX": { "name": "Increment X", "text": "Increases `X` by 1. From 255 it goes to 0 and sets `Z`." },
-    "INY": { "name": "Increment Y", "text": "Increases `Y` by 1." },
-    "DEX": { "name": "Decrement X", "text": "Decreases `X` by 1. From 0 it goes to 255." },
-    "DEY": { "name": "Decrement Y", "text": "Decreases `Y` by 1." },
-    "CMP": { "name": "Compare accumulator", "text": "Computes `A − value` without changing `A` and only sets flags: `Z` = equal, `C` = `A` is greater or equal, `N` = bit 7 of the difference." },
-    "CPX": { "name": "Compare X", "text": "Like `CMP`, but with `X`." },
-    "CPY": { "name": "Compare Y", "text": "Like `CMP`, but with `Y`." },
-    "BCC": { "name": "Branch if carry clear", "text": "Branches if `C = 0`. After a comparison: less than (unsigned)." },
-    "BCS": { "name": "Branch if carry set", "text": "Branches if `C = 1`. After a comparison: greater or equal (unsigned)." },
-    "BEQ": { "name": "Branch if equal", "text": "Branches if `Z = 1`, that is if the last result was 0 or both values in a comparison were equal." },
-    "BNE": { "name": "Branch if not equal", "text": "Branches if `Z = 0`." },
-    "BMI": { "name": "Branch if minus", "text": "Branches if `N = 1`, that is if bit 7 of the last result is set." },
-    "BPL": { "name": "Branch if plus", "text": "Branches if `N = 0`." },
-    "BVC": { "name": "Branch if overflow clear", "text": "Branches if `V = 0`." },
-    "BVS": { "name": "Branch if overflow set", "text": "Branches if `V = 1`." },
-    "JMP": { "name": "Jump", "text": "Sets the program counter to the target address, unconditionally. Reaches all of memory. With `($nnnn)` it reads the target from memory." },
-    "JSR": { "name": "Jump to subroutine", "text": "Pushes the address of the last byte of its own instruction onto the stack and jumps to the target. `RTS` returns to the instruction after it." },
-    "RTS": { "name": "Return from subroutine", "text": "Pulls the return address from the stack, adds 1 and jumps there." },
-    "RTI": { "name": "Return from interrupt", "text": "Pulls first the flags, then the return address from the stack. Not needed in this environment because there are no interrupts." },
-    "BRK": { "name": "Break", "text": "On a real 6502, `BRK` pushes the address after the instruction and the flags onto the stack and jumps through the vector at `$FFFE`. In this environment **`BRK` stops the program**; that is how you end one. The byte `00` is also found everywhere memory is empty." },
-    "NOP": { "name": "No operation", "text": "Does nothing except use up time (2 cycles). Useful as a placeholder or for waiting." },
-    "CLC": { "name": "Clear carry", "text": "Sets the carry flag to 0. Belongs in front of every single addition." },
-    "CLD": { "name": "Clear decimal mode", "text": "Sets the decimal flag to 0; `ADC` and `SBC` calculate in binary again." },
-    "CLI": { "name": "Clear interrupt disable", "text": "Sets flag `I` to 0. Has no effect in this environment." },
-    "CLV": { "name": "Clear overflow", "text": "Sets the overflow flag `V` to 0." },
-    "SEC": { "name": "Set carry", "text": "Sets the carry flag to 1. Belongs in front of every single subtraction." },
-    "SED": { "name": "Set decimal mode", "text": "Sets the decimal flag; `ADC` and `SBC` then work with two-digit decimal numbers (BCD), for example `$19 + $28 = $47`." },
-    "SEI": { "name": "Set interrupt disable", "text": "Sets flag `I` to 1. Has no effect in this environment." }
+    "LDA": {
+      "name": "Load accumulator",
+      "text": "Copies a number or the contents of a memory cell into `A`. `Z` becomes 1 if the value is 0; `N` becomes 1 if bit 7 is set.",
+      "example": {
+        "code": "LDA #$80      ; A = $80, the top bit sets N\nBRK",
+        "expect": "A:80,N:1"
+      }
+    },
+    "LDX": {
+      "name": "Load X register",
+      "text": "Like `LDA`, but for `X`.",
+      "example": {
+        "code": "LDX #$00      ; X = 0, Z becomes 1\nBRK",
+        "expect": "X:00,Z:1"
+      }
+    },
+    "LDY": {
+      "name": "Load Y register",
+      "text": "Like `LDA`, but for `Y`.",
+      "example": {
+        "code": "LDY #$7F      ; Y = $7F\nBRK",
+        "expect": "Y:7F,N:0"
+      }
+    },
+    "STA": {
+      "name": "Store accumulator",
+      "text": "Writes `A` to a memory cell. Does not change any flags. Written into the screen area (`$0200` to `$05FF`), it colours a pixel.",
+      "example": {
+        "code": "LDA #$01\nSTA $0200     ; white dot at the top left\nBRK",
+        "expect": "$0200:01"
+      }
+    },
+    "STX": {
+      "name": "Store X register",
+      "text": "Like `STA`, but for `X`.",
+      "example": {
+        "code": "LDX #$05\nSTX $10       ; cell $10 = 5\nBRK",
+        "expect": "$0010:05"
+      }
+    },
+    "STY": {
+      "name": "Store Y register",
+      "text": "Like `STA`, but for `Y`.",
+      "example": {
+        "code": "LDY #$06\nSTY $0201     ; blue dot next to the first\nBRK",
+        "expect": "$0201:06"
+      }
+    },
+    "TAX": {
+      "name": "Transfer A to X",
+      "text": "Copies `A` to `X`. `A` stays unchanged.",
+      "example": {
+        "code": "LDA #$2A\nTAX           ; X = A\nBRK",
+        "expect": "A:2A,X:2A"
+      }
+    },
+    "TAY": {
+      "name": "Transfer A to Y",
+      "text": "Copies `A` to `Y`.",
+      "example": {
+        "code": "LDA #$2B\nTAY           ; Y = A\nBRK",
+        "expect": "A:2B,Y:2B"
+      }
+    },
+    "TXA": {
+      "name": "Transfer X to A",
+      "text": "Copies `X` to `A`.",
+      "example": {
+        "code": "LDX #$2C\nTXA           ; A = X\nBRK",
+        "expect": "A:2C,X:2C"
+      }
+    },
+    "TYA": {
+      "name": "Transfer Y to A",
+      "text": "Copies `Y` to `A`.",
+      "example": {
+        "code": "LDY #$2D\nTYA           ; A = Y\nBRK",
+        "expect": "A:2D,Y:2D"
+      }
+    },
+    "TSX": {
+      "name": "Transfer stack pointer to X",
+      "text": "Copies the stack pointer `SP` to `X`.",
+      "example": {
+        "code": "TSX           ; X = SP, $FF at the start\nBRK",
+        "expect": "X:FF,N:1"
+      }
+    },
+    "TXS": {
+      "name": "Transfer X to stack pointer",
+      "text": "Copies `X` to the stack pointer `SP`. The only transfer instruction that sets no flags.",
+      "example": {
+        "code": "LDX #$F0\nTXS           ; SP = $F0\nBRK",
+        "expect": "SP:F0"
+      }
+    },
+    "PHA": {
+      "name": "Push accumulator",
+      "text": "Puts `A` on the stack (`$0100` to `$01FF`) and decreases `SP` by 1.",
+      "example": {
+        "code": "LDA #$11\nPHA           ; lands in $01FF\nLDA #$22\nPHA           ; lands in $01FE\nBRK",
+        "expect": "$01FF:11,$01FE:22,SP:FD"
+      }
+    },
+    "PLA": {
+      "name": "Pull accumulator",
+      "text": "Increases `SP` by 1 and takes the top value from the stack into `A`. Sets `N` and `Z`.",
+      "example": {
+        "code": "LDA #$11\nPHA\nLDA #$00\nPLA           ; A = $11 from the stack\nBRK",
+        "expect": "A:11"
+      }
+    },
+    "PHP": {
+      "name": "Push processor status",
+      "text": "Puts the status register `P` on the stack. The flag `B` is stored as 1.",
+      "example": {
+        "code": "SEC\nPHP           ; flags onto the stack\nPLA           ; read them as a number: $35 (C, I, B and the fixed bit)\nBRK",
+        "expect": "A:35"
+      }
+    },
+    "PLP": {
+      "name": "Pull processor status",
+      "text": "Takes the status register from the stack. All flags take the stored values.",
+      "example": {
+        "code": "LDA #$01\nPHA\nPLP           ; flags = %00000001, only C is set\nBRK",
+        "expect": "C:1,Z:0"
+      }
+    },
+    "ADC": {
+      "name": "Add with carry",
+      "text": "Adds the operand and the carry flag to `A`. Before a single addition, clear the carry with `CLC`. If the result exceeds 255, the low byte stays in `A` and `C` becomes 1. With the decimal flag set (`SED`) the instruction works with two-digit decimal numbers (BCD).",
+      "example": {
+        "code": "CLC           ; clear the carry\nLDA #$15\nADC #$23      ; A = $38\nBRK",
+        "expect": "A:38,C:0"
+      }
+    },
+    "SBC": {
+      "name": "Subtract with carry",
+      "text": "Subtracts the operand from `A`, and one more if the carry is clear. Before a single subtraction, set the carry with `SEC`. `C = 0` afterwards means the result was negative.",
+      "example": {
+        "code": "SEC           ; nothing borrowed\nLDA #$50\nSBC #$18      ; A = $38\nBRK",
+        "expect": "A:38,C:1"
+      }
+    },
+    "AND": {
+      "name": "Bitwise AND",
+      "text": "Combines `A` with the operand bit by bit: a result bit is 1 if both bits are 1. With a mask you hide bits.",
+      "example": {
+        "code": "LDA #$DB\nAND #$0F      ; only the low nibble stays\nBRK",
+        "expect": "A:0B"
+      }
+    },
+    "ORA": {
+      "name": "Bitwise OR",
+      "text": "A result bit is 1 if at least one of the two bits is 1. Sets bits.",
+      "example": {
+        "code": "LDA #$0A\nORA #$05      ; combine bits\nBRK",
+        "expect": "A:0F"
+      }
+    },
+    "EOR": {
+      "name": "Bitwise exclusive OR",
+      "text": "A result bit is 1 if exactly one of the two bits is 1. Flips bits.",
+      "example": {
+        "code": "LDA #$FF\nEOR #$0F      ; flip the low nibble\nBRK",
+        "expect": "A:F0,N:1"
+      }
+    },
+    "BIT": {
+      "name": "Test bits",
+      "text": "Tests `A` against a memory cell without changing `A`: `Z` is 1 if `A ∧ value` is zero; `N` and `V` copy bits 7 and 6 of the memory cell.",
+      "example": {
+        "code": "LDA #$C0\nSTA $10\nLDA #$01\nBIT $10        ; $01 and $C0 share no bit: Z=1; N and V come from $C0\nBRK",
+        "expect": "A:01,Z:1,N:1,V:1"
+      }
+    },
+    "ASL": {
+      "name": "Arithmetic shift left",
+      "text": "Shifts all bits one place to the left; a 0 comes in on the right, the bit pushed out of position 7 lands in the carry. Doubles the number.",
+      "example": {
+        "code": "LDA #$41\nASL A         ; double it: $82\nBRK",
+        "expect": "A:82,C:0,N:1"
+      }
+    },
+    "LSR": {
+      "name": "Logical shift right",
+      "text": "Shifts all bits one place to the right; a 0 comes in on the left, the bit pushed out of position 0 lands in the carry. Halves the number (rounded down). `N` is always 0.",
+      "example": {
+        "code": "LDA #$03\nLSR A         ; halve it: 1, bit 0 lands in the carry\nBRK",
+        "expect": "A:01,C:1"
+      }
+    },
+    "ROL": {
+      "name": "Rotate left",
+      "text": "Like `ASL`, but the old carry comes in on the right (rotation through the carry).",
+      "example": {
+        "code": "SEC\nLDA #$80\nROL A         ; bit 7 goes to the carry, the old carry to bit 0\nBRK",
+        "expect": "A:01,C:1"
+      }
+    },
+    "ROR": {
+      "name": "Rotate right",
+      "text": "Like `LSR`, but the old carry comes in on the left.",
+      "example": {
+        "code": "SEC\nLDA #$02\nROR A         ; the old carry comes into bit 7\nBRK",
+        "expect": "A:81,C:0"
+      }
+    },
+    "INC": {
+      "name": "Increment memory",
+      "text": "Increases the contents of a memory cell by 1. From 255 it goes to 0 (without carry).",
+      "example": {
+        "code": "LDA #$FF\nSTA $10\nINC $10       ; $FF + 1 = 0\nBRK",
+        "expect": "$0010:00,Z:1"
+      }
+    },
+    "DEC": {
+      "name": "Decrement memory",
+      "text": "Decreases the contents of a memory cell by 1. From 0 it goes to 255.",
+      "example": {
+        "code": "LDA #$01\nSTA $10\nDEC $10       ; 1 - 1 = 0\nBRK",
+        "expect": "$0010:00,Z:1"
+      }
+    },
+    "INX": {
+      "name": "Increment X",
+      "text": "Increases `X` by 1. From 255 it goes to 0 and sets `Z`.",
+      "example": {
+        "code": "LDX #$09\nINX\nBRK",
+        "expect": "X:0A"
+      }
+    },
+    "INY": {
+      "name": "Increment Y",
+      "text": "Increases `Y` by 1.",
+      "example": {
+        "code": "LDY #$FF\nINY           ; wraps around to 0\nBRK",
+        "expect": "Y:00,Z:1"
+      }
+    },
+    "DEX": {
+      "name": "Decrement X",
+      "text": "Decreases `X` by 1. From 0 it goes to 255.",
+      "example": {
+        "code": "LDX #$01\nDEX\nBRK",
+        "expect": "X:00,Z:1"
+      }
+    },
+    "DEY": {
+      "name": "Decrement Y",
+      "text": "Decreases `Y` by 1.",
+      "example": {
+        "code": "LDY #$00\nDEY           ; wraps back to $FF\nBRK",
+        "expect": "Y:FF,N:1"
+      }
+    },
+    "CMP": {
+      "name": "Compare accumulator",
+      "text": "Computes `A − value` without changing `A` and only sets flags: `Z` = equal, `C` = `A` is greater or equal, `N` = bit 7 of the difference.",
+      "example": {
+        "code": "LDA #$10\nCMP #$10      ; equal: Z=1, C=1\nBRK",
+        "expect": "Z:1,C:1"
+      }
+    },
+    "CPX": {
+      "name": "Compare X",
+      "text": "Like `CMP`, but with `X`.",
+      "example": {
+        "code": "LDX #$05\nCPX #$08      ; X is smaller: C=0\nBRK",
+        "expect": "Z:0,C:0,N:1"
+      }
+    },
+    "CPY": {
+      "name": "Compare Y",
+      "text": "Like `CMP`, but with `Y`.",
+      "example": {
+        "code": "LDY #$09\nCPY #$08      ; Y is greater: C=1, Z=0\nBRK",
+        "expect": "Z:0,C:1"
+      }
+    },
+    "BCC": {
+      "name": "Branch if carry clear",
+      "text": "Branches if `C = 0`. After a comparison: less than (unsigned).",
+      "example": {
+        "code": "CLC\nBCC skip       ; C = 0: jumps\nLDA #$01      ; skipped\nskip:\nLDA #$02\nBRK",
+        "expect": "A:02"
+      }
+    },
+    "BCS": {
+      "name": "Branch if carry set",
+      "text": "Branches if `C = 1`. After a comparison: greater or equal (unsigned).",
+      "example": {
+        "code": "SEC\nBCS skip       ; C = 1: jumps\nLDA #$01      ; skipped\nskip:\nLDA #$02\nBRK",
+        "expect": "A:02"
+      }
+    },
+    "BEQ": {
+      "name": "Branch if equal",
+      "text": "Branches if `Z = 1`, that is if the last result was 0 or both values in a comparison were equal.",
+      "example": {
+        "code": "LDA #$00        ; sets Z\nBEQ skip       ; Z = 1: jumps\nLDX #$01      ; skipped\nskip:\nLDX #$02\nBRK",
+        "expect": "X:02"
+      }
+    },
+    "BNE": {
+      "name": "Branch if not equal",
+      "text": "Branches if `Z = 0`.",
+      "example": {
+        "code": "LDA #$01\nBNE skip       ; Z = 0: jumps\nLDX #$01      ; skipped\nskip:\nLDX #$02\nBRK",
+        "expect": "X:02"
+      }
+    },
+    "BMI": {
+      "name": "Branch if minus",
+      "text": "Branches if `N = 1`, that is if bit 7 of the last result is set.",
+      "example": {
+        "code": "LDA #$80        ; top bit set: N = 1\nBMI skip       ; jumps\nLDX #$01      ; skipped\nskip:\nLDX #$02\nBRK",
+        "expect": "X:02"
+      }
+    },
+    "BPL": {
+      "name": "Branch if plus",
+      "text": "Branches if `N = 0`.",
+      "example": {
+        "code": "LDA #$01        ; N = 0\nBPL skip       ; jumps\nLDX #$01      ; skipped\nskip:\nLDX #$02\nBRK",
+        "expect": "X:02"
+      }
+    },
+    "BVC": {
+      "name": "Branch if overflow clear",
+      "text": "Branches if `V = 0`.",
+      "example": {
+        "code": "CLV\nBVC skip       ; V = 0: jumps\nLDX #$01      ; skipped\nskip:\nLDX #$02\nBRK",
+        "expect": "X:02"
+      }
+    },
+    "BVS": {
+      "name": "Branch if overflow set",
+      "text": "Branches if `V = 1`.",
+      "example": {
+        "code": "CLC\nLDA #$50\nADC #$50      ; $50 + $50 overflows into the negative range: V = 1\nBVS skip       ; jumps\nLDX #$01      ; skipped\nskip:\nLDX #$02\nBRK",
+        "expect": "X:02,V:1"
+      }
+    },
+    "JMP": {
+      "name": "Jump",
+      "text": "Sets the program counter to the target address, unconditionally. Reaches all of memory. With `($nnnn)` it reads the target from memory.",
+      "example": {
+        "code": "JMP skip\nLDA #$01      ; skipped\nskip:\nLDA #$02\nBRK",
+        "expect": "A:02"
+      }
+    },
+    "JSR": {
+      "name": "Jump to subroutine",
+      "text": "Pushes the address of the last byte of its own instruction onto the stack and jumps to the target. `RTS` returns to the instruction after it.",
+      "example": {
+        "code": "JSR sub        ; call the subroutine\nLDX #$05      ; execution continues here afterwards\nBRK\n\nsub:\nLDA #$07\nRTS",
+        "expect": "A:07,X:05"
+      }
+    },
+    "RTS": {
+      "name": "Return from subroutine",
+      "text": "Pulls the return address from the stack, adds 1 and jumps there.",
+      "example": {
+        "code": "LDA #$04\nJSR dbl\nBRK\n\ndbl:\nASL A\nRTS            ; back behind the JSR",
+        "expect": "A:08"
+      }
+    },
+    "RTI": {
+      "name": "Return from interrupt",
+      "text": "Pulls first the flags, then the return address from the stack. Not needed in this environment because there are no interrupts.",
+      "example": {
+        "code": "LDA #>target   ; return address and flags onto the stack\nPHA\nLDA #<target\nPHA\nLDA #$00\nPHA\nRTI            ; pulls flags and address and jumps to target\nLDX #$01      ; skipped\ntarget:\nLDX #$02\nBRK",
+        "expect": "X:02"
+      }
+    },
+    "BRK": {
+      "name": "Break",
+      "text": "On a real 6502, `BRK` pushes the address after the instruction and the flags onto the stack and jumps through the vector at `$FFFE`. In this environment **`BRK` stops the program**; that is how you end one. The byte `00` is also found everywhere memory is empty.",
+      "example": {
+        "code": "LDA #$01\nBRK            ; the program stops here\nLDA #$02      ; is never executed",
+        "expect": "A:01"
+      }
+    },
+    "NOP": {
+      "name": "No operation",
+      "text": "Does nothing except use up time (2 cycles). Useful as a placeholder or for waiting.",
+      "example": {
+        "code": "LDX #$01\nNOP            ; does nothing\nINX\nBRK",
+        "expect": "X:02"
+      }
+    },
+    "CLC": {
+      "name": "Clear carry",
+      "text": "Sets the carry flag to 0. Belongs in front of every single addition.",
+      "example": {
+        "code": "SEC\nCLC            ; carry back to 0\nBRK",
+        "expect": "C:0"
+      }
+    },
+    "CLD": {
+      "name": "Clear decimal mode",
+      "text": "Sets the decimal flag to 0; `ADC` and `SBC` calculate in binary again.",
+      "example": {
+        "code": "SED\nCLD            ; back to binary arithmetic\nBRK",
+        "expect": "D:0"
+      }
+    },
+    "CLI": {
+      "name": "Clear interrupt disable",
+      "text": "Sets flag `I` to 0. Has no effect in this environment.",
+      "example": {
+        "code": "CLI            ; I = 0 (no effect in this environment)\nBRK",
+        "expect": "I:0"
+      }
+    },
+    "CLV": {
+      "name": "Clear overflow",
+      "text": "Sets the overflow flag `V` to 0.",
+      "example": {
+        "code": "CLC\nLDA #$50\nADC #$50      ; V = 1\nCLV            ; V = 0\nBRK",
+        "expect": "V:0"
+      }
+    },
+    "SEC": {
+      "name": "Set carry",
+      "text": "Sets the carry flag to 1. Belongs in front of every single subtraction.",
+      "example": {
+        "code": "SEC            ; carry to 1\nBRK",
+        "expect": "C:1"
+      }
+    },
+    "SED": {
+      "name": "Set decimal mode",
+      "text": "Sets the decimal flag; `ADC` and `SBC` then work with two-digit decimal numbers (BCD), for example `$19 + $28 = $47`.",
+      "example": {
+        "code": "SED            ; decimal mode\nCLC\nLDA #$19\nADC #$28      ; 19 + 28 = 47 (calculated in decimal)\nBRK",
+        "expect": "A:47"
+      }
+    },
+    "SEI": {
+      "name": "Set interrupt disable",
+      "text": "Sets flag `I` to 1. Has no effect in this environment.",
+      "example": {
+        "code": "CLI\nSEI            ; I = 1 (no effect in this environment)\nBRK",
+        "expect": "I:1"
+      }
+    }
   }
 }

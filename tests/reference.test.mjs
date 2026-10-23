@@ -53,3 +53,31 @@ test('Opcode-Tabelle: 151 Einträge, jede Adressierungsart je Befehl einmalig', 
     assert.equal(new Set(ops).size, ops.length, mn);
   }
 });
+
+// Beispiele der Referenz: jedes Programm übersetzt, läuft bis BRK und liefert die angegebenen Werte
+import { Machine } from '../src/core/machine.js';
+import { parseExpect } from '../src/ui/markdown.js';
+
+for (const loc of locales) {
+  test(`Referenz ${loc}: jedes Befehlsbeispiel läuft und liefert die angegebenen Werte`, () => {
+    const data = JSON.parse(fs.readFileSync(path.join(root, 'content', loc, 'reference.json'), 'utf8'));
+    const problems = [];
+    for (const mn of MNEMONICS) {
+      const ex = data.instructions[mn]?.example;
+      if (!ex) { problems.push(`${mn}: Beispiel fehlt`); continue; }
+      if (!new RegExp('\\b' + mn + '\\b', 'i').test(ex.code)) problems.push(`${mn}: Beispiel enthält den Befehl nicht`);
+      const m = new Machine();
+      const r = m.assembleAndLoad(ex.code);
+      if (!r.ok) { problems.push(`${mn}: ${r.errors.map((e) => `Z${e.line} ${e.key}`).join(', ')}`); continue; }
+      m.run(10000);
+      if (m.stopReason !== 'brk') problems.push(`${mn}: endet nicht mit BRK (${m.stopReason})`);
+      for (const e of parseExpect([`expect=${ex.expect}`])) {
+        const actual = typeof e.target === 'number' ? m.mem.peek(e.target)
+          : e.target === 'A' ? m.cpu.a : e.target === 'X' ? m.cpu.x : e.target === 'Y' ? m.cpu.y
+            : e.target === 'SP' ? m.cpu.sp : m.cpu[e.target.toLowerCase()];
+        if (actual !== e.value) problems.push(`${mn}: ${e.target} ist ${actual}, erwartet ${e.value}`);
+      }
+    }
+    assert.deepEqual(problems, []);
+  });
+}

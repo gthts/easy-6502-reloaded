@@ -340,3 +340,21 @@ dialog#about::backdrop { background: rgb(0 0 0 / 0.5); }
 
 .vsplit { flex: none; height: 8px; margin: -4px 0; border-radius: 4px; cursor: row-resize; touch-action: none; position: relative; z-index: 1; }
 .vsplit:hover, .vsplit:focus-visible, .vsplit.drag { background: var(--accent); opacity: .5; }
+
+.ref-example-title { font-size: 12px; font-weight: 600; color: var(--text-2); margin: 8px 0 4px; }
+.ref-detail .codebox { margin: 0 0 6px; }
+
+.monitor .asc span { padding: 0; border-radius: 2px; cursor: text; }
+.monitor .asc span.cur { outline: 1px solid var(--accent); background: var(--accent-bg); color: var(--accent-text); }
+.monitor:focus .asc span.cur { outline-width: 2px; }
+.monitor .asc span.chg, .monitor .bytes span.chg { background: var(--accent-bg); color: var(--accent-text); }
+.monitor .asc span.hit { background: var(--warn-bg); color: var(--warn-text); }
+.monitor .cur-soft { background: var(--surface-2); outline: 1px dotted var(--text-3); }
+
+.sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+.findbar { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-bottom: 6px; padding: 6px; border: 1px solid var(--border); border-radius: 6px; background: var(--surface-2); }
+.findbar[hidden] { display: none; }
+.findbar input[type="search"], .findbar input[type="text"] { width: 14ch; }
+.layer.matches { color: transparent; }
+.layer.matches mark { color: transparent; background: color-mix(in srgb, var(--warn-bg) 80%, transparent); border-radius: 2px; }
+.layer.matches mark.cur { background: color-mix(in srgb, var(--accent) 45%, transparent); outline: 1px solid var(--accent); }

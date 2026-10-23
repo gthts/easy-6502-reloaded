@@ -49,11 +49,15 @@ Befehlsnamen dürfen groß oder klein geschrieben werden; Marken und Konstanten 
 | Quelltext | `Tab` / `Umschalt+Tab` | ein- und ausrücken (auch mehrere Zeilen) |
 | Quelltext | `Strg+S` | Datei speichern |
 | Quelltext | `F1` über einem Befehlsnamen | diese Referenz öffnet den Befehl |
+| Quelltext | `Strg+F`, `Strg+H`, `F3` | suchen, ersetzen, nächster Treffer |
+| Quelltext | `F9` | Haltepunkt in der aktuellen Zeile setzen oder löschen |
+| Quelltext | `Escape`, dann `Tab` | den Editor mit der Tastatur verlassen (sonst fügt `Tab` Leerzeichen ein) |
 | Zeilennummer | Klick | Haltepunkt setzen oder löschen |
 | Ablauf, Disassemblierung | Klick auf eine Zeile | Haltepunkt |
 | Ablauf | Doppelklick, oder die hervorgehobene Zeile ziehen | Programmzähler dorthin setzen |
 | Ablauf, Disassemblierung | Klick auf den Befehlsnamen | Befehl in der Referenz öffnen |
 | Monitor | Byte anklicken, zwei Hexziffern tippen | Byte überschreiben |
+| Monitor | Textspalte anklicken, Zeichen tippen | Bytes mit Zeichencodes überschreiben |
 | Register | Wert eintippen, Flag anklicken | Register oder Flag ändern |
 
 ## Die Flags
