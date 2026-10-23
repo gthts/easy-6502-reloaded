@@ -84,7 +84,7 @@ Legende: `[ ]` offen · `[~]` in Arbeit · `[x]` erledigt. Jeder Abschnitt ist e
 - [x] Text auf Grundlage von Easy 6502 neu verfasst und umgegliedert (CC BY 4.0, Nennung unter jedem Kapitel und in NOTICE.md); die Schlange ist aus dem Lehrbuch heraus: Kapitel 17 baut ein kleines Spiel in fünf Etappen, die Schlange liegt kommentiert in der Beispielauswahl
 - [x] Indirekt-indiziert `($zp),Y` (Kapitel 14, zuerst) und indiziert-indirekt `($zp,X)` (Kapitel 15) in getrennten Kapiteln
 - [x] Die beiden PDF-Übungsblätter sind als Kapitel 18 und 19 („Übungsaufgaben Präsenz 1/2“) am Ende des Lehrbuchs; Aufgabentexte übernommen, Lösungen ergänzt und geprüft
-- [ ] Urheberlage der Übungsblätter klären (Verfasser nennen, Weitergabe erlaubt?) – **vor der Veröffentlichung**; die PDFs selbst liegen nicht im Git
+- [x] Urheberlage der Übungsblätter: Sie stammen vom Projektinhaber und stehen unter derselben Lizenz wie das Projekt (geklärt); die PDFs selbst liegen nicht im Git
 
 ### Lehrplan – Stand (Kapitel 1 bis 19)
 Einführung · Erstes Programm · Zahlen · Register · Rechnen · Verzweigen · Schleifen · Adressierung I · Adressierung II (Index) · Bits · Stapel · Sprünge und Unterprogramme · Ordnung (Namen, Daten) · Zeiger I · Zeiger II · Eingabe und Zufall · Spiel in Etappen · Präsenz 1 · Präsenz 2
@@ -107,10 +107,13 @@ Einführung · Erstes Programm · Zahlen · Register · Rechnen · Verzweigen ·
 15. Schlange: das ganze Spiel, aus bekannten Teilen zusammengesetzt
 
 ## M7 – Referenz
-- [ ] Übersicht der Adressierungsarten, Befehle (mit Flags), Opcode-Tabelle 16×16
-- [ ] Sprungmarken aus Lehrbuch, Befehlsanzeige und Disassemblierung in die Referenz
-- [ ] Ein-/ausklappbar, frei platzierbar
-- [ ] Opcode-Quelle prüfen und angeben
+- [x] Übersicht dieser Umgebung (Speicherplan, Farben, Schreibweise, Bedienung, Flags, Takte), Adressierungsarten, alle 56 Befehle (Wirkung, Flags, Beschreibung, Tabelle der Adressierungsarten mit Opcode/Bytes/Takten), Opcode-Tabelle 16×16 mit Gruppenfarben
+- [x] Sprungmarken: Kopfleiste der Referenz (Übersicht · Adressierung · Befehle · Opcodes); Befehlsnamen im Lehrbuchtext, im Ablauf und in der Disassemblierung öffnen den Befehl; F1 im Editor; Opcode-Zelle öffnet den Befehl mit der Adressierungsart; Rückverweis in das passende Lehrbuchkapitel
+- [x] Ein-/ausklappbar (rechts); frei platzierbar bleibt zurückgestellt (siehe M2)
+- [x] Suche über Name und Beschreibung der Befehle
+- [x] Opcode-Quelle angegeben (Pickens, Clark, Spittles; 6502.org); Tabelle mit dem Funktionstest von Klaus Dormann geprüft
+- [ ] Englische Fassung der Referenz (`content/en/reference.json`, `reference.md`); bis dahin Rückfall auf Deutsch
+- [ ] Beispiel je Befehl (kurzes Programm mit „An Emulator senden“)
 
 ## M8 – Beispielprogramme
 - [x] Katalog (`examples/index.json`) mit Titel und Beschreibung (de/en), Gruppe (Kleine Programme, Vorführungen, Spiele) und Stufe; Auswahl über dem Quelltext

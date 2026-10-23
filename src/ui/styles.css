@@ -234,3 +234,73 @@ button.primary { background: var(--accent-bg); color: var(--accent-text); border
 .box.loesung { background: var(--surface-2); }
 .box.loesung summary { cursor: pointer; font-weight: 600; font-size: 12px; color: var(--text-2); }
 .box.loesung[open] summary { margin-bottom: 6px; }
+
+.side-body.ref { padding: 0; display: flex; flex-direction: column; overflow: hidden; }
+.ref-nav { flex: none; padding: 8px 12px; border-bottom: 1px solid var(--border); background: var(--surface-2); }
+.ref-nav input { width: 100%; margin-top: 6px; }
+.ref-links { display: flex; gap: 10px; flex-wrap: wrap; font-size: 13px; }
+.ref-links a { color: var(--accent); text-decoration: none; }
+.ref-links a:hover { text-decoration: underline; }
+.ref-scroll { flex: 1; min-height: 0; overflow: auto; padding: 4px 14px 16px; font-size: 13px; line-height: 1.55; }
+.ref-section { padding-top: 10px; }
+.ref-section > h3 { font-size: 15px; margin: 8px 0 6px; padding-bottom: 3px; border-bottom: 1px solid var(--border); }
+.ref-scroll .prose { font-size: 13px; }
+.ref-scroll table { border-collapse: collapse; font-size: 12px; }
+.ref-scroll th, .ref-scroll td { border: 1px solid var(--border); padding: 2px 6px; text-align: left; vertical-align: top; }
+.ref-scroll th { background: var(--surface); }
+.ref-scroll tr.desc td { border-top: 0; color: var(--text-2); }
+.ref-scroll code { font-family: var(--mono); font-size: 12px; background: var(--surface); border: 1px solid var(--border); border-radius: 4px; padding: 0 3px; }
+.ref-scroll .tbl { overflow: auto; margin: 4px 0 10px; }
+.ref-scroll a { color: var(--accent); }
+code.mn, .row .mn { cursor: pointer; }
+code.mn:hover, .row .mn:hover { text-decoration: underline; text-decoration-style: dotted; }
+.row .mn { display: inline; }
+
+:root {
+  --cat-load: light-dark(#1f6feb, #79b0ff);
+  --cat-transfer: light-dark(#0e8a7d, #56d4c4);
+  --cat-stack: light-dark(#8250df, #d2a8ff);
+  --cat-arith: light-dark(#bc4c00, #ffa657);
+  --cat-logic: light-dark(#a8266b, #ff8cc6);
+  --cat-shift: light-dark(#6f6f00, #e3e35f);
+  --cat-count: light-dark(#1a7f37, #7ee787);
+  --cat-compare: light-dark(#0969da, #a5d6ff);
+  --cat-branch: light-dark(#cf222e, #ff7b72);
+  --cat-jump: light-dark(#953800, #ffb86b);
+  --cat-flag: light-dark(#57606a, #b1bac4);
+  --cat-other: light-dark(#6e7781, #8b949e);
+}
+.cat-load { --cat: var(--cat-load); }
+.cat-transfer { --cat: var(--cat-transfer); }
+.cat-stack { --cat: var(--cat-stack); }
+.cat-arith { --cat: var(--cat-arith); }
+.cat-logic { --cat: var(--cat-logic); }
+.cat-shift { --cat: var(--cat-shift); }
+.cat-count { --cat: var(--cat-count); }
+.cat-compare { --cat: var(--cat-compare); }
+.cat-branch { --cat: var(--cat-branch); }
+.cat-jump { --cat: var(--cat-jump); }
+.cat-flag { --cat: var(--cat-flag); }
+.cat-other { --cat: var(--cat-other); }
+.chips { display: flex; flex-direction: column; gap: 8px; margin-bottom: 8px; }
+.chip-title { font-size: 11px; color: var(--text-2); margin-bottom: 2px; }
+.chip-row { display: flex; flex-wrap: wrap; gap: 4px; }
+.chip { font: 12px var(--mono); padding: 1px 7px; border-radius: 12px; border: 1px solid color-mix(in srgb, var(--cat) 55%, transparent); background: color-mix(in srgb, var(--cat) 14%, var(--surface)); color: var(--text); cursor: pointer; }
+.chip:hover { background: color-mix(in srgb, var(--cat) 28%, var(--surface)); }
+.chip.sel { background: var(--cat); color: var(--surface); border-color: var(--cat); }
+.legend { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px; }
+.legend .chip { cursor: default; font-family: var(--sans); font-size: 11px; }
+.ref-detail { border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px 8px; background: var(--surface); margin-bottom: 8px; scroll-margin-top: 4px; }
+.ref-detail:empty { display: none; }
+.ref-title { font-size: 14px; margin: 2px 0 6px; }
+.ref-op, .ref-flags { margin: 2px 0 6px; }
+.ref-flags .flag { display: inline-block; min-width: 1.4ch; margin-right: 3px; font-family: var(--mono); padding: 0 3px; border-radius: 3px; }
+.ref-flags .flag.on { background: var(--accent-bg); color: var(--accent-text); font-weight: 700; }
+.ref-flags .flag.off { color: var(--text-3); }
+.ref-detail tr.active td { background: var(--warn-bg); color: var(--warn-text); }
+.ref-detail .lesson { display: inline-block; margin-top: 6px; }
+table.opcodes { font-size: 10px; text-align: center; }
+table.opcodes th, table.opcodes td { padding: 1px 2px; text-align: center; min-width: 3.2ch; font-family: var(--mono); }
+table.opcodes td[class^="cat-"] { background: color-mix(in srgb, var(--cat) 18%, var(--surface)); color: var(--text); cursor: pointer; }
+table.opcodes td[class^="cat-"]:hover { background: color-mix(in srgb, var(--cat) 40%, var(--surface)); }
+table.opcodes td.unused { color: var(--text-3); }

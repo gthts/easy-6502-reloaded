@@ -22,4 +22,8 @@ Sie sind keine Bestandteile der Anwendung und werden nicht ausgeliefert.
 
 - Die Kapitel wurden **neu verfasst** und gegenüber „Easy 6502“ (Nick Morgan, CC BY 4.0) umgegliedert: andere Reihenfolge, kleinere Schritte, eigene Beispiele und Aufgaben. Die Gliederung und viele Beispielideen (zum Beispiel Spiegelmuster mit dem Stapel, `JSR`-Beispiel, Zeigerbeispiele) gehen auf das Original zurück. Namensnennung: Nick Morgan, https://skilldrick.github.io/easy6502/, Lizenz CC BY 4.0.
 - Die Schlange aus dem Original ist nicht mehr Teil des Lehrbuchs; die kommentierte Fassung aus 6502js liegt in der Beispielauswahl.
-- Kapitel 18 und 19 („Übungsaufgaben Präsenz 1/2“) beruhen auf zwei Übungsblättern des Projektinhabers. Die Aufgabentexte sind übernommen, die Lösungen neu geschrieben. Verfasser und Weitergaberechte sind vor der Veröffentlichung zu klären.
+- Kapitel 18 und 19 („Übungsaufgaben Präsenz 1/2“) beruhen auf zwei Übungsblättern des Projektinhabers. Die Aufgabentexte sind übernommen, die Lösungen neu geschrieben. Die Übungsblätter stammen vom Projektinhaber und werden unter denselben Bedingungen wie das Projekt veröffentlicht (Code: GPL v3, Lehrtexte: CC BY 4.0).
+
+## Referenz (content/*/reference.*, src/reference/)
+
+Die Texte zu Befehlen und Adressierungsarten sind eigens geschrieben. Die Opcode-Tabelle und die Taktzahlen richten sich nach der Dokumentation von John Pickens, Bruce Clark und Ed Spittles (6502.org, „NMOS 6502 Opcodes“), die Taktzahlen und der Seitenfehler von `JMP ($xxFF)` nach den allgemein bekannten Eigenschaften des NMOS-6502.

@@ -23,7 +23,14 @@ export function buildRow(machine, ins, active) {
   b.className = 'b';
   b.textContent = ins.bytes.map(hex2).join(' ');
   const txt = document.createElement('span');
-  txt.textContent = ins.text + (active ? '  ◂' : '');
+  if (ins.valid) {
+    const mn = document.createElement('span');
+    mn.className = 'mn';
+    mn.dataset.mn = ins.mn;
+    mn.title = t('ref.open');
+    mn.textContent = ins.mn;
+    txt.append(mn, ins.operand ? ` ${ins.operand}` : '', active ? '  ◂' : '');
+  } else txt.textContent = ins.text + (active ? '  ◂' : '');
   el.append(bp, a, b, txt);
   return el;
 }

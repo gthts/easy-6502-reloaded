@@ -81,5 +81,12 @@ export function initLayout() {
   setupSplitter(document.getElementById('split-right'), 'rw', 'rc', -1);
 
   apply();
-  return { refresh: apply };
+  return {
+    refresh: apply,
+    open(name) {
+      state[sides[name].cls] = false;
+      apply();
+      save();
+    },
+  };
 }

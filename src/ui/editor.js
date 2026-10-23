@@ -4,7 +4,9 @@ import { highlight } from './highlight.js';
 
 const INDENT = '  ';
 
-export function createEditor({ textarea, layer, gutter, onChange, onGutterClick }) {
+import { MNEMONICS } from '../core/opcodes.js';
+
+export function createEditor({ textarea, layer, gutter, onChange, onGutterClick, onHelp }) {
   const layerIn = layer.firstElementChild; // <code>
   const gutterIn = gutter.firstElementChild;
   let lineEls = [];
@@ -119,7 +121,26 @@ export function createEditor({ textarea, layer, gutter, onChange, onGutterClick 
     textarea.setSelectionRange(from, from + out.length);
   }
 
+  // F1: Befehl unter dem Cursor (sonst der erste Befehl der Zeile) in der Referenz öffnen
+  function helpWord() {
+    const v = textarea.value;
+    const pos = textarea.selectionStart;
+    const [ls, le] = lineBounds(pos);
+    const line = v.slice(ls, le);
+    const rel = pos - ls;
+    for (const m of line.matchAll(/[A-Za-z]{3}/g)) {
+      if (m.index <= rel && rel <= m.index + 3 && MNEMONICS.has(m[0].toUpperCase())) return m[0].toUpperCase();
+    }
+    for (const m of line.replace(/;.*/, '').matchAll(/\b[A-Za-z]{3}\b/g)) if (MNEMONICS.has(m[0].toUpperCase())) return m[0].toUpperCase();
+    return null;
+  }
+
   textarea.addEventListener('keydown', (e) => {
+    if (e.key === 'F1' && !e.ctrlKey && !e.altKey && !e.shiftKey) {
+      const w = helpWord();
+      if (w && onHelp) { e.preventDefault(); onHelp(w); }
+      return;
+    }
     if (e.ctrlKey || e.metaKey || e.altKey) return;
     if (e.key === 'Tab') {
       e.preventDefault();

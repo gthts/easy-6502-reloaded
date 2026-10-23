@@ -176,7 +176,21 @@
       <button type="button" class="tog" data-toggle="right" data-i18n-title="panel.collapse" data-i18n-label="panel.collapse" aria-expanded="true">›</button>
       <h2 id="title-right" data-i18n="panel.reference"></h2>
     </div>
-    <div class="side-body"><p class="muted" data-i18n="placeholder.reference"></p></div>
+    <div class="side-body ref">
+      <div class="ref-nav">
+        <nav id="ref-links" class="ref-links">
+          <a href="#ref-overview" data-target="overview" data-i18n="ref.nav.overview"></a>
+          <a href="#ref-modes" data-target="modes" data-i18n="ref.nav.modes"></a>
+          <a href="#ref-instr" data-target="instr" data-i18n="ref.nav.instr"></a>
+          <a href="#ref-opcodes" data-target="opcodes" data-i18n="ref.nav.opcodes"></a>
+        </nav>
+        <input id="ref-search" type="search" spellcheck="false" autocomplete="off" data-i18n-placeholder="ref.search" data-i18n-label="ref.search">
+      </div>
+      <div id="ref-scroll" class="ref-scroll">
+        <p id="ref-error" class="err-text" hidden data-i18n="ref.loadError"></p>
+        <div id="ref-content"></div>
+      </div>
+    </div>
     <div class="rail-label" aria-hidden="true" data-i18n="panel.reference"></div>
   </aside>
 </main>

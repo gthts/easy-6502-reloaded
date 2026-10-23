@@ -14,6 +14,7 @@ import { createMonitor } from './monitor.js';
 import { createEditor } from './editor.js';
 import { createFiles } from './files.js';
 import { createTutorial } from './tutorial.js';
+import { createReference } from './reference.js';
 import { createExamples } from './examples.js';
 import { anchorFor, resolveAnchor } from '../core/breakpoints.js';
 
@@ -151,6 +152,7 @@ const editor = createEditor({
     renderMessages();
     store.set('source', editor.getValue());
   },
+  onHelp: (mn) => reference.show(mn),
   onGutterClick: (line) => {
     runner.pause();
     if (sourceDirty && !assemble()) return;
@@ -173,6 +175,21 @@ function sendToEditor(code) {
   editor.replaceAll(code.endsWith('\n') ? code : code + '\n');
   $('editor-note').textContent = t('tutorial.sent');
 }
+const reference = createReference({
+  ui: { content: $('ref-content'), search: $('ref-search'), links: $('ref-links'), error: $('ref-error') },
+  reveal: () => layout.open('right'),
+  onChapter: (id) => { layout.open('left'); tutorial.open(id); },
+  chapterTitle: (id) => tutorial.titleOf(id),
+  onSend: sendToEditor,
+  onSendRun: (code) => { sendToEditor(code); $('btn-run').click(); },
+});
+// Klick auf einen Befehlsnamen in Ablauf oder Disassemblierung öffnet die Referenz (statt den Haltepunkt zu schalten)
+document.addEventListener('click', (e) => {
+  const mn = e.target.closest?.('.row .mn[data-mn]');
+  if (!mn) return;
+  e.stopPropagation();
+  reference.show(mn.dataset.mn);
+}, true);
 const tutorial = createTutorial({
   ui: {
     select: $('tut-select'), marks: $('tut-marks'), search: $('tut-search'), results: $('tut-results'),
@@ -180,6 +197,7 @@ const tutorial = createTutorial({
   },
   onSend: sendToEditor,
   onSendRun: (code) => { sendToEditor(code); $('btn-run').click(); },
+  onRef: (mn) => reference.show(mn),
 });
 const examples = createExamples({
   select: $('example-sel'),
@@ -328,6 +346,7 @@ function retranslate() {
   renderMessages();
   files.labelSlots();
   tutorial.reload();
+  reference.reload();
   examples.relabel();
   flow.refreshLabels();
   disasm.refreshLabels();
