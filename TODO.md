@@ -36,6 +36,8 @@ Legende: `[ ]` offen · `[~]` in Arbeit · `[x]` erledigt. Jeder Abschnitt ist e
 ## M2 – Oberfläche: Rahmen
 - [x] Aufteilung Lehrbuch · Arbeitsfläche · Referenz, Seitenleisten ein-/ausklappbar und in der Breite ziehbar (auch per Pfeiltasten); Mitte: Quelltext, Ablauf + Bildschirm/Register, Monitor (Entwurf B2)
 - [ ] Anordnung wählbar (Bereiche tauschen, Referenz unten oder seitlich) – zurückgestellt
+- [x] Höhen von Quelltext und Ablauf per senkrechter Trennlinie ziehbar (Maus, Pfeiltasten, Doppelklick = Standard); im Browserspeicher gemerkt; der Monitor bleibt bei 16 Zeilen
+- [x] Trennlinien der Seitenleisten mit der Maus geprüft (echtes Ziehen im Browser)
 - [x] Bildschirm 32×32 mit 16 Farben; Tasten über `$FF` (W A S D, Pfeiltasten), Zufallszahl über `$FE`
 - [~] Tastaturbedienung und Barrierefreiheit: Trennlinien und Monitor per Tastatur bedienbar, Beschriftungen übersetzt; Prüfung auf Kontrast und Screenreader steht aus
 - [x] Laufzeit-Zeitgeber der Maschine getrennt vom Zeichnen der Ansichten; Geschwindigkeit 1/s bis maximal

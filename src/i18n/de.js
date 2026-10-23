@@ -188,4 +188,6 @@ export const de = {
   'ref.loadError': 'Die Referenz konnte nicht geladen werden.',
   'about.open': 'Über',
   'about.close': 'Schließen',
+  'layout.resizeVertical': 'Höhe des Bereichs darüber ändern',
+  'layout.resizeVerticalTip': 'Ziehen verändert die Höhe; Doppelklick stellt die Standardhöhe wieder her; Pfeiltasten gehen auch',
 };

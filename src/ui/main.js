@@ -16,6 +16,7 @@ import { createFiles } from './files.js';
 import { createTutorial } from './tutorial.js';
 import { createReference } from './reference.js';
 import { createAbout } from './about.js';
+import { initVSplits } from './vsplit.js';
 import { createExamples } from './examples.js';
 import { anchorFor, resolveAnchor } from '../core/breakpoints.js';
 
@@ -88,6 +89,10 @@ themeSel.addEventListener('change', () => { store.set('theme', themeSel.value); 
 // ---- Bausteine -------------------------------------------------------------
 
 const layout = initLayout();
+initVSplits(document.querySelector('.center'), [
+  { el: $('vsplit-editor'), prop: '--editor-h', target: $('editor') },
+  { el: $('vsplit-flow'), prop: '--flow-h', target: $('flow') },
+]);
 const screen = createScreen($('screen'), $('screen-wrap'), machine.mem);
 const regs = createRegisters($('regs'), machine, () => { rev++; updateStatus(); updateButtons(); });
 const flow = createFlow($('flow'), machine, {

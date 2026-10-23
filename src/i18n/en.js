@@ -188,4 +188,6 @@ export const en = {
   'ref.loadError': 'The reference could not be loaded.',
   'about.open': 'About',
   'about.close': 'Close',
+  'layout.resizeVertical': 'Change the height of the area above',
+  'layout.resizeVerticalTip': 'Drag to change the height; double-click to reset; arrow keys also work',
 };

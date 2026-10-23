@@ -88,7 +88,7 @@ button.primary { background: var(--accent-bg); color: var(--accent-text); border
   --code-reg: light-dark(#953800, #ffb86b);
   --code-com: light-dark(#6e7781, #8b949e);
 }
-.editor { display: flex; height: 260px; min-height: 120px; resize: vertical; overflow: hidden; border: 1px solid var(--border); border-radius: 6px; background: var(--surface); font: 13px/20px var(--mono); }
+.editor { display: flex; height: var(--editor-h, 260px); min-height: 120px; overflow: hidden; border: 1px solid var(--border); border-radius: 6px; background: var(--surface); font: 13px/20px var(--mono); }
 .editor.drop { outline: 2px dashed var(--accent); outline-offset: -4px; }
 .gutter { flex: none; width: calc(var(--digits, 3) * 1ch + 30px); overflow: hidden; background: var(--surface-2); border-right: 1px solid var(--border); user-select: none; padding-top: 6px; }
 .gutter-in { will-change: transform; }
@@ -124,6 +124,7 @@ button.primary { background: var(--accent-bg); color: var(--accent-text); border
 .messages li.ok { color: var(--ok); }
 
 .flow { position: relative; height: calc(24 * 1.55em); overflow: hidden; }
+#flow.flow { height: var(--flow-h, calc(24 * 1.55em)); }
 #disasm.flow { height: calc(18 * 1.55em); }
 .flow .row { display: flex; gap: 10px; padding: 0 4px; white-space: pre; cursor: pointer; border-radius: 3px; }
 .flow .row:hover { background: var(--surface-2); }
@@ -329,7 +330,10 @@ dialog#about::backdrop { background: rgb(0 0 0 / 0.5); }
   .card { padding: 6px 8px; }
   .card-tools { gap: 4px; }
   .card-tools select { max-width: 18ch; }
-  .editor { height: 220px; }
+  .editor { height: var(--editor-h, 220px); }
   .statusbar { padding: 2px 8px; }
   dialog#about { width: calc(100vw - 12px); max-height: calc(100vh - 24px); }
 }
+
+.vsplit { flex: none; height: 8px; margin: -4px 0; border-radius: 4px; cursor: row-resize; touch-action: none; position: relative; z-index: 1; }
+.vsplit:hover, .vsplit:focus-visible, .vsplit.drag { background: var(--accent); opacity: .5; }
