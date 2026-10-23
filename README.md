@@ -1,7 +1,65 @@
 # Easy 6502 Reloaded
 
+**English** · [Deutsch](#easy-6502-reloaded-deutsch)
+
+A learning and development environment for 6502 assembly in the browser: tutorial, source code editor, emulator, debugger, monitor and reference. Bilingual (English/German).
+
+Derived from [Easy 6502](https://skilldrick.github.io/easy6502/) (Nick Morgan) and the [6502 Assembler and Simulator](https://itema-as.github.io/6502js/) (Stian Soreng, Nick Morgan, Torkild Ulvøy Resheim).
+
+Status: version 0.1, working. Progress is tracked in [TODO.md](TODO.md) (in German).
+
+## Features
+
+- **Tutorial** in 19 chapters with an even learning curve (from “What is a processor?” to pointers and a small game), tasks with fold-away solutions, two exercise chapters and a “Send to emulator” button on every example
+- **Source editor** with line numbers, syntax highlighting, error display, breakpoints in the margin, files, quick slots and an example library
+- **Emulator** (all 151 official instructions, decimal mode, cycle counts) with an execution view (10 instructions before and after), disassembly, editable registers, stack, a 16-line monitor with search and overwrite, breakpoints that follow labels, and “set PC”
+- **Reference** with an overview, addressing modes, all instructions, an opcode table, and links from the tutorial, the execution view and the editor (`F1`)
+- Runs entirely in the browser; no accounts, no tracking, **no third-party libraries**
+
+## Run it locally
+
+On Windows, double-click `start.cmd` (it opens the browser). Otherwise:
+
+    node tools/serve.mjs
+
+and open <http://127.0.0.1:8080/>. Double-clicking `index.html` alone is not enough, because browsers block modules loaded from `file://`. You only need Node.js (version 20 or later), no packages.
+
+## Tests
+
+    npm test
+
+The tests cover the processor core, assembler, disassembler, Markdown renderer, reference data and **every code example in the tutorial** (they are assembled and run, and the stated results are checked). Klaus Dormann's functional test runs in addition when `DORMANN_BIN` points to `6502_functional_test.bin`; on GitHub this happens automatically in the workflow.
+
+## Publishing (GitHub Pages)
+
+The file `.github/workflows/pages.yml` checks every push and pull request and, after a push to `main`, deploys the site. Once, in the repository under *Settings → Pages*, choose **GitHub Actions** as the source. `node tools/build-site.mjs` assembles the site into `_site/` (only `index.html`, `src`, `content`, `examples`, licence and notices). All paths are relative, so the site also works under `https://<name>.github.io/<repository>/`.
+
+## Layout
+
+| Folder | Contents |
+|---|---|
+| `src/core` | CPU, memory, assembler, disassembler, run control |
+| `src/ui` | user interface (editor, views, tutorial, reference) |
+| `src/i18n` | translations of the interface |
+| `src/reference` | language-neutral reference data |
+| `content/<language>` | tutorial (Markdown), reference texts, “About” |
+| `examples` | example programs and `index.json` |
+| `tests`, `tools` | tests, development server, site build |
+| `upstream` | unmodified originals of the two models, for reference (not part of the site) |
+
+Adding a language: create `src/i18n/<code>.js`, register it in `src/i18n/index.js` and fill `content/<code>/` with the same files. The tests check that all keys and examples are complete.
+
+## Licence
+
+Program code: GNU General Public License v3 (see [LICENSE](LICENSE)). Texts: CC BY 4.0. Details and credits in [NOTICE.md](NOTICE.md) (in German).
+
+---
+
+# Easy 6502 Reloaded (Deutsch)
+
+[English](#easy-6502-reloaded) · **Deutsch**
+
 Eine Lern- und Entwicklungsumgebung für die 6502-Assemblersprache im Browser – mit Lehrbuch, Quelltexteditor, Emulator, Debugger, Monitor und Referenz. Zweisprachig (Deutsch/Englisch).
-*A learning and development environment for 6502 assembly in the browser – tutorial, source editor, emulator, debugger, monitor and reference. Bilingual (German/English).*
 
 Abgeleitet von [Easy 6502](https://skilldrick.github.io/easy6502/) (Nick Morgan) und dem [6502 Assembler und Simulator](https://itema-as.github.io/6502js/) (Stian Soreng, Nick Morgan, Torkild Ulvøy Resheim).
 
