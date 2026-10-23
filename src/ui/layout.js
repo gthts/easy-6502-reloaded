@@ -35,13 +35,22 @@ export function initLayout() {
     store.set('layout', state);
   }
 
+  const isNarrow = () => window.matchMedia('(max-width: 900px)').matches;
+  const other = { left: 'right', right: 'left' };
+  function setOpen(name, open) {
+    state[sides[name].cls] = !open;
+    if (open && isNarrow()) state[sides[other[name]].cls] = true;
+  }
+
   for (const name of Object.keys(sides)) {
     document.querySelector(`[data-toggle="${name}"]`).addEventListener('click', () => {
-      state[sides[name].cls] = !state[sides[name].cls];
+      setOpen(name, state[sides[name].cls]);
       apply();
       save();
     });
   }
+  // Beim Laden darf auf schmalen Bildschirmen nicht gleich alles offen sein
+  if (isNarrow() && !state.lc && !state.rc) state.rc = true;
 
   function setupSplitter(el, prop, collapsedKey, sign) {
     const clamp = (v) => Math.max(MIN, Math.min(MAX, v));
@@ -84,7 +93,7 @@ export function initLayout() {
   return {
     refresh: apply,
     open(name) {
-      state[sides[name].cls] = false;
+      setOpen(name, true);
       apply();
       save();
     },

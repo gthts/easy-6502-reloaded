@@ -127,11 +127,16 @@ Einführung · Erstes Programm · Zahlen · Register · Rechnen · Verzweigen ·
 - [ ] Weitere Vorführungen (Tech-Demos) ergänzen
 
 ## M9 – Veröffentlichung
-- [ ] Prüfung der Fremdinhalte, Lizenzhinweise in der Oberfläche
-- [ ] Ansicht für Mobilgeräte
-- [ ] Leistungsprüfung (langer Lauf, volle Geschwindigkeit)
-- [ ] GitHub-Repository anlegen, GitHub Pages einrichten (**erst nach Rückfrage**)
-- [ ] Automatische Prüfläufe (GitHub Actions, optional)
+- [x] Lizenzhinweise in der Oberfläche: Seite „Über“ (Knopf oben rechts, zweisprachig) mit Lizenzen, Herkunft, Dank und Datenschutz; Verweise auf LICENSE und NOTICE.md
+- [ ] Prüfung der Fremdinhalte: Urheberlage der Beispielprogramme (Hinweise im Quelltext, GPL der Quelle) vor der Veröffentlichung abschließend klären; Beschreibungen der Beispiele gegenlesen
+- [x] Ansicht für Mobilgeräte (geprüft im Emulationsmodus 375×812): kompakte Kopfzeile, Werkzeugleiste zum Wischen, Seitenleisten als Schubladen (höchstens eine offen), Seite nicht breiter als der Bildschirm
+- [ ] Auf einem echten Telefon und Tablet ausprobieren (Bedienung per Touch, Bildschirmtastatur, Tastencodes für das Spiel: es gibt keine Pfeiltasten)
+- [ ] Bildschirm-Steuerkreuz für Touchgeräte erwägen
+- [x] Leistungsprüfung: bei „Maximal“ rund 16,7 Millionen Befehle je Sekunde (zum Vergleich: ein echter 6502 schafft etwa 0,4 Millionen); Zeitscheibe des Emulators auf 5 ms verkürzt, damit Anzeige und Bedienung nicht verhungern; Heap bleibt bei 4 MB
+- [ ] Bildraten im sichtbaren Browser messen (die Vorschau zeichnet im Hintergrund nicht)
+- [x] Vorbereitet: Workflow `.github/workflows/pages.yml` (Tests mit Dormann, dann Bereitstellung), `tools/build-site.mjs`, `.gitattributes`, `.gitignore`, Metadaten und Symbol in `index.html`, README mit Anleitung
+- [ ] GitHub-Repository anlegen, GitHub Pages einrichten (**erst nach ausdrücklicher Freigabe**; Name des Repositorys und Sichtbarkeit festlegen)
+- [x] Automatische Prüfläufe (GitHub Actions) im Workflow enthalten; noch nie auf GitHub gelaufen
 
 ## Offene Fragen
 - Gewünschter Name des Repositorys?

@@ -15,6 +15,7 @@ import { createEditor } from './editor.js';
 import { createFiles } from './files.js';
 import { createTutorial } from './tutorial.js';
 import { createReference } from './reference.js';
+import { createAbout } from './about.js';
 import { createExamples } from './examples.js';
 import { anchorFor, resolveAnchor } from '../core/breakpoints.js';
 
@@ -175,6 +176,7 @@ function sendToEditor(code) {
   editor.replaceAll(code.endsWith('\n') ? code : code + '\n');
   $('editor-note').textContent = t('tutorial.sent');
 }
+const about = createAbout({ dialog: $('about'), openBtn: $('btn-about'), closeBtn: $('about-close'), body: $('about-body') });
 const reference = createReference({
   ui: { content: $('ref-content'), search: $('ref-search'), links: $('ref-links'), error: $('ref-error') },
   reveal: () => layout.open('right'),
@@ -347,6 +349,7 @@ function retranslate() {
   files.labelSlots();
   tutorial.reload();
   reference.reload();
+  about.reload();
   examples.relabel();
   flow.refreshLabels();
   disasm.refreshLabels();

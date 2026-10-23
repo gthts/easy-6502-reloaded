@@ -48,6 +48,10 @@ export function createRenderer(h) {
           a.href = n.href;
           a.target = '_blank';
           a.rel = 'noopener noreferrer';
+        } else if (/^[A-Za-z0-9_./-]+$/.test(n.href) && !n.href.startsWith('/') && !n.href.includes('..')) {
+          a.href = n.href; // Datei des Projekts, zum Beispiel LICENSE
+          a.target = '_blank';
+          a.rel = 'noopener noreferrer';
         } else a.className = 'dead-link';
         appendInline(a, n.children);
         parent.append(a);

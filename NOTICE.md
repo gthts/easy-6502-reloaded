@@ -27,3 +27,7 @@ Sie sind keine Bestandteile der Anwendung und werden nicht ausgeliefert.
 ## Referenz (content/*/reference.*, src/reference/)
 
 Die Texte zu Befehlen und Adressierungsarten sind eigens geschrieben. Die Opcode-Tabelle und die Taktzahlen richten sich nach der Dokumentation von John Pickens, Bruce Clark und Ed Spittles (6502.org, „NMOS 6502 Opcodes“), die Taktzahlen und der Seitenfehler von `JMP ($xxFF)` nach den allgemein bekannten Eigenschaften des NMOS-6502.
+
+## Seite „Über“
+
+Die Lizenz- und Herkunftsangaben in der Oberfläche (`content/*/about.md`) fassen diese Datei zusammen. Bei Änderungen an einer der beiden Stellen bitte die andere nachführen.

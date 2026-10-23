@@ -39,8 +39,8 @@ export class Runner {
     this.last = now;
     let reason;
     if (this.speed === Infinity) {
-      // so viel wie in rund 10 ms möglich
-      const end = now + 10;
+      // so viel wie in rund 5 ms möglich: der Rest der Zeit bleibt für Anzeige und Bedienung
+      const end = now + 5;
       do {
         reason = m.run(2000, null, this.fresh);
         this.fresh = false;

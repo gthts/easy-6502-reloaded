@@ -186,4 +186,6 @@ export const en = {
   'ref.opcodeHint': 'Click a cell to open the instruction with that addressing mode.',
   'ref.unused': 'not an official opcode',
   'ref.loadError': 'The reference could not be loaded.',
+  'about.open': 'About',
+  'about.close': 'Close',
 };

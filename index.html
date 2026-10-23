@@ -4,6 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Easy 6502 Reloaded</title>
+  <meta name="description" content="Learn 6502 assembly in the browser: tutorial, editor, emulator with debugger, monitor and reference. Lernumgebung für 6502-Assembler im Browser.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%276%27 fill=%27%231f6feb%27/%3E%3Ctext x=%2716%27 y=%2722%27 font-family=%27monospace%27 font-size=%2714%27 font-weight=%27bold%27 text-anchor=%27middle%27 fill=%27white%27%3E65%3C/text%3E%3C/svg%3E">
   <link rel="stylesheet" href="src/ui/styles.css">
   <script type="module" src="src/ui/main.js"></script>
 </head>
@@ -34,6 +36,7 @@
     </label>
   </div>
   <div class="spacer"></div>
+  <button id="btn-about" type="button" data-i18n="about.open"></button>
   <label class="field"><span data-i18n="theme.label"></span>
     <select id="theme">
       <option value="auto" data-i18n="theme.auto"></option>
@@ -197,6 +200,15 @@
   </aside>
 </main>
 
+<dialog id="about" aria-labelledby="about-title">
+  <div class="about-head">
+    <span id="about-title" class="muted">Easy 6502 Reloaded</span>
+    <button id="about-close" type="button" data-i18n="about.close"></button>
+  </div>
+  <div id="about-body" class="prose"></div>
+</dialog>
+
 <footer class="statusbar"><span id="status"></span><span class="spacer"></span><span id="status-right" class="mono"></span></footer>
+<noscript><p style="padding:16px;font-family:system-ui,sans-serif">Easy 6502 Reloaded needs JavaScript. / Easy 6502 Reloaded braucht JavaScript.</p></noscript>
 </body>
 </html>

@@ -186,4 +186,6 @@ export const de = {
   'ref.opcodeHint': 'Zelle anklicken: der Befehl wird mit dieser Adressierungsart geöffnet.',
   'ref.unused': 'kein offizieller Opcode',
   'ref.loadError': 'Die Referenz konnte nicht geladen werden.',
+  'about.open': 'Über',
+  'about.close': 'Schließen',
 };
