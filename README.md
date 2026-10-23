@@ -5,7 +5,7 @@ Abgeleitet von [Easy 6502](https://skilldrick.github.io/easy6502/) (Nick Morgan)
 und dem [6502 Assembler und Simulator](https://itema-as.github.io/6502js/)
 (Stian Soreng, Nick Morgan, Torkild Ulvøy Resheim).
 
-Status: Planung. Den Fortschritt verfolgt [TODO.md](TODO.md).
+Status: Kern (CPU, Assembler, Disassembler, Ablaufsteuerung) fertig und geprüft; Oberfläche folgt. Den Fortschritt verfolgt [TODO.md](TODO.md).
 
 ## Ziele
 
@@ -20,3 +20,9 @@ Status: Planung. Den Fortschritt verfolgt [TODO.md](TODO.md).
 
 GNU General Public License v3 (siehe [LICENSE](LICENSE)); Lehrtexte nach CC BY 4.0.
 Einzelheiten und Herkunftsnachweise in [NOTICE.md](NOTICE.md).
+
+## Prüfen
+
+    npm test
+
+Benötigt nur Node.js (ab Version 20), keine Pakete. Der Funktionstest von Klaus Dormann läuft zusätzlich, wenn `DORMANN_BIN` auf `6502_functional_test.bin` zeigt.

@@ -5,22 +5,33 @@ Legende: `[ ]` offen · `[~]` in Arbeit · `[x]` erledigt. Jeder Abschnitt ist e
 ## M0 – Grundlagen
 - [x] Quellen beider Repositories gesichtet, Lizenzen geprüft
 - [x] Projekt angelegt, Git eingerichtet, Originale unter `upstream/`
-- [ ] **Entscheidung:** Oberflächenvariante (A/B/C, siehe Visualisierungen)
-- [ ] **Entscheidung:** Lizenz GPL v3 bestätigen
-- [ ] **Entscheidung:** Emulator im Hauptfaden mit entkoppelter Anzeige oder in einem Web Worker (Worker: auf GitHub Pages kein gemeinsamer Speicher ohne Sonderkopfzeilen, daher Nachrichtenaustausch)
-- [ ] **Entscheidung:** Sprache der Oberfläche (nur Deutsch oder zweisprachig)
-- [ ] Ordnerstruktur: `index.html`, `src/{core,ui,tutorial,reference}`, `content/`, `examples/`
+- [x] Entscheidung: Oberflächenvariante B2 (Lehrbuch links und Referenz rechts jeweils an den Rand einklappbar; Mitte: Editor, darunter Ablauf und Bildschirm, darunter Monitor)
+- [x] Entscheidung: GPL v3 für den Code, CC BY 4.0 für übernommene Lehrtexte
+- [~] Vorläufig: Emulator im Hauptfaden, Ansichten entkoppelt (eigene Aktualisierungstakte); Web Worker bleibt Option, falls die Leistung nicht reicht
+- [x] Entscheidung: Lokalisierung von Anfang an vorsehen; Ausgangssprache Englisch, Deutsch zusätzlich (siehe Abschnitt Lokalisierung)
+- [~] Ordnerstruktur: `src/{core,i18n}` und `tests/` angelegt; `index.html`, `src/{ui,tutorial,reference}`, `content/` folgen
 - [ ] Gestaltungsgrundlagen (Farben, Schrift, helles/dunkles Thema)
 
 ## M1 – Kern (ohne Oberfläche, mit Prüfläufen)
-- [ ] CPU: alle 151 offiziellen Opcodes, Adressierungsarten, Flags, Taktzyklen
-- [ ] Speicher 64 KiB mit Lese-/Schreibhaken (für Anzeige, Monitor, Haltepunkte)
-- [ ] Assembler: Marken, Direktiven (`.org`, `.byte`, `.word`, `.text`, `define`), Ausdrücke (`<`, `>`, `+`, `-`), Fehler mit Zeilennummer
-- [ ] Zuordnung Quellzeile ↔ Adresse (für Haltepunkte und Hervorhebung)
-- [ ] Disassembler (einzelne Adresse, Bereich, rückwärts mit Heuristik)
-- [ ] Ablaufsteuerung: Lauf, Einzelschritt, Schritt über Unterprogramm, Schritt hinaus, Geschwindigkeit, Halt bei Haltepunkt/BRK
-- [ ] Prüfläufe: Funktionstest von Klaus Dormann (Lizenz prüfen), eigene Einzeltests
+- [x] CPU: alle 151 offiziellen Opcodes, Adressierungsarten, Flags, Taktzyklen, Dezimalmodus
+- [x] Speicher 64 KiB mit Lese-/Schreibhaken (für Anzeige, Monitor, Ein-/Ausgabe)
+- [x] Assembler: Marken, Direktiven (`*=`, `.org`, `dcb`, `.byte`, `dcw`, `.word`, `.text`, `.res`, `define`, `name = wert`), Ausdrücke, Fehler mit Zeilennummer und Übersetzungsschlüssel
+- [x] Zuordnung Quellzeile ↔ Adresse (`lineMap`)
+- [x] Disassembler (einzelne Adresse, Bereich, rückwärts mit Heuristik und bekannten Anfängen)
+- [x] Ablaufsteuerung (`Machine`): Lauf mit Befehlsbudget, Einzelschritt, Schritt über, Schritt hinaus, Halt bei Haltepunkt/BRK, Ablaufprotokoll
+- [ ] Geschwindigkeitsregelung (Takt/Zeitgeber) gehört zur Oberfläche (M2)
+- [x] Prüfläufe: 17 Tests (`npm test`), Funktionstest von Klaus Dormann (GPL v3) besteht; die Binärdatei liegt nicht im Projekt, Pfad über `DORMANN_BIN`
+- [ ] Dormann-Datei und Anleitung für die Prüfung in CI aufnehmen (optional)
 - [ ] Inoffizielle Opcodes: vorerst ausgeschlossen
+
+## Lokalisierung (querschnittlich)
+- [x] Modul `src/i18n` mit Katalogen (`en.js` Ausgangssprache, `de.js`), Platzhalter und Schachtelung
+- [x] Fehlermeldungen des Assemblers als Schlüssel mit Parametern; Namen der Adressierungsarten im Katalog
+- [ ] Alle Texte der Oberfläche über Schlüssel; keine fest eingebauten Zeichenketten in `src/ui`
+- [ ] Sprachwahl in der Oberfläche, Erkennung über `navigator.language`, Speicherung im Browser
+- [ ] Lehrbuch und Referenz je Sprache als eigene Inhaltsdateien (`content/<sprache>/`), Rückfall auf Englisch
+- [ ] Prüfung auf fehlende Schlüssel (Test: jeder Schlüssel in `en` existiert in `de`)
+- [ ] Datums-, Zahlen- und Hexformate unabhängig von der Sprache halten
 
 ## M2 – Oberfläche: Rahmen
 - [ ] Aufteilung Lehrbuch · Arbeitsfläche · Referenz, jeweils ein-/ausklappbar und in der Größe veränderbar
@@ -88,7 +99,7 @@ Legende: `[ ]` offen · `[~]` in Arbeit · `[x]` erledigt. Jeder Abschnitt ist e
 
 ## M8 – Beispielprogramme
 - [ ] Katalog mit Beschreibung, Schwierigkeit und Schlagworten
-- [ ] Übernahme der 18 Beispiele aus 6502js (liegen bereits unter `examples/`; Urheberlage klären)
+- [~] 18 Beispiele aus 6502js liegen unter `examples/` und lassen sich alle übersetzen; Urheberlage klären
 - [ ] Laden in den Editor, Warnung bei ungesicherten Änderungen
 - [ ] Weitere Vorführungen (Tech-Demos) ergänzen
 
@@ -101,4 +112,4 @@ Legende: `[ ]` offen · `[~]` in Arbeit · `[x]` erledigt. Jeder Abschnitt ist e
 
 ## Offene Fragen
 - Gewünschter Name des Repositorys?
-- Oberfläche deutsch, englisch oder zweisprachig?
+- Weitere Sprachen nach Deutsch?
