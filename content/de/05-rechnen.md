@@ -59,7 +59,7 @@ SBC #$20     ; 16 - 32 = -16, als Byte $F0
 BRK
 ```
 
-$F0 ist 240; zählt man bei 16 zwanzigmal rückwärts, kommt man bei 240 an. Man kann das als „minus 16“ lesen. Mehr dazu im Kapitel über Verzweigungen.
+`$F0` ist 240: Zählt man von 16 aus um 32 Schritte (`$20`) rückwärts, kommt man bei 240 an. Man kann das als „minus 16“ lesen. Mehr dazu im Kapitel über Verzweigungen.
 
 ## Das Zero-Flag und das Carry als Meldung
 

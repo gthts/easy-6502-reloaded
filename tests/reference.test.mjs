@@ -34,10 +34,9 @@ for (const loc of locales) {
   test(`Referenz ${loc}: Übersicht lässt sich lesen, Tabelle mit maskiertem Strich bleibt heil`, () => {
     const blocks = parseMarkdown(fs.readFileSync(path.join(root, 'content', loc, 'reference.md'), 'utf8'));
     assert.ok(blocks.some((b) => b.type === 'table'));
-    const syntax = blocks.filter((b) => b.type === 'table').find((b) => b.rows.some((r) => inlineText(r[0]) === 'Ausdruck'));
-    const row = syntax.rows.find((r) => inlineText(r[0]) === 'Ausdruck');
-    assert.equal(row.length, 3, 'Zeile „Ausdruck“ hat drei Spalten');
-    assert.ok(inlineText(row[1]).includes('|'));
+    const row = blocks.filter((b) => b.type === 'table').flatMap((b) => b.rows).find((r) => inlineText(r[1] ?? []).includes('|'));
+    assert.ok(row, 'Zeile mit maskiertem Strich gefunden');
+    assert.equal(row.length, 3, 'die Zeile hat drei Spalten');
   });
 }
 

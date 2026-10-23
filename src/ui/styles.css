@@ -124,7 +124,7 @@ button.primary { background: var(--accent-bg); color: var(--accent-text); border
 .messages li.ok { color: var(--ok); }
 
 .flow { position: relative; height: calc(24 * 1.55em); overflow: hidden; }
-#disasm.flow { height: calc(21 * 1.55em); }
+#disasm.flow { height: calc(18 * 1.55em); }
 .flow .row { display: flex; gap: 10px; padding: 0 4px; white-space: pre; cursor: pointer; border-radius: 3px; }
 .flow .row:hover { background: var(--surface-2); }
 .flow .row.active { background: var(--warn-bg); color: var(--warn-text); }
@@ -305,3 +305,7 @@ table.opcodes th, table.opcodes td { padding: 1px 2px; text-align: center; min-w
 table.opcodes td[class^="cat-"] { background: color-mix(in srgb, var(--cat) 18%, var(--surface)); color: var(--text); cursor: pointer; }
 table.opcodes td[class^="cat-"]:hover { background: color-mix(in srgb, var(--cat) 40%, var(--surface)); }
 table.opcodes td.unused { color: var(--text-3); }
+
+/* Monitor und Disassemblierung nebeneinander, bei schmaler Mitte untereinander */
+.pair.md { grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); align-items: start; }
+@container (max-width: 900px) { .pair.md { grid-template-columns: minmax(0, 1fr); } }

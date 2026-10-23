@@ -52,7 +52,7 @@ farben:
   dcb $01,$02,$03,$04,$05,$06,$07,$08
 ```
 
-Die Tabelle steht **hinter** `BRK`, denn der Prozessor soll sie nie ausführen. Im **Disassemblierfenster** (der unteren Anzeige) kannst du `farben` anwählen: Dort wird die Tabelle als Befehle gedeutet, was man an wirren Befehlen erkennt, die in Wirklichkeit gar keine sind. Daten und Programm sind im Speicher nicht unterscheidbar; nur der Programmablauf entscheidet.
+Die Tabelle steht **hinter** `BRK`, denn der Prozessor soll sie nie ausführen. Im **Disassemblierfenster** (neben dem Monitor) kannst du `farben` anwählen: Dort wird die Tabelle als Befehle gedeutet, was man an wirren Befehlen erkennt, die in Wirklichkeit gar keine sind. Daten und Programm sind im Speicher nicht unterscheidbar; nur der Programmablauf entscheidet.
 
 Auch Text geht, mit Anführungszeichen:
 

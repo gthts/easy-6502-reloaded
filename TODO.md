@@ -65,6 +65,7 @@ Legende: `[ ]` offen · `[~]` in Arbeit · `[x]` erledigt. Jeder Abschnitt ist e
 - [x] Register A, X, Y zusätzlich binär (8 Bit, in Vierergruppen)
 
 ## M5 – Monitor
+- [x] Anordnung: Monitor und Disassemblierfenster stehen nebeneinander (bei schmaler Mitte untereinander)
 - [x] Immer aktiv, unabhängig von der Hauptschleife
 - [x] 16 Zeilen × 16 Bytes, Blättern (Rad, Tasten, Knöpfe), Springen zu Adresse oder Marke
 - [x] Bytefolge suchen (Hexbytes, `??` als Platzhalter, "Text"), weitersuchen mit Umbruch, Treffer hervorgehoben
@@ -78,7 +79,9 @@ Legende: `[ ]` offen · `[~]` in Arbeit · `[x]` erledigt. Jeder Abschnitt ist e
 - [x] Beispiele mit „An Emulator senden“ (Strg+Z holt den alten Quelltext zurück)
 - [x] „Senden und starten“ direkt am Beispiel
 - [x] **Neuer Lehrplan** mit 17 Sachkapiteln und Aufgaben samt aufklappbaren Lösungen je Kapitel (deutsch); alle Codebeispiele werden von `tests/content.test.mjs` übersetzt, Ergebnisse (`expect=`) geprüft
-- [ ] Englische Fassung des Lehrbuchs (`content/en/`); bis dahin zeigt die Oberfläche den deutschen Text
+- [x] Englische Fassung des Lehrbuchs (`content/en/`, 19 Kapitel; Dateinamen bleiben deutsch, weil daraus die Kapitelkennungen für Verweise entstehen); alle Beispiele werden ebenfalls geprüft
+- [ ] Englische Fassung gegenlesen lassen (Muttersprachler); sie ist eine sinngemäße Übersetzung des deutschen Textes
+- [ ] Änderungen künftig in beiden Sprachen nachführen (Test prüft Übersetzbarkeit der Beispiele, nicht Gleichlauf der Texte)
 - [ ] Probelesen: Verständlichkeit, Tempo, Tonfall („du“) mit echten Lernenden prüfen
 - [ ] Querverweise Lehrbuch → Referenz (M7) bei Befehlen
 - [x] Text auf Grundlage von Easy 6502 neu verfasst und umgegliedert (CC BY 4.0, Nennung unter jedem Kapitel und in NOTICE.md); die Schlange ist aus dem Lehrbuch heraus: Kapitel 17 baut ein kleines Spiel in fünf Etappen, die Schlange liegt kommentiert in der Beispielauswahl
@@ -112,7 +115,7 @@ Einführung · Erstes Programm · Zahlen · Register · Rechnen · Verzweigen ·
 - [x] Ein-/ausklappbar (rechts); frei platzierbar bleibt zurückgestellt (siehe M2)
 - [x] Suche über Name und Beschreibung der Befehle
 - [x] Opcode-Quelle angegeben (Pickens, Clark, Spittles; 6502.org); Tabelle mit dem Funktionstest von Klaus Dormann geprüft
-- [ ] Englische Fassung der Referenz (`content/en/reference.json`, `reference.md`); bis dahin Rückfall auf Deutsch
+- [x] Englische Fassung der Referenz (`content/en/reference.json`, `reference.md`)
 - [ ] Beispiel je Befehl (kurzes Programm mit „An Emulator senden“)
 
 ## M8 – Beispielprogramme
