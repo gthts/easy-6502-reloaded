@@ -245,7 +245,13 @@ $('btn-out').addEventListener('click', stepper(() => machine.stepOut()));
 $('btn-reset').addEventListener('click', resetProgram);
 
 function updateButtons() {
-  $('btn-run').textContent = runner.running ? t('btn.pause') : t('btn.run');
+  let key = 'run';
+  if (runner.running) key = 'pause';
+  else if (machine.cpu.halted) key = 'restart';
+  else if (machine.instructions > 0) key = 'resume';
+  const tip = { run: 'tip.start', pause: 'tip.pause', restart: 'tip.restart', resume: 'tip.resume' }[key];
+  $('btn-run').textContent = t('btn.' + key);
+  $('btn-run').title = t(tip);
 }
 
 $('messages').addEventListener('click', (e) => {

@@ -62,6 +62,7 @@ Legende: `[ ]` offen · `[~]` in Arbeit · `[x]` erledigt. Jeder Abschnitt ist e
 - [ ] „Springe zu“: Adresse, Marke aus Liste oder Verschieben der hervorgehobenen Zeile (naher Sprung)
 - [ ] Disassemblierfenster (frei wählbarer Bereich) bleibt zusätzlich bestehen
 - [~] Register- und Flaganzeige fertig; Stapelanzeige und Änderung per Eingabe stehen aus
+- [ ] Register A, X, Y zusätzlich binär anzeigen (8 Bit, gruppiert), nicht nur hexadezimal und dezimal
 
 ## M5 – Monitor
 - [x] Immer aktiv, unabhängig von der Hauptschleife

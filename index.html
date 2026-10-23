@@ -8,17 +8,29 @@
   <script type="module" src="src/ui/main.js"></script>
 </head>
 <body>
+<div id="file-warning" hidden style="padding:12px 16px;background:#fff1c2;color:#4a3800;border-bottom:1px solid #d9b100;font:14px/1.5 system-ui,sans-serif"></div>
+<script>
+  // Browser blockieren Module, die aus dem Dateisystem (file://) geladen werden. Statt einer leeren Seite einen Hinweis zeigen.
+  if (location.protocol === 'file:') {
+    var de = (navigator.language || '').slice(0, 2) === 'de';
+    var box = document.getElementById('file-warning');
+    box.textContent = de
+      ? 'Diese Seite lässt sich nicht per Doppelklick auf die Datei öffnen, weil der Browser dann ihre Programmteile blockiert. Starten Sie start.cmd im Projektordner (oder „node tools/serve.mjs“) und öffnen Sie http://127.0.0.1:8080/.'
+      : 'This page cannot be opened by double-clicking the file because the browser blocks its modules then. Run start.cmd in the project folder (or "node tools/serve.mjs") and open http://127.0.0.1:8080/.';
+    box.hidden = false;
+  }
+</script>
 <header class="topbar">
   <h1 class="brand">Easy 6502 Reloaded</h1>
   <div class="toolbar" role="toolbar">
-    <button id="btn-assemble" type="button" data-i18n="btn.assemble"></button>
+    <button id="btn-assemble" type="button" data-i18n-title="tip.assemble" data-i18n="btn.assemble"></button>
     <button id="btn-run" type="button" class="primary" data-i18n="btn.run"></button>
-    <button id="btn-step" type="button" data-i18n="btn.step"></button>
-    <button id="btn-over" type="button" data-i18n="btn.stepOver"></button>
-    <button id="btn-out" type="button" data-i18n="btn.stepOut"></button>
-    <button id="btn-reset" type="button" data-i18n="btn.reset"></button>
+    <button id="btn-step" type="button" data-i18n-title="tip.step" data-i18n="btn.step"></button>
+    <button id="btn-over" type="button" data-i18n-title="tip.stepOver" data-i18n="btn.stepOver"></button>
+    <button id="btn-out" type="button" data-i18n-title="tip.stepOut" data-i18n="btn.stepOut"></button>
+    <button id="btn-reset" type="button" data-i18n-title="tip.reset" data-i18n="btn.reset"></button>
     <label class="field"><span data-i18n="speed.label"></span>
-      <select id="speed"></select>
+      <select id="speed" data-i18n-title="tip.speed"></select>
     </label>
   </div>
   <div class="spacer"></div>
