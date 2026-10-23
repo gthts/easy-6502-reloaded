@@ -164,3 +164,25 @@ button.primary { background: var(--accent-bg); color: var(--accent-text); border
   .splitter { display: none; }
   .pair { grid-template-columns: minmax(0, 1fr); }
 }
+
+.flow-bar { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; margin-bottom: 6px; }
+.flow-bar input { width: 10ch; }
+.flow-bar select { max-width: 22ch; }
+.err-text { color: var(--danger); min-height: 1.5em; margin: 4px 0 0; }
+.flow .row.active[draggable="true"] { cursor: grab; }
+.monitor-bar .sep { width: 1px; height: 18px; background: var(--border-strong); margin: 0 2px; }
+.reg-in.wide { width: 8ch; }
+.monitor-bar { flex-wrap: wrap; }
+.monitor-bar input[id="mon-find"] { width: 18ch; }
+.monitor .bytes span { cursor: pointer; min-width: 2ch; text-align: center; }
+.monitor .bytes span.cur { outline: 1px solid var(--accent); background: var(--accent-bg); color: var(--accent-text); }
+.monitor:focus .bytes span.cur { outline-width: 2px; }
+.monitor .bytes span.hit { background: var(--warn-bg); color: var(--warn-text); }
+.reg-in { width: 6ch; padding: 0 3px; font-size: 12px; text-align: left; }
+.regs dd { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; min-height: 1.7em; }
+.regs .dec { color: var(--text-2); white-space: pre; }
+.regs .bin { color: var(--text-3); white-space: pre; }
+.regs .stack-line { color: var(--text-2); }
+.regs button.flag { border: 0; background: transparent; padding: 0 2px; font: inherit; cursor: pointer; border-radius: 3px; }
+.regs button.flag:hover { background: var(--surface-2); }
+.regs .flag { display: inline-block; min-width: 1.2ch; }

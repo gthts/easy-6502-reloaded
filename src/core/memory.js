@@ -42,14 +42,18 @@ export class Memory {
     for (let i = 0; i < 0x10000; i++) if (this.data[i] !== 0) this.poke(i, 0);
   }
 
-  // Sucht eine Bytefolge ab `from` (ohne Umbruch bis zum Ende), liefert die Adresse oder -1.
-  find(pattern, from = 0) {
+  // Sucht eine Bytefolge ab `from`; null im Muster passt auf jedes Byte. Mit `wrap` geht die Suche am Ende von vorn weiter.
+  // Liefert die Adresse oder -1.
+  find(pattern, from = 0, wrap = false) {
     const n = pattern.length;
     if (n === 0) return -1;
-    outer: for (let a = from; a <= 0x10000 - n; a++) {
-      for (let i = 0; i < n; i++) if (this.data[a + i] !== pattern[i]) continue outer;
-      return a;
-    }
+    const last = 0x10000 - n;
+    const at = (a) => {
+      for (let i = 0; i < n; i++) if (pattern[i] !== null && this.data[a + i] !== pattern[i]) return false;
+      return true;
+    };
+    for (let a = Math.max(0, from); a <= last; a++) if (at(a)) return a;
+    if (wrap) for (let a = 0; a < Math.min(from, last + 1); a++) if (at(a)) return a;
     return -1;
   }
 }

@@ -9,6 +9,7 @@ import { createScreen } from './screen.js';
 import { Runner, SPEEDS } from './runner.js';
 import { createRegisters } from './registers.js';
 import { createFlow } from './flow.js';
+import { createDisasm } from './disasm.js';
 import { createMonitor } from './monitor.js';
 import { createEditor } from './editor.js';
 import { createFiles } from './files.js';
@@ -84,9 +85,19 @@ themeSel.addEventListener('change', () => { store.set('theme', themeSel.value); 
 
 const layout = initLayout();
 const screen = createScreen($('screen'), $('screen-wrap'), machine.mem);
-const regs = createRegisters($('regs'), machine);
-const flow = createFlow($('flow'), machine, toggleBp);
-const monitor = createMonitor($('monitor'), $('mon-goto'), $('mon-prev'), $('mon-next'), machine);
+const regs = createRegisters($('regs'), machine, () => { rev++; updateStatus(); updateButtons(); });
+const flow = createFlow($('flow'), machine, {
+  onToggleBp: (addr) => toggleBp(addr),
+  onJump: (addr) => jumpTo(addr),
+  ui: { input: $('flow-target'), select: $('flow-labels'), jumpBtn: $('flow-jump'), bpBtn: $('flow-bp'), prevBtn: $('flow-prev'), nextBtn: $('flow-next'), note: $('flow-note') },
+});
+const disasm = createDisasm($('disasm'), {
+  input: $('dis-goto'), select: $('dis-labels'), prevBtn: $('dis-prev'), nextBtn: $('dis-next'), follow: $('dis-follow'),
+}, machine, (addr) => toggleBp(addr));
+const monitor = createMonitor($('monitor'), {
+  goto: $('mon-goto'), prev: $('mon-prev'), next: $('mon-next'),
+  find: $('mon-find'), findBtn: $('mon-find-btn'), findNext: $('mon-find-next'), note: $('mon-note'),
+}, machine);
 const runner = new Runner(machine, () => {
   updateButtons();
   updateStatus();
@@ -97,7 +108,8 @@ speedSel.value = String(Math.max(0, SPEEDS.indexOf(runner.speed)));
 speedSel.addEventListener('change', () => { runner.speed = SPEEDS[Number(speedSel.value)]; store.set('speed', Number(speedSel.value)); });
 
 // Schreibzugriffe: Bildschirm zeichnet nur geänderte Punkte; Zufallszahl und Tastenwert als Eingabe
-machine.mem.onWrite = (addr) => screen.mark(addr);
+let memRev = 0; // zählt Schreibzugriffe; Ansichten, die Befehle zeigen, zeichnen dann neu
+machine.mem.onWrite = (addr) => { screen.mark(addr); memRev++; };
 machine.mem.onRead = (addr) => (addr === 0xfe ? (Math.random() * 256) | 0 : undefined);
 
 // ---- Quelltext ---------------------------------------------------------------
@@ -192,6 +204,8 @@ function assemble() {
     const bytes = result.segments.reduce((n, s) => n + s.bytes.length, 0);
     lastAssembled = { bytes, addr: machine.entry };
     syncBreakpoints();
+    flow.refreshLabels();
+    disasm.refreshLabels();
     sourceDirty = false;
     assembledSource = editor.getValue();
     addrToLine = new Map(machine.lineMap.filter((l) => l.size > 0).map((l) => [l.addr, l.line]));
@@ -202,6 +216,15 @@ function assemble() {
   updateStatus();
   updateButtons();
   return result.ok;
+}
+
+function jumpTo(addr) {
+  runner.pause();
+  machine.jumpTo(addr);
+  rev++;
+  updateStatus();
+  updateButtons();
+  editor.reveal(addrToLine.get(addr));
 }
 
 function ensureAssembled() {
@@ -279,6 +302,8 @@ function retranslate() {
   regs.retranslate();
   renderMessages();
   files.labelSlots();
+  flow.refreshLabels();
+  disasm.refreshLabels();
   updateButtons();
   updateStatus();
 }
@@ -293,7 +318,8 @@ retranslate();
 function frame(now) {
   screen.draw();
   regs.update();
-  flow.update(rev);
+  flow.update(rev, memRev);
+  disasm.update(rev, memRev);
   updateMarkers();
   monitor.update(now);
   $('status-right').textContent = `PC $${hex4(machine.cpu.pc)}`;

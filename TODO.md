@@ -58,17 +58,18 @@ Legende: `[ ]` offen · `[~]` in Arbeit · `[x]` erledigt. Jeder Abschnitt ist e
 - [x] Ablaufansicht: aktive Instruktion hervorgehoben, 10 Instruktionen davor und danach, Marken eingeblendet
 - [x] Entkoppelt von der Emulatorschleife (Zeichnen über requestAnimationFrame)
 - [x] Haltepunkte per Klick auf die Zeile; sie hängen an der nächsten Marke davor (Marke + Abstand) und überstehen Änderungen am Quelltext; entfällt die Marke, entfällt der Haltepunkt; im Browserspeicher gemerkt
-- [ ] Haltepunkt per Auswahl einer Marke aus einer Liste
-- [ ] „Springe zu“: Adresse, Marke aus Liste oder Verschieben der hervorgehobenen Zeile (naher Sprung)
-- [ ] Disassemblierfenster (frei wählbarer Bereich) bleibt zusätzlich bestehen
-- [~] Register- und Flaganzeige fertig; Stapelanzeige und Änderung per Eingabe stehen aus
-- [ ] Register A, X, Y zusätzlich binär anzeigen (8 Bit, gruppiert), nicht nur hexadezimal und dezimal
+- [x] Haltepunkt per Auswahl einer Marke aus einer Liste (Markenliste oder Eingabe, Knopf „Haltepunkt“)
+- [x] „PC setzen“: Adresse, Marke aus Liste, Doppelklick auf eine Zeile, Ziehen der hervorgehobenen Zeile, Pfeile für eine Instruktion zurück/vor
+- [x] Disassemblierfenster (frei wählbarer Bereich, Marken, Blättern, „PC folgen“, Haltepunkte per Klick)
+- [x] Register, Flags und Stapel (8 Bytes); Register und Flags direkt bearbeitbar (PC-Änderung setzt die Ausführung dort fort)
+- [x] Register A, X, Y zusätzlich binär (8 Bit, in Vierergruppen)
 
 ## M5 – Monitor
 - [x] Immer aktiv, unabhängig von der Hauptschleife
 - [x] 16 Zeilen × 16 Bytes, Blättern (Rad, Tasten, Knöpfe), Springen zu Adresse oder Marke
-- [ ] Bytefolge suchen (hexadezimal und Text)
-- [ ] Überschreiben von Hexwerten direkt im Feld
+- [x] Bytefolge suchen (Hexbytes, `??` als Platzhalter, "Text"), weitersuchen mit Umbruch, Treffer hervorgehoben
+- [x] Überschreiben von Hexwerten direkt im Feld (Byte anklicken, zwei Ziffern tippen, Pfeiltasten)
+- [ ] Überschreiben auch in der Textspalte, Auswahl mehrerer Bytes, Füllen eines Bereichs
 - [x] Geänderte Bytes kurz hervorheben
 
 ## M6 – Lehrbuch

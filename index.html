@@ -85,7 +85,18 @@
     <div class="pair">
       <article class="card">
         <h2 data-i18n="panel.flow"></h2>
-        <div id="flow" class="mono flow" aria-label="Execution"></div>
+        <div class="flow-bar">
+          <label class="field"><span data-i18n="flow.target"></span>
+            <input id="flow-target" class="mono" size="9" spellcheck="false" autocomplete="off" data-i18n-placeholder="monitor.gotoHint">
+          </label>
+          <select id="flow-labels" data-i18n-label="flow.pickLabel"></select>
+          <button id="flow-jump" type="button" data-i18n="flow.jump" data-i18n-title="flow.jumpTip"></button>
+          <button id="flow-bp" type="button" data-i18n="flow.bp" data-i18n-title="flow.bpTip"></button>
+          <button id="flow-prev" type="button" data-i18n-title="flow.prev" data-i18n-label="flow.prev">▲</button>
+          <button id="flow-next" type="button" data-i18n-title="flow.next" data-i18n-label="flow.next">▼</button>
+        </div>
+        <div id="flow" class="mono flow" role="list"></div>
+        <p id="flow-note" class="small err-text" aria-live="polite"></p>
         <p class="muted small" data-i18n="flow.bpHint"></p>
       </article>
       <div class="stack">
@@ -111,8 +122,30 @@
         </label>
         <button id="mon-prev" type="button" data-i18n-title="monitor.prev" data-i18n-label="monitor.prev">▲</button>
         <button id="mon-next" type="button" data-i18n-title="monitor.next" data-i18n-label="monitor.next">▼</button>
+        <span class="sep" aria-hidden="true"></span>
+        <label class="field"><span data-i18n="monitor.find"></span>
+          <input id="mon-find" class="mono" size="16" spellcheck="false" autocomplete="off" data-i18n-placeholder="monitor.findHint">
+        </label>
+        <button id="mon-find-btn" type="button" data-i18n="monitor.find"></button>
+        <button id="mon-find-next" type="button" data-i18n="monitor.findNext"></button>
+        <span id="mon-note" class="small muted" aria-live="polite"></span>
       </div>
       <div id="monitor" class="mono monitor" tabindex="0"></div>
+      <p class="muted small" data-i18n="monitor.editHint"></p>
+    </article>
+
+    <article class="card">
+      <h2 data-i18n="panel.disasm"></h2>
+      <div class="flow-bar">
+        <label class="field"><span data-i18n="flow.target"></span>
+          <input id="dis-goto" class="mono" size="9" spellcheck="false" autocomplete="off" data-i18n-placeholder="monitor.gotoHint" value="$0600">
+        </label>
+        <select id="dis-labels" data-i18n-label="flow.pickLabel"></select>
+        <button id="dis-prev" type="button" data-i18n-title="disasm.prev" data-i18n-label="disasm.prev">▲</button>
+        <button id="dis-next" type="button" data-i18n-title="disasm.next" data-i18n-label="disasm.next">▼</button>
+        <label class="field"><input id="dis-follow" type="checkbox"><span data-i18n="disasm.follow"></span></label>
+      </div>
+      <div id="disasm" class="mono flow" role="list"></div>
     </article>
   </section>
 

@@ -267,3 +267,30 @@ test('Haltepunkte folgen ihrer Marke, wenn sich der Quelltext ändert', async ()
   // ohne Marke davor: feste Adresse
   assert.deepEqual(anchorFor(0x0602, {}), { addr: 0x0602 });
 });
+
+test('Suchmuster und Adressen', async () => {
+  const { parseSearch, parseAddress } = await import('../src/core/search.js');
+  assert.deepEqual(parseSearch('A9 00'), [0xa9, 0]);
+  assert.deepEqual(parseSearch('a900'), [0xa9, 0]);
+  assert.deepEqual(parseSearch('$a9 ?? 8d'), [0xa9, null, 0x8d]);
+  assert.deepEqual(parseSearch('"Hi"'), [72, 105]);
+  assert.equal(parseSearch('xyz'), null);
+  assert.equal(parseSearch('a'), null);
+  assert.equal(parseAddress('$0200'), 0x200);
+  assert.equal(parseAddress('ff'), 0xff);
+  assert.equal(parseAddress('loop', { loop: 0x604 }), 0x604);
+  assert.equal(parseAddress('dead', { dead: 5 }), 5); // Marke vor Hexziffern
+  assert.equal(parseAddress('zzz'), null);
+});
+
+test('Speichersuche mit Platzhalter, Umbruch und Sprung des Programmzählers', () => {
+  const m = new Machine();
+  m.mem.load(0x300, [0xa9, 0x01, 0x8d, 0x00, 0x02]);
+  assert.equal(m.mem.find([0xa9, null, 0x8d]), 0x300);
+  assert.equal(m.mem.find([0xa9, null, 0x8d], 0x301), -1);
+  assert.equal(m.mem.find([0xa9, null, 0x8d], 0x301, true), 0x300);
+  m.cpu.halted = true;
+  m.jumpTo(0x300);
+  assert.equal(m.cpu.pc, 0x300);
+  assert.equal(m.cpu.halted, false);
+});

@@ -64,6 +64,14 @@ export class Machine {
     return out; // neueste zuerst
   }
 
+  // Setzt den Programmzähler, ohne die Befehle dazwischen auszuführen; ein beendetes Programm läuft wieder an
+  jumpTo(addr) {
+    this.cpu.pc = addr & 0xffff;
+    this.cpu.halted = false;
+    this.cpu.haltReason = null;
+    this.stopReason = null;
+  }
+
   toggleBreakpoint(addr) {
     addr &= 0xffff;
     if (this.breakpoints.delete(addr)) return false;
