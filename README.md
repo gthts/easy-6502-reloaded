@@ -23,9 +23,11 @@ Einzelheiten und Herkunftsnachweise in [NOTICE.md](NOTICE.md).
 
 ## Starten
 
+Unter Windows genügt ein Doppelklick auf `start.cmd` (öffnet den Browser). Andernfalls:
+
     node tools/serve.mjs
 
-und <http://127.0.0.1:8080/> öffnen. Die Seite braucht einen Webserver (Module), aber keine Pakete und keinen Bauvorgang; auf GitHub Pages läuft sie unverändert.
+und <http://127.0.0.1:8080/> öffnen. Die Datei `index.html` allein per Doppelklick zu öffnen genügt nicht, weil Browser Module von `file://` blockieren. Die Seite braucht einen Webserver (Module), aber keine Pakete und keinen Bauvorgang; auf GitHub Pages läuft sie unverändert.
 
 ## Prüfen
 

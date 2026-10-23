@@ -12,6 +12,7 @@ import { createFlow } from './flow.js';
 import { createMonitor } from './monitor.js';
 import { createEditor } from './editor.js';
 import { createFiles } from './files.js';
+import { anchorFor, resolveAnchor } from '../core/breakpoints.js';
 
 const $ = (id) => document.getElementById(id);
 
@@ -84,7 +85,7 @@ themeSel.addEventListener('change', () => { store.set('theme', themeSel.value); 
 const layout = initLayout();
 const screen = createScreen($('screen'), $('screen-wrap'), machine.mem);
 const regs = createRegisters($('regs'), machine);
-const flow = createFlow($('flow'), machine, (addr) => { machine.toggleBreakpoint(addr); rev++; });
+const flow = createFlow($('flow'), machine, toggleBp);
 const monitor = createMonitor($('monitor'), $('mon-goto'), $('mon-prev'), $('mon-next'), machine);
 const runner = new Runner(machine, () => {
   updateButtons();
@@ -103,6 +104,28 @@ machine.mem.onRead = (addr) => (addr === 0xfe ? (Math.random() * 256) | 0 : unde
 
 let addrToLine = new Map();
 
+// Haltepunkte hängen an Marken (siehe core/breakpoints.js) und überstehen Änderungen am Quelltext
+let anchors = store.get('breakpoints', []);
+function syncBreakpoints() {
+  const valid = new Set(machine.lineMap.map((l) => l.addr));
+  const bps = new Set();
+  anchors = anchors.filter((a) => {
+    const addr = resolveAnchor(a, machine.labels, valid);
+    if (addr === null) return false;
+    bps.add(addr);
+    return true;
+  });
+  machine.breakpoints = bps;
+  store.set('breakpoints', anchors);
+}
+function toggleBp(addr) {
+  const same = anchors.filter((a) => resolveAnchor(a, machine.labels) === addr);
+  if (same.length) anchors = anchors.filter((a) => !same.includes(a));
+  else anchors.push(anchorFor(addr, machine.labels));
+  syncBreakpoints();
+  rev++;
+}
+
 const editor = createEditor({
   textarea: $('source'),
   layer: $('layer'),
@@ -119,8 +142,7 @@ const editor = createEditor({
     if (sourceDirty && !assemble()) return;
     const entry = machine.lineMap.find((l) => l.line === line && l.size > 0);
     if (!entry) return;
-    machine.toggleBreakpoint(entry.addr);
-    rev++;
+    toggleBp(entry.addr);
   },
 });
 editor.setValue(store.get('source', SAMPLE));
@@ -169,6 +191,7 @@ function assemble() {
     lastResult = result;
     const bytes = result.segments.reduce((n, s) => n + s.bytes.length, 0);
     lastAssembled = { bytes, addr: machine.entry };
+    syncBreakpoints();
     sourceDirty = false;
     assembledSource = editor.getValue();
     addrToLine = new Map(machine.lineMap.filter((l) => l.size > 0).map((l) => [l.addr, l.line]));

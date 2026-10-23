@@ -57,7 +57,8 @@ Legende: `[ ]` offen · `[~]` in Arbeit · `[x]` erledigt. Jeder Abschnitt ist e
 ## M4 – Ablaufansicht und Disassemblierung
 - [x] Ablaufansicht: aktive Instruktion hervorgehoben, 10 Instruktionen davor und danach, Marken eingeblendet
 - [x] Entkoppelt von der Emulatorschleife (Zeichnen über requestAnimationFrame)
-- [~] Haltepunkte per Klick auf die Zeile (fertig); per Auswahl einer Marke steht aus
+- [x] Haltepunkte per Klick auf die Zeile; sie hängen an der nächsten Marke davor (Marke + Abstand) und überstehen Änderungen am Quelltext; entfällt die Marke, entfällt der Haltepunkt; im Browserspeicher gemerkt
+- [ ] Haltepunkt per Auswahl einer Marke aus einer Liste
 - [ ] „Springe zu“: Adresse, Marke aus Liste oder Verschieben der hervorgehobenen Zeile (naher Sprung)
 - [ ] Disassemblierfenster (frei wählbarer Bereich) bleibt zusätzlich bestehen
 - [~] Register- und Flaganzeige fertig; Stapelanzeige und Änderung per Eingabe stehen aus

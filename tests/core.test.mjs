@@ -250,3 +250,20 @@ test('Jeder englische Schlüssel existiert auch auf Deutsch und umgekehrt', asyn
   const ph = (s) => (s.match(/\{\w+\}/g) ?? []).sort().join();
   for (const k of Object.keys(en)) assert.equal(ph(de[k]), ph(en[k]), `Platzhalter in ${k}`);
 });
+
+test('Haltepunkte folgen ihrer Marke, wenn sich der Quelltext ändert', async () => {
+  const { anchorFor, resolveAnchor } = await import('../src/core/breakpoints.js');
+  const v1 = assemble('start: ldx #0\nloop: inx\n  stx $10\n  bne loop\n  brk');
+  const bpAddr = v1.lineMap.find((l) => l.line === 3).addr; // stx $10, zwei Bytes hinter loop
+  const a = anchorFor(bpAddr, v1.labels);
+  assert.deepEqual(a, { label: 'loop', offset: 1 });
+  // davor eingefügter Befehl verschiebt alles; Marke bleibt, Haltepunkt wandert mit
+  const v2 = assemble('start: ldx #0\n  nop\n  nop\nloop: inx\n  stx $10\n  bne loop\n  brk');
+  const valid = new Set(v2.lineMap.map((l) => l.addr));
+  assert.equal(resolveAnchor(a, v2.labels, valid), v2.lineMap.find((l) => l.line === 5).addr);
+  // Marke entfernt: Haltepunkt entfällt
+  const v3 = assemble('start: ldx #0\n  inx\n  stx $10\n  brk');
+  assert.equal(resolveAnchor(a, v3.labels), null);
+  // ohne Marke davor: feste Adresse
+  assert.deepEqual(anchorFor(0x0602, {}), { addr: 0x0602 });
+});
