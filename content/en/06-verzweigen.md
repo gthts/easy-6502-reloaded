@@ -23,7 +23,7 @@ What happens here?
 
 1. `LDX #$08` sets `X` to 8.
 2. Under the label `count:` is the start of a **loop**: `DEX` decreases `X` by 1, `STX $0200` shows it as a pixel colour at the top left.
-3. `CPX #$03` **compares** `X` with 3 (*compare X*). Nothing is changed; only the flags are set: `Z` is 1 if both are equal.
+3. `CPX #$03` **compares** `X` with 3 (*compare X*). `X` stays unchanged; only the flags are set. Internally the 6502 treats a comparison as a **subtraction** (`X − 3`), but throws the result away and keeps only the flags. Two numbers are equal exactly when their difference is zero; that is why `Z` becomes 1 if both are equal.
 4. `BNE count` (*branch if not equal*) jumps back to the label as long as `Z` is zero, that is as long as `X` is not yet 3. Otherwise the program simply continues with the next line.
 
 Go through the program with **Single step**: in the **execution** panel you see the program counter jump back after `BNE`, and register `X` counts down.
@@ -44,7 +44,7 @@ After the comparison the flags show the result:
 | register > number | 0 | 1 |
 | register < number | 0 | 0 |
 
-(`C` here means “no borrow needed”: the register is at least as large as the number.)
+(`C` here means, as with `SBC`, “no borrow needed”: the register is at least as large as the number, so the subtraction did not go negative.)
 
 ## The branch instructions
 

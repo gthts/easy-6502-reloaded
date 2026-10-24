@@ -84,6 +84,7 @@ Legende: `[ ]` offen · `[~]` in Arbeit · `[x]` erledigt. Jeder Abschnitt ist e
 - [x] **Neuer Lehrplan** mit 17 Sachkapiteln und Aufgaben samt aufklappbaren Lösungen je Kapitel (deutsch); alle Codebeispiele werden von `tests/content.test.mjs` übersetzt, Ergebnisse (`expect=`) geprüft
 - [x] Englische Fassung des Lehrbuchs (`content/en/`, 19 Kapitel; Dateinamen bleiben deutsch, weil daraus die Kapitelkennungen für Verweise entstehen); alle Beispiele werden ebenfalls geprüft
 - [ ] Änderungen künftig in beiden Sprachen nachführen (Test prüft Übersetzbarkeit der Beispiele, nicht Gleichlauf der Texte)
+- [x] Übungskapitel 18 und 19 zeigen nur noch **Lösungshinweise** (Vorgehenstipps ohne Programmtext); die vollständigen, getesteten Lösungen liegen in `intern/loesungen/` (per .gitignore nicht im Repository; `tests/loesungen.test.mjs` prüft sie, wenn der Ordner da ist). Hinweis: Frühere Commits im öffentlichen Verlauf enthalten die Lösungen noch.
 - [ ] Probelesen: Verständlichkeit, Tempo, Tonfall („du“) mit echten Lernenden prüfen
 - [x] Querverweise Lehrbuch → Referenz: Befehlsnamen im Text öffnen die Referenz
 - [x] Text auf Grundlage von Easy 6502 neu verfasst und umgegliedert (CC BY 4.0, Nennung unter jedem Kapitel und in NOTICE.md); die Schlange ist aus dem Lehrbuch heraus: Kapitel 17 baut ein kleines Spiel in fünf Etappen, die Schlange liegt kommentiert in der Beispielauswahl

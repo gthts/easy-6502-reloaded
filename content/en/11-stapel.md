@@ -29,9 +29,28 @@ BRK
 
 Go through it with **Single step** and watch the stack pointer `SP` in the **registers** panel and the **Stack** line, which shows the top bytes of the stack: after the first `PHA`, `SP = $FE`, after the second `$FD`. In the **monitor** (go to `$01F0`) you see the same numbers in memory.
 
+Note: `PLA` does not erase the number from memory. When you pull a value, only the stack pointer `SP` changes; the value stays in `$01FE` or `$01FF` until a later `PHA` simply overwrites it. Erasing would be wasted work, because the stack pointer already determines how far the stack extends.
+
 ::: merke
 The stack is “last in, first out”: you get the values back in the reverse order from which you put them on.
 :::
+
+## The limits of the stack
+
+The stack has only 256 bytes (`$0100` to `$01FF`), and the 6502 **checks nothing**:
+
+- **Too many `PHA`:** With `SP = $00`, `PHA` writes to `$0100` and sets `SP` back to `$FF`. The stack wraps around, and the new value silently overwrites the oldest one.
+- **Too many `PLA` (on an empty stack):** Empty means `SP = $FF`. A `PLA` sets `SP` to `$00` and fetches whatever happens to be in `$0100`: garbage.
+
+There is no error message. The programmer is responsible: every `PHA` needs its `PLA`, and a subroutine must leave the stack as it found it.
+
+```asm expect=SP:FF,$0100:77
+LDX #$00
+TXS            ; SP = $00: the stack counts as “full”
+LDA #$77
+PHA            ; writes to $0100, SP wraps back to $FF
+BRK
+```
 
 ## A visible example
 
@@ -69,14 +88,16 @@ The stack has two main jobs:
 ## Tasks
 
 ::: aufgabe Swapping via the stack
-The accumulator holds `$AA`, register `X` holds `$BB`. Swap the two values (`A` should end up with `$BB`, `X` with `$AA`). Use the stack for it.
+The accumulator holds `$AA`, register `X` holds `$BB`. Swap the two values (`A` should end up with `$BB`, `X` with `$AA`). Use the stack for it. Think first: why are the transfer instructions (`TAX`, `TXA` …) alone not enough for the swap?
 :::
 
-::: loesung Solution
+::: loesung Solution and reflections
+Transfer instructions alone cannot do it: `TAX` overwrites `X` before its old value has been saved, and `TXA` does the same to `A`. A swap always needs a **third place** that holds one of the two values for a moment. That can be a third register:
+
 ```asm expect=A:BB,X:AA
 LDA #$AA
 LDX #$BB
-PHA            ; $AA onto the stack
+PHA            ; remember A
 TXA            ; A = X (= $BB)
 TAY            ; Y = $BB as a temporary store
 PLA            ; A = $AA, back from the stack
@@ -85,7 +106,34 @@ TYA            ; A = $BB
 BRK
 ```
 
-The stack holds the old `A`, register `Y` serves as a temporary store for `$BB`. With `TXA`, `TAY`, `PLA`, `TAX` and `TYA` the values slip past each other.
+But you can also manage **without `Y` and without a memory cell of your own** by using the fact that the stack forgets nothing: a `PLA` only changes `SP`, the number stays in memory. You put `$AA` on the stack, set `SP` back (which “forgets” the value) and then read it directly from stack memory:
+
+```asm expect=A:BB,X:AA,SP:FF
+LDA #$AA
+LDX #$BB
+PHA            ; $AA onto the stack (cell $01FF), SP = $FE
+TXA            ; A = $BB
+TSX            ; X = SP = $FE
+INX            ; X = $FF
+TXS            ; SP = $FF: the stack counts as empty again, but $AA still lies in $01FF
+LDX $01FF      ; ... and is read from there
+BRK
+```
+
+The fixed address `$01FF` is right because `SP` was `$FF` at the start. (There is no `LDX $0100,X`: `LDX` only knows `Y` as an index.)
+
+**What is fastest?** When processor cycles count, a zero-page cell as a temporary store wins: just 3 instructions and **8 cycles**. Both solutions above need 15 cycles.
+
+```asm expect=A:BB,X:AA
+LDA #$AA
+LDX #$BB
+STA $10        ; 3 cycles: park A
+TXA            ; 2 cycles: A = X
+LDX $10        ; 3 cycles: X = old A
+BRK
+```
+
+So the stack only pays off if no cell and no register is free, or if you need it for something else anyway.
 :::
 
 ::: aufgabe Turning three values around

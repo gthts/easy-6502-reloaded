@@ -26,7 +26,7 @@ pointer = $10
   BRK
 ```
 
-Names may consist of letters, digits and the underscore, and must not start with a digit. Upper and lower case are different. `LDA #white` is the number, `LDA white` would be the cell with the number `white`: the `#` still applies.
+Names may consist of letters, digits and the underscore, and must not start with a digit. Upper and lower case are different. `LDA #white` loads the number, whereas `LDA white` loads the contents of the cell with the number `white`.
 
 You can calculate with simple expressions: `STA pointer+1`, `LDA #height-1`, `LDA #<address` (low byte) and `LDA #>address` (high byte).
 

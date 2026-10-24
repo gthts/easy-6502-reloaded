@@ -4,7 +4,7 @@ Eine Verzweigung wie `BNE` reicht nur etwa 128 Bytes weit und hängt von einem F
 
 ## `JMP`: der Sprung ohne Bedingung
 
-`JMP` springt immer, an eine beliebige Adresse im ganzen Speicher.
+`JMP` ist ein nicht an eine Bedingung geknüpfter Sprung an eine beliebige Adresse im Speicher.
 
 ```asm expect=$0200:03
   LDA #$03
@@ -77,8 +77,13 @@ Ein Unterprogramm hat keine Parameterliste. Man verabredet stattdessen, in welch
 
 verdoppeln:          ; Eingabe: A   Ausgabe: A
   ASL A
+  NOP                ; Die NOPs tun nichts. Sie machen das Unterprogramm nur lang genug,
+  NOP                ; damit man „Einzelschritt“ (geht in das Unterprogramm hinein)
+  NOP                ; und „Bis Rückkehr“ (läuft bis zum RTS) deutlich unterscheiden kann.
   RTS
 ```
+
+Drücke bei der Zeile `JSR verdoppeln` **Einzelschritt**: Der Programmzähler wandert in das Unterprogramm und durch jedes `NOP`. Mit **Bis Rückkehr** läuft es dagegen ohne Halt bis zum `RTS`, und mit **Aufruf überspringen** erledigt ein einziger Klick das ganze Unterprogramm.
 
 Es lohnt sich, über jedes Unterprogramm in einem Kommentar zu schreiben, was es erwartet und was es liefert, denn der Quelltext verrät das nicht selbst.
 
@@ -108,7 +113,7 @@ plus3:
 :::
 
 ::: aufgabe Punkt zeichnen
-Schreibe ein Unterprogramm `punkt`, das den Wert in `A` als Farbe an die Stelle zeichnet, deren Nummer in `X` steht. Rufe es dann dreimal mit verschiedenen Farben und Stellen auf.
+Schreibe ein Unterprogramm `punkt`, das den Wert in `A` als Farbe an die Stelle `X` der **ersten Bildschirmzeile** zeichnet (also in die Zelle `$0200 + X`). Rufe es dann dreimal mit verschiedenen Farben und Stellen auf.
 :::
 
 ::: loesung Lösung

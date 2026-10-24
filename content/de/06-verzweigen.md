@@ -23,7 +23,7 @@ Was passiert hier?
 
 1. `LDX #$08` setzt `X` auf 8.
 2. Unter der Marke `zaehlen:` steht der Anfang einer **Schleife**: `DEX` verringert `X` um 1, `STX $0200` zeigt es als Pixelfarbe oben links.
-3. `CPX #$03` **vergleicht** `X` mit 3 (*compare X*). Dabei wird nichts verändert; nur die Flags werden gesetzt: `Z` ist 1, wenn beide gleich sind.
+3. `CPX #$03` **vergleicht** `X` mit 3 (*compare X*). Dabei bleibt `X` unverändert; nur die Flags werden gesetzt. Intern rechnet der 6502 einen Vergleich als **Subtraktion** (`X − 3`), wirft das Ergebnis aber weg und behält nur die Flags. Zwei Zahlen sind genau dann gleich, wenn ihre Differenz null ist; deshalb wird `Z` zu 1, wenn beide gleich sind.
 4. `BNE zaehlen` (*branch if not equal*) springt zurück zur Marke, solange `Z` null ist, also solange `X` noch nicht 3 ist. Sonst läuft das Programm einfach mit der nächsten Zeile weiter.
 
 Gehe das Programm mit **Einzelschritt** durch: Im Feld **Ablauf** siehst du, wie der Programmzähler nach `BNE` zurückspringt, und im Register `X` zählt es herunter.
@@ -44,7 +44,7 @@ Nach dem Vergleich zeigen die Flags das Ergebnis:
 | Register > Zahl | 0 | 1 |
 | Register < Zahl | 0 | 0 |
 
-(`C` ist hier „kein Borger nötig“: Das Register ist mindestens so groß wie die Zahl.)
+(`C` bedeutet hier, wie bei `SBC`, „kein Borger nötig“: Das Register ist mindestens so groß wie die Zahl, die Subtraktion ging also nicht ins Negative.)
 
 ## Die Verzweigungsbefehle
 

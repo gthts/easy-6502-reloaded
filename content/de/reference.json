@@ -214,7 +214,7 @@
     },
     "AND": {
       "name": "Bitweise Und-Verknüpfung",
-      "text": "Verknüpft `A` bitweise mit dem Operanden: Ein Ergebnisbit ist 1, wenn beide Bits 1 sind. Mit einer Maske blendet man Bits aus.",
+      "text": "Verknüpft `A` bitweise mit dem Operanden: Ein Ergebnisbit ist 1, wenn beide Bits 1 sind. Mit einer Maske behält man genau die gewünschten Bits und löscht die übrigen.",
       "example": {
         "code": "LDA #$DB\nAND #$0F      ; nur das untere Halbbyte bleibt\nBRK",
         "expect": "A:0B"

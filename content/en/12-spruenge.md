@@ -4,7 +4,7 @@ A branch like `BNE` only reaches about 128 bytes and depends on a flag. This cha
 
 ## `JMP`: the jump without a condition
 
-`JMP` always jumps, to any address in the whole memory.
+`JMP` is a jump that is not tied to any condition, to any address in memory.
 
 ```asm expect=$0200:03
   LDA #$03
@@ -77,8 +77,13 @@ A subroutine has no parameter list. Instead you agree in which register or memor
 
 double:              ; input: A   output: A
   ASL A
+  NOP                ; The NOPs do nothing. They only make the subroutine long enough
+  NOP                ; to tell “Single step” (goes into the subroutine)
+  NOP                ; and “Run to return” (runs up to the RTS) clearly apart.
   RTS
 ```
+
+At the line `JSR double`, press **Single step**: the program counter moves into the subroutine and through every `NOP`. **Run to return** runs without stopping to the `RTS`, and **Skip call** does the whole subroutine with a single click.
 
 It is worth writing a comment above every subroutine saying what it expects and what it delivers, because the source does not tell you by itself.
 
@@ -108,7 +113,7 @@ plus3:
 :::
 
 ::: aufgabe Draw a dot
-Write a subroutine `dot` that draws the value in `A` as a colour at the place whose number is in `X`. Then call it three times with different colours and places.
+Write a subroutine `dot` that draws the value in `A` as a colour at place `X` of the **first screen row** (that is, in cell `$0200 + X`). Then call it three times with different colours and places.
 :::
 
 ::: loesung Solution

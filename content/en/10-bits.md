@@ -1,6 +1,6 @@
 # Bits: logic and shifting
 
-So far you have treated bytes as numbers. This chapter shows how to treat them as a row of eight individual bits: hiding, setting, flipping, shifting and testing them.
+So far you have treated bytes as numbers. This chapter shows how to treat them as a row of eight individual bits: clearing, setting, flipping, shifting and testing them.
 
 ## The logic instructions
 
@@ -12,7 +12,7 @@ All three combine `A` with a number or memory cell bit by bit. The result is in 
 | `ORA` | or | at least one bit is 1 |
 | `EOR` | exclusive or | exactly one bit is 1 (the bits differ) |
 
-### `AND`: hiding bits (mask)
+### `AND`: keeping or clearing bits (mask)
 
 With `AND` you keep exactly the bits where the mask has a 1; all others become 0.
 
@@ -111,8 +111,8 @@ BRK
 
 ## Tasks
 
-::: aufgabe Both nibbles
-Take the value `$DB` and hide the **upper** nibble so that `$D0` results, using `AND` and the right mask.
+::: aufgabe Keep the upper nibble
+Take the value `$DB` and keep only the **upper** nibble: the lower nibble is to be set to 0, so that `$D0` results. Use `AND` with the right mask.
 :::
 
 ::: loesung Solution
@@ -141,7 +141,7 @@ BRK
 :::
 
 ::: aufgabe Shifting without ASL
-How do you get from `$08` to `$20` without using `ASL`? (There are at least two ways.)
+How do you turn `$08` into `$20`, that is **multiply it by four** (8 · 4 = 32), without using `ASL`? (There are at least two ways.)
 :::
 
 ::: loesung Solution

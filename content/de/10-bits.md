@@ -1,6 +1,6 @@
 # Bits: Logik und Schieben
 
-Bisher hast du Bytes als Zahlen behandelt. Dieses Kapitel zeigt, wie man sie als Reihe von acht einzelnen Bits behandelt: ausblenden, setzen, umkehren, verschieben und abfragen.
+Bisher hast du Bytes als Zahlen behandelt. Dieses Kapitel zeigt, wie man sie als Reihe von acht einzelnen Bits behandelt: löschen, setzen, umkehren, verschieben und abfragen.
 
 ## Die logischen Befehle
 
@@ -12,7 +12,7 @@ Alle drei verknüpfen `A` Bit für Bit mit einer Zahl oder Speicherzelle. Das Er
 | `ORA` | oder | mindestens ein Bit 1 ist |
 | `EOR` | exklusiv-oder | genau ein Bit 1 ist (die Bits verschieden sind) |
 
-### `AND`: Bits ausblenden (Maske)
+### `AND`: Bits behalten oder löschen (Maske)
 
 Mit `AND` behält man genau die Bits, an denen die Maske eine 1 hat; alle anderen werden 0.
 
@@ -111,8 +111,8 @@ BRK
 
 ## Aufgaben
 
-::: aufgabe Beide Halbbytes
-Nimm den Wert `$DB` und blende das **obere** Halbbyte aus, so dass `$D0` entsteht, mit `AND` und der passenden Maske.
+::: aufgabe Oberes Halbbyte behalten
+Nimm den Wert `$DB` und behalte nur das **obere** Halbbyte: Das untere Halbbyte soll auf 0 gesetzt werden, so dass `$D0` entsteht. Benutze `AND` mit der passenden Maske.
 :::
 
 ::: loesung Lösung
@@ -141,7 +141,7 @@ BRK
 :::
 
 ::: aufgabe Schieben ohne ASL
-Wie bekommt man `$08` zu `$20`, ohne `ASL` zu benutzen? (Es gibt mindestens zwei Wege.)
+Wie macht man aus `$08` den Wert `$20`, also eine **Vervierfachung** (8 · 4 = 32), ohne `ASL` zu benutzen? (Es gibt mindestens zwei Wege.)
 :::
 
 ::: loesung Lösung

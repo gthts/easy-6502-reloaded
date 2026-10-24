@@ -214,7 +214,7 @@
     },
     "AND": {
       "name": "Bitwise AND",
-      "text": "Combines `A` with the operand bit by bit: a result bit is 1 if both bits are 1. With a mask you hide bits.",
+      "text": "Combines `A` with the operand bit by bit: a result bit is 1 if both bits are 1. With a mask you keep exactly the wanted bits and clear the rest.",
       "example": {
         "code": "LDA #$DB\nAND #$0F      ; only the low nibble stays\nBRK",
         "expect": "A:0B"

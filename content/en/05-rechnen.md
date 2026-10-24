@@ -52,14 +52,14 @@ BRK
 
 If the result of a subtraction drops below zero, `C` becomes 0 and `A` “wraps around backwards”:
 
-```asm expect=A:F0,C:0
+```asm expect=A:F0,C:0,N:1
 SEC
 LDA #$10
 SBC #$20     ; 16 - 32 = -16, as a byte $F0
 BRK
 ```
 
-`$F0` is 240: counting backwards from 16 in 32 steps (`$20`) lands on 240. You can read that as “minus 16”. More on that in the chapter on branching.
+`$F0` is 240: counting backwards from 16 in 32 steps (`$20`) lands on 240. You can read that as “minus 16”. Because the top bit (bit 7) of the result is set as well, the flag `N` (“negative”) is also set. How to react to `C` and `N` is shown in the next chapter, on branching.
 
 ## The zero flag and the carry as a message
 

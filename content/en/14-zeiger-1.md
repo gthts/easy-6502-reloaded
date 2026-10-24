@@ -40,6 +40,10 @@ You can follow it step by step:
 `($zp),Y`: the pointer is in **two zero-page cells** `$zp` and `$zp+1`. `Y` is added to the address in them. Only `Y` is allowed as the index, and the pointer must be in the zero page.
 :::
 
+::: hinweis
+**Why is the pointer in the zero page?** There is no `STA ($1F10),Y`. The instruction `STA ($10),Y` is only **two bytes** long: the opcode and a one-byte address. That address names the cell where the pointer is stored, and because it holds only one byte, the pointer can only lie in the zero page (`$00`–`$FF`). The reason lies in the instruction format: this keeps the instruction short and fast. A two-byte address for the pointer would have meant a longer instruction with more cycles. The zero page is scarce (only 256 bytes), but it is the place for pointers and fast variables.
+:::
+
 ## Related: the indirect jump
 
 `JMP` can also read a pointer. `JMP ($00F0)` does not jump to `$00F0`, but to the **address stored in `$00F0` and `$00F1`**:
@@ -121,11 +125,11 @@ dot:
 :::
 
 ::: aufgabe Copy a page
-Draw a gradient in the first page of the screen (`$0200`–`$02FF`) (colour = number of the dot, with `TYA`) and copy the page to the second (`$0300`–`$03FF`). For that you need two pointers.
+Draw a gradient in the first page of the screen (`$0200`–`$02FF`) (colour = number of the dot, with `TYA`) and copy the page to the **third** page (`$0400`–`$04FF`). For that you need two pointers.
 :::
 
 ::: loesung Solution
-```asm expect=$0200:00,$02FF:FF,$0300:00,$03FF:FF
+```asm expect=$0200:00,$02FF:FF,$0400:00,$04FF:FF
 define source $10
 define target $12
 
@@ -134,7 +138,7 @@ define target $12
   STA target
   LDA #$02
   STA source+1
-  LDA #$03
+  LDA #$04
   STA target+1
 
   LDY #$00

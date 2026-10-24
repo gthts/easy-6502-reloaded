@@ -40,6 +40,10 @@ Du kannst es Schritt für Schritt nachvollziehen:
 `($zp),Y` : Der Zeiger steht in **zwei Nullseitenzellen** `$zp` und `$zp+1`. Zur Adresse darin wird `Y` addiert. Nur `Y` ist als Index erlaubt, und der Zeiger muss in der Nullseite liegen.
 :::
 
+::: hinweis
+**Warum liegt der Zeiger in der Nullseite?** Es gibt kein `STA ($1F10),Y`. Der Befehl `STA ($10),Y` ist nur **zwei Bytes** lang: der Opcode und eine Ein-Byte-Adresse. Diese Adresse nennt die Zelle, in der der Zeiger steht, und weil sie nur ein Byte fasst, kann der Zeiger nur in der Nullseite (`$00`–`$FF`) liegen. Der Grund liegt im Befehlsaufbau: So bleibt der Befehl kurz und schnell. Eine zweibyteige Adresse für den Zeiger hätte einen längeren Befehl mit mehr Takten bedeutet. Die Nullseite ist knapp (nur 256 Bytes), aber sie ist der Ort für Zeiger und schnelle Variablen.
+:::
+
 ## Verwandt: der indirekte Sprung
 
 Auch `JMP` kann einen Zeiger lesen. `JMP ($00F0)` springt nicht nach `$00F0`, sondern an die **Adresse, die in `$00F0` und `$00F1` steht**:
@@ -121,11 +125,11 @@ punkt:
 :::
 
 ::: aufgabe Eine Seite kopieren
-Zeichne in die erste Seite des Bildschirms (`$0200`–`$02FF`) einen Verlauf (Farbe = Nummer des Punktes, mit `TYA`) und kopiere die Seite in die zweite (`$0300`–`$03FF`). Dazu brauchst du zwei Zeiger.
+Zeichne in die erste Seite des Bildschirms (`$0200`–`$02FF`) einen Verlauf (Farbe = Nummer des Punktes, mit `TYA`) und kopiere die Seite in die **dritte** Seite (`$0400`–`$04FF`). Dazu brauchst du zwei Zeiger.
 :::
 
 ::: loesung Lösung
-```asm expect=$0200:00,$02FF:FF,$0300:00,$03FF:FF
+```asm expect=$0200:00,$02FF:FF,$0400:00,$04FF:FF
 define quelle $10
 define ziel $12
 
@@ -134,7 +138,7 @@ define ziel $12
   STA ziel
   LDA #$02
   STA quelle+1
-  LDA #$03
+  LDA #$04
   STA ziel+1
 
   LDY #$00

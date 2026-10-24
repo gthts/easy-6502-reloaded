@@ -29,9 +29,28 @@ BRK
 
 Gehe es mit **Einzelschritt** durch und beobachte im Feld **Register** den Stapelzeiger `SP` und die Zeile **Stapel**, die die obersten Bytes des Stapels zeigt: nach dem ersten `PHA` ist `SP = $FE`, nach dem zweiten `$FD`. Im **Monitor** (springe zu `$01F0`) siehst du dieselben Zahlen im Speicher.
 
+Beachte: `PLA` löscht die Zahl nicht aus dem Speicher. Beim Herunterholen ändert sich nur der Stapelzeiger `SP`; der Wert bleibt in `$01FE` oder `$01FF` stehen, bis ein späteres `PHA` ihn einfach überschreibt. Löschen wäre unnötige Arbeit, denn der Stapelzeiger legt ohnehin fest, bis wohin der Stapel gilt.
+
 ::: merke
 Der Stapel ist „last in, first out“: Man bekommt die Werte in der umgekehrten Reihenfolge zurück, in der man sie abgelegt hat.
 :::
+
+## Die Grenzen des Stapels
+
+Der Stapel hat nur 256 Bytes (`$0100` bis `$01FF`), und der 6502 **prüft nichts**:
+
+- **Zu viele `PHA`:** Bei `SP = $00` schreibt `PHA` nach `$0100` und setzt `SP` auf `$FF` zurück. Der Stapel läuft also im Kreis herum, und der neue Wert überschreibt unbemerkt den ältesten.
+- **Zu viele `PLA` (auf leerem Stapel):** Leer heißt `SP = $FF`. Ein `PLA` setzt `SP` auf `$00` und holt, was zufällig in `$0100` steht, also Datenmüll.
+
+Es gibt keine Fehlermeldung. Der Programmierer ist verantwortlich: Jedes `PHA` braucht sein `PLA`, und ein Unterprogramm muss den Stapel so hinterlassen, wie es ihn vorgefunden hat.
+
+```asm expect=SP:FF,$0100:77
+LDX #$00
+TXS            ; SP = $00: der Stapel gilt als „voll“
+LDA #$77
+PHA            ; schreibt nach $0100, SP springt auf $FF zurück
+BRK
+```
 
 ## Ein sichtbares Beispiel
 
@@ -69,10 +88,12 @@ Der Stapel hat zwei Hauptaufgaben:
 ## Aufgaben
 
 ::: aufgabe Tauschen über den Stapel
-Im Akkumulator steht `$AA`, in `X` steht `$BB`. Vertausche die beiden Werte (`A` soll am Ende `$BB`, `X` soll `$AA` haben). Verwende dazu den Stapel.
+Im Akkumulator steht `$AA`, in `X` steht `$BB`. Vertausche die beiden Werte (`A` soll am Ende `$BB`, `X` soll `$AA` haben). Verwende dazu den Stapel. Überlege vorher: Warum genügen die Übertragungsbefehle (`TAX`, `TXA` …) allein für den Tausch nicht?
 :::
 
-::: loesung Lösung
+::: loesung Lösung und Überlegungen
+Mit Übertragungsbefehlen allein geht es nicht: `TAX` überschreibt `X`, bevor man dessen alten Wert gesichert hat, und `TXA` tut dasselbe mit `A`. Ein Tausch braucht immer einen **dritten Platz**, der einen der beiden Werte kurz hält. Das kann ein drittes Register sein:
+
 ```asm expect=A:BB,X:AA
 LDA #$AA
 LDX #$BB
@@ -85,7 +106,34 @@ TYA            ; A = $BB
 BRK
 ```
 
-Der Stapel hält das alte `A`, das Register `Y` dient als Zwischenspeicher für `$BB`. Mit `TXA`, `TAY`, `PLA`, `TAX` und `TYA` rutschen die Werte über Kreuz.
+Man kommt aber auch **ohne `Y` und ohne eigene Speicherzelle** aus, wenn man ausnutzt, dass der Stapel nichts vergisst: Ein `PLA` ändert nur `SP`, die Zahl bleibt im Speicher liegen. Man legt `$AA` auf den Stapel, setzt `SP` wieder zurück („vergisst“ den Wert damit) und liest ihn danach direkt aus dem Stapelspeicher:
+
+```asm expect=A:BB,X:AA,SP:FF
+LDA #$AA
+LDX #$BB
+PHA            ; $AA auf den Stapel (Zelle $01FF), SP = $FE
+TXA            ; A = $BB
+TSX            ; X = SP = $FE
+INX            ; X = $FF
+TXS            ; SP = $FF: der Stapel gilt wieder als leer, $AA liegt aber noch in $01FF
+LDX $01FF      ; ... und wird von dort gelesen
+BRK
+```
+
+Die feste Adresse `$01FF` stimmt, weil `SP` am Anfang `$FF` war. (Eine Schreibweise `LDX $0100,X` gibt es nicht: `LDX` kennt als Index nur `Y`.)
+
+**Was ist am schnellsten?** Wenn es um Prozessortakte geht, gewinnt eine Zelle der Nullseite als Zwischenspeicher: nur 3 Befehle und **8 Takte**. Beide Lösungen oben brauchen 15 Takte.
+
+```asm expect=A:BB,X:AA
+LDA #$AA
+LDX #$BB
+STA $10        ; 3 Takte: A parken
+TXA            ; 2 Takte: A = X
+LDX $10        ; 3 Takte: X = altes A
+BRK
+```
+
+Der Stapel lohnt sich also nur, wenn keine Zelle und kein Register frei ist, oder wenn man ihn ohnehin für etwas anderes braucht.
 :::
 
 ::: aufgabe Drei Werte umdrehen

@@ -26,7 +26,7 @@ zeiger = $10
   BRK
 ```
 
-Namen dürfen aus Buchstaben, Ziffern und dem Unterstrich bestehen und nicht mit einer Ziffer beginnen. Große und kleine Buchstaben sind verschieden. `LDA #weiss` ist die Zahl, `LDA weiss` wäre die Zelle mit der Nummer `weiss`: das `#` gilt weiter.
+Namen dürfen aus Buchstaben, Ziffern und dem Unterstrich bestehen und nicht mit einer Ziffer beginnen. Große und kleine Buchstaben sind verschieden. `LDA #weiss` lädt die Zahl, `LDA weiss` dagegen den Inhalt der Zelle mit der Nummer `weiss`.
 
 Mit einfachen Ausdrücken kann man rechnen: `STA zeiger+1`, `LDA #hoehe-1`, `LDA #<adresse` (niederwertiges Byte) und `LDA #>adresse` (höherwertiges Byte).
 

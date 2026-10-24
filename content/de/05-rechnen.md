@@ -52,14 +52,14 @@ BRK
 
 Wird bei der Subtraktion das Ergebnis kleiner als null, wird `C` zu 0 und `A` „läuft rückwärts über“:
 
-```asm expect=A:F0,C:0
+```asm expect=A:F0,C:0,N:1
 SEC
 LDA #$10
 SBC #$20     ; 16 - 32 = -16, als Byte $F0
 BRK
 ```
 
-`$F0` ist 240: Zählt man von 16 aus um 32 Schritte (`$20`) rückwärts, kommt man bei 240 an. Man kann das als „minus 16“ lesen. Mehr dazu im Kapitel über Verzweigungen.
+`$F0` ist 240: Zählt man von 16 aus um 32 Schritte (`$20`) rückwärts, kommt man bei 240 an. Man kann das als „minus 16“ lesen. Weil dabei auch das oberste Bit (Bit 7) des Ergebnisses gesetzt ist, wird außerdem das Flag `N` („negativ“) gesetzt. Wie man auf `C` und `N` reagiert, zeigt das nächste Kapitel über Verzweigungen.
 
 ## Das Zero-Flag und das Carry als Meldung
 
