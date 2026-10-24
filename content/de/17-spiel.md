@@ -12,7 +12,7 @@ Das Spielfeld sind die oberen **acht Zeilen** des Bildschirms (`$0200` bis `$02F
 | nach oben | `pos` − 32 |
 
 ::: hinweis
-Klicke vor dem Spielen auf den **Bildschirm**, damit er die Tasten bekommt (Kapitel „Eingabe und Zufall“). Gesteuert wird mit `W`, `A`, `S`, `D` oder den Pfeiltasten. Ab Etappe 3 läuft das Spiel in einer Schleife; stelle dazu über dem Quelltext die **Geschwindigkeit auf 10.000/s** ein. Die kurze Pause im Programm ist darauf abgestimmt.
+Klicke vor dem Spielen auf den **Bildschirm**, damit er die Tasten bekommt (blauer Rahmen und „Tastatur aktiv“ darunter zeigen es) (Kapitel „Eingabe und Zufall“). Gesteuert wird mit `W`, `A`, `S`, `D` oder den Pfeiltasten. Ab Etappe 3 läuft das Spiel in einer Schleife; stelle dazu über dem Quelltext die **Geschwindigkeit auf 10.000/s** ein. Die kurze Pause im Programm ist darauf abgestimmt.
 :::
 
 ## Etappe 1: Der Spieler

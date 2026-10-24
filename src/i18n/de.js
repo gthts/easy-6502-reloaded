@@ -206,4 +206,6 @@ export const de = {
   'editor.bpSet': 'Haltepunkt in Zeile {line} gesetzt',
   'editor.bpCleared': 'Haltepunkt in Zeile {line} gelöscht',
   'editor.bpNone': 'Zeile {line} hat keinen Befehl für einen Haltepunkt',
+  'screen.keysOff': 'Tastatur aus – zum Tippen den Bildschirm anklicken',
+  'screen.keysOn': 'Tastatur aktiv – Tasten gehen an das Programm',
 };

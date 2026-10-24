@@ -11,7 +11,7 @@ These are not real computer chips: the emulator writes into `$FF` as soon as you
 
 ## Keys
 
-For the emulator to accept keys, you must **click the screen**; it then shows a visible frame. Only then does every key go to the program.
+For the emulator to accept keys, you must **click the screen**. You can tell it accepts keys because it gets a **blue frame**, and below it you read, in green, “● Keyboard active”. If you click elsewhere, the frame disappears and “○ Keyboard off” is shown again. Only while the frame is there does every key go to the program.
 
 The stored value is the ASCII code of the character. Common ones:
 

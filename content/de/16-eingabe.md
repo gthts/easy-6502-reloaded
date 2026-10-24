@@ -11,7 +11,7 @@ Das sind keine echten Computerbausteine: Der Emulator schreibt in `$FF`, sobald 
 
 ## Tasten
 
-Damit der Emulator Tasten annimmt, musst du den **Bildschirm anklicken**; er hat dann einen sichtbaren Rahmen. Erst dann geht jede Taste an das Programm.
+Damit der Emulator Tasten annimmt, musst du den **Bildschirm anklicken**. Daran erkennst du, dass er die Tasten annimmt: Der Bildschirm bekommt einen **blauen Rahmen**, und unter ihm steht in Grün „● Tastatur aktiv“. Klickst du woanders hin, verschwindet der Rahmen, und dort steht wieder „○ Tastatur aus“. Nur solange der Rahmen da ist, geht jede Taste an das Programm.
 
 Der gespeicherte Wert ist der ASCII-Code des Zeichens. Gebräuchlich sind:
 

@@ -353,6 +353,16 @@ function updateStatus() {
   $('status').textContent = t(key);
 }
 
+// Tastatureingabe: Anzeige unter dem Bildschirm, wann er die Tasten annimmt
+const screenWrap = $('screen-wrap');
+function updateKeyInfo() {
+  const on = document.activeElement === screenWrap;
+  $('screen-keys').textContent = t(on ? 'screen.keysOn' : 'screen.keysOff');
+  $('screen-keys').classList.toggle('on', on);
+}
+screenWrap.addEventListener('focus', updateKeyInfo);
+screenWrap.addEventListener('blur', updateKeyInfo);
+
 // ---- Sprache umschalten ------------------------------------------------------
 
 function retranslate() {
@@ -363,6 +373,7 @@ function retranslate() {
   regs.retranslate();
   renderMessages();
   files.labelSlots();
+  updateKeyInfo();
   tutorial.reload();
   reference.reload();
   about.reload();

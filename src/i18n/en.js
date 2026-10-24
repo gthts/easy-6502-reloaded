@@ -206,4 +206,6 @@ export const en = {
   'editor.bpSet': 'Breakpoint set on line {line}',
   'editor.bpCleared': 'Breakpoint cleared on line {line}',
   'editor.bpNone': 'Line {line} has no instruction for a breakpoint',
+  'screen.keysOff': 'Keyboard off – click the screen to type',
+  'screen.keysOn': 'Keyboard active – keys go to the program',
 };

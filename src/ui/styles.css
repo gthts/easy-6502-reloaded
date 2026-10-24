@@ -358,3 +358,10 @@ dialog#about::backdrop { background: rgb(0 0 0 / 0.5); }
 .layer.matches { color: transparent; }
 .layer.matches mark { color: transparent; background: color-mix(in srgb, var(--warn-bg) 80%, transparent); border-radius: 2px; }
 .layer.matches mark.cur { background: color-mix(in srgb, var(--accent) 45%, transparent); outline: 1px solid var(--accent); }
+
+/* Tastatureingabe: der Bildschirm zeigt deutlich, wann er die Tasten annimmt */
+.screen-wrap:focus { outline: 3px solid var(--accent); outline-offset: 2px; border-color: var(--accent); }
+.keystate { text-align: center; color: var(--text-2); margin: 6px 0 0; }
+.keystate::before { content: '○ '; }
+.keystate.on { color: var(--ok); font-weight: 600; }
+.keystate.on::before { content: '● '; }

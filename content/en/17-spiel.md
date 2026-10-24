@@ -12,7 +12,7 @@ The playing field is the upper **eight rows** of the screen (`$0200` to `$02FF`)
 | up | `pos` − 32 |
 
 ::: hinweis
-Before playing, click the **screen** so that it receives the keys (chapter “Input and randomness”). You steer with `W`, `A`, `S`, `D` or the arrow keys. From stage 3 on, the game runs in a loop; set the **speed to 10,000/s** above the source code for it. The short pause in the program is tuned for that.
+Before playing, click the **screen** so that it receives the keys (a blue frame and “Keyboard active” below it show it) (chapter “Input and randomness”). You steer with `W`, `A`, `S`, `D` or the arrow keys. From stage 3 on, the game runs in a loop; set the **speed to 10,000/s** above the source code for it. The short pause in the program is tuned for that.
 :::
 
 ## Stage 1: The player
