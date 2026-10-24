@@ -2,6 +2,9 @@
 
 **English** · [Deutsch](#easy-6502-reloaded-deutsch)
 
+> ### ▶ [Try it right away!](https://gthts.github.io/easy-6502-reloaded/)
+> No installation needed: it runs in your browser (also on a tablet). / <https://gthts.github.io/easy-6502-reloaded/>
+
 A learning and development environment for 6502 assembly in the browser: tutorial, source code editor, emulator, debugger, monitor and reference. Bilingual (English/German).
 
 Derived from [Easy 6502](https://skilldrick.github.io/easy6502/) (Nick Morgan) and the [6502 Assembler and Simulator](https://itema-as.github.io/6502js/) (Stian Soreng, Nick Morgan, Torkild Ulvøy Resheim).
@@ -58,6 +61,9 @@ Program code: GNU General Public License v3 (see [LICENSE](LICENSE)). Texts: CC 
 # Easy 6502 Reloaded (Deutsch)
 
 [English](#easy-6502-reloaded) · **Deutsch**
+
+> ### ▶ [Direkt ausprobieren!](https://gthts.github.io/easy-6502-reloaded/)
+> Keine Installation nötig: läuft im Browser (auch auf dem Tablet). / <https://gthts.github.io/easy-6502-reloaded/>
 
 Eine Lern- und Entwicklungsumgebung für die 6502-Assemblersprache im Browser – mit Lehrbuch, Quelltexteditor, Emulator, Debugger, Monitor und Referenz. Zweisprachig (Deutsch/Englisch).
 
