@@ -294,3 +294,33 @@ test('Speichersuche mit Platzhalter, Umbruch und Sprung des Programmzählers', (
   assert.equal(m.cpu.pc, 0x300);
   assert.equal(m.cpu.halted, false);
 });
+
+test('Start bei $0600, auch wenn davor Daten an anderen Adressen übersetzt werden', () => {
+  const m = new Machine();
+  const r = m.assembleAndLoad('*=$0300\n  dcb 1,2,3\n*=$0600\n  LDA #$05\n  BRK');
+  assert.ok(r.ok);
+  assert.equal(m.entry, 0x0600);
+  assert.equal(m.cpu.pc, 0x0600);
+  m.run(10);
+  assert.equal(m.cpu.a, 5);
+});
+
+test('Ohne Programm bei $0600 beginnt der Lauf am ersten übersetzten Byte', () => {
+  const m = new Machine();
+  const r = m.assembleAndLoad('*=$0700\n  LDA #$07\n  BRK');
+  assert.ok(r.ok);
+  assert.equal(m.entry, 0x0700);
+  m.run(10);
+  assert.equal(m.cpu.a, 7);
+});
+
+test('Skifahrer-Beispiel: übersetzt, startet bei $0600 und läuft weiter (kein Absturz nach dem Startbild)', async () => {
+  const fs = await import('node:fs');
+  const src = fs.readFileSync(new URL('../examples/skier.asm', import.meta.url), 'utf8');
+  const m = new Machine();
+  assert.ok(m.assembleAndLoad(src).ok);
+  assert.equal(m.entry, 0x0600);
+  m.run(300000);
+  assert.equal(m.cpu.halted, false);
+  assert.ok(m.cpu.pc >= 0x0600 && m.cpu.pc < 0x0c00, 'PC liegt im Programm: $' + m.cpu.pc.toString(16));
+});

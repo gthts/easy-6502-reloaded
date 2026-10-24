@@ -462,5 +462,9 @@ export function assemble(source, options = {}) {
 // Schreibt das Ergebnis in einen Speicher und liefert die Startadresse
 export function loadInto(memory, result) {
   for (const s of result.segments) memory.load(s.addr, s.bytes);
+  // Start wie in den Vorlagen bei $0600, sofern dort Programm liegt; sonst am ersten übersetzten Byte.
+  // (Beispiele, die zuerst Daten an andere Adressen legen, etwa das Skifahrer-Beispiel, beginnen weiter bei $0600.)
+  const atOrigin = result.segments.some((seg) => seg.addr <= result.origin && result.origin < seg.addr + seg.bytes.length);
+  if (atOrigin) return result.origin;
   return result.segments.length ? result.segments[0].addr : result.origin;
 }

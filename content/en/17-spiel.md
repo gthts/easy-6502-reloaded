@@ -12,7 +12,7 @@ The playing field is the upper **eight rows** of the screen (`$0200` to `$02FF`)
 | up | `pos` − 32 |
 
 ::: hinweis
-Before playing, click the **screen** so that it receives the keys (chapter “Input and randomness”). You steer with `W`, `A`, `S`, `D` or the arrow keys.
+Before playing, click the **screen** so that it receives the keys (chapter “Input and randomness”). You steer with `W`, `A`, `S`, `D` or the arrow keys. From stage 3 on, the game runs in a loop; set the **speed to 10,000/s** above the source code for it. The short pause in the program is tuned for that.
 :::
 
 ## Stage 1: The player
@@ -116,14 +116,10 @@ draw:
   JMP game
 
 pause:
-  LDY #$FF
-outer:
   LDX #$FF
 inner:
   DEX
   BNE inner
-  DEY
-  BNE outer
   RTS
 ```
 
@@ -210,14 +206,10 @@ draw:
   JMP game
 
 pause:
-  LDY #$FF
-outer:
   LDX #$FF
 inner:
   DEX
   BNE inner
-  DEY
-  BNE outer
   RTS
 ```
 
@@ -330,14 +322,10 @@ new_prey:
   RTS
 
 pause:
-  LDY #$FF
-outer:
   LDX #$FF
 inner:
   DEX
   BNE inner
-  DEY
-  BNE outer
   RTS
 ```
 
@@ -346,7 +334,7 @@ That is a complete game in under 150 lines. You know every single ingredient: co
 ::: aufgabe Your own ideas
 Change the game:
 
-- Make the pause shorter or longer (`LDY #$FF`).
+- Make the pause shorter or longer (the value `#$FF` in `pause`).
 - Choose other colours for player, prey and score.
 - Let the prey appear in a different colour when the score passes a limit.
 - Create an obstacle the player may not enter.

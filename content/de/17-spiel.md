@@ -12,7 +12,7 @@ Das Spielfeld sind die oberen **acht Zeilen** des Bildschirms (`$0200` bis `$02F
 | nach oben | `pos` − 32 |
 
 ::: hinweis
-Klicke vor dem Spielen auf den **Bildschirm**, damit er die Tasten bekommt (Kapitel „Eingabe und Zufall“). Gesteuert wird mit `W`, `A`, `S`, `D` oder den Pfeiltasten.
+Klicke vor dem Spielen auf den **Bildschirm**, damit er die Tasten bekommt (Kapitel „Eingabe und Zufall“). Gesteuert wird mit `W`, `A`, `S`, `D` oder den Pfeiltasten. Ab Etappe 3 läuft das Spiel in einer Schleife; stelle dazu über dem Quelltext die **Geschwindigkeit auf 10.000/s** ein. Die kurze Pause im Programm ist darauf abgestimmt.
 :::
 
 ## Etappe 1: Der Spieler
@@ -116,14 +116,10 @@ zeichnen:
   JMP spiel
 
 pause:
-  LDY #$FF
-aussen:
   LDX #$FF
 innen:
   DEX
   BNE innen
-  DEY
-  BNE aussen
   RTS
 ```
 
@@ -210,14 +206,10 @@ zeichnen:
   JMP spiel
 
 pause:
-  LDY #$FF
-aussen:
   LDX #$FF
 innen:
   DEX
   BNE innen
-  DEY
-  BNE aussen
   RTS
 ```
 
@@ -330,14 +322,10 @@ neue_beute:
   RTS
 
 pause:
-  LDY #$FF
-aussen:
   LDX #$FF
 innen:
   DEX
   BNE innen
-  DEY
-  BNE aussen
   RTS
 ```
 
@@ -346,7 +334,7 @@ Das ist ein vollständiges Spiel in unter 150 Zeilen. Jede einzelne Zutat kennst
 ::: aufgabe Eigene Ideen
 Verändere das Spiel:
 
-- Mache die Pause kürzer oder länger (`LDY #$FF`).
+- Mache die Pause kürzer oder länger (der Wert `#$FF` in `pause`).
 - Wähle andere Farben für Spieler, Beute und Anzeige.
 - Lass die Beute in einer anderen Farbe erscheinen, wenn der Punktestand eine Grenze überschreitet.
 - Schaffe ein Hindernis, das der Spieler nicht betreten darf.
