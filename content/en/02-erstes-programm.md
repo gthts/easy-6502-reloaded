@@ -1,6 +1,6 @@
 # The first program
 
-Let us look more closely at the program from the first chapter. It colours three dots at the top left of the screen.
+In the first chapter you ran a tiny program that drew a single white dot at the top left. It consisted of the two lines `LDA #$01` and `STA $0200`. Here we add two more pairs like it, so that three coloured dots appear. You already know the first two lines; the rest is new and shows how the pattern repeats.
 
 ```asm expect=$0200:01,$0201:05,$0202:08
 LDA #$01
@@ -11,7 +11,7 @@ LDA #$08
 STA $0202
 ```
 
-Press **Send and run**. Three coloured dots appear at the top left. The program consists of just two different instructions, repeated.
+Press **Send and run**. Three coloured dots appear at the top left; the first is the white dot from before. The program consists of just two different instructions, repeated.
 
 ## Two instructions
 

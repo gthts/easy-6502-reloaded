@@ -1,6 +1,6 @@
 # Das erste Programm
 
-Sehen wir uns das Programm aus dem ersten Kapitel genauer an. Es färbt drei Punkte oben links auf dem Bildschirm ein.
+Im ersten Kapitel hast du ein winziges Programm gestartet, das einen einzigen weißen Punkt oben links gezeichnet hat. Es bestand aus den zwei Zeilen `LDA #$01` und `STA $0200`. Hier hängen wir zwei weitere solche Paare an, damit drei farbige Punkte entstehen. Die ersten beiden Zeilen kennst du also schon; der Rest ist neu und zeigt, wie sich das Muster wiederholt.
 
 ```asm expect=$0200:01,$0201:05,$0202:08
 LDA #$01
@@ -11,7 +11,7 @@ LDA #$08
 STA $0202
 ```
 
-Drücke auf **Senden und starten**. Oben links erscheinen drei farbige Punkte. Das Programm besteht nur aus zwei verschiedenen Befehlen, die sich wiederholen.
+Drücke auf **Senden und starten**. Oben links erscheinen drei farbige Punkte; der erste ist der weiße Punkt von vorhin. Das Programm besteht nur aus zwei verschiedenen Befehlen, die sich wiederholen.
 
 ## Zwei Befehle
 
