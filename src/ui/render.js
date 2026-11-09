@@ -3,6 +3,7 @@ import { parseExpect } from './markdown.js';
 import { highlightLine } from './highlight.js';
 import { MNEMONICS } from '../core/opcodes.js';
 import { t } from '../i18n/index.js';
+import { PALETTE } from './screen.js';
 
 const hex = (v, n) => `$${v.toString(16).toUpperCase().padStart(n, '0')}`;
 
@@ -35,6 +36,12 @@ export function createRenderer(h) {
           c.addEventListener('keydown', (e) => { if (e.key === 'Enter') go(); });
         }
         parent.append(c);
+      } else if (n.t === 'swatch') {
+        const s = document.createElement('span');
+        s.className = 'swatch';
+        s.style.background = PALETTE[n.index & 15];
+        s.setAttribute('aria-hidden', 'true');
+        parent.append(s);
       } else if (n.t === 'strong' || n.t === 'em') {
         const e = document.createElement(n.t === 'strong' ? 'strong' : 'em');
         appendInline(e, n.children);

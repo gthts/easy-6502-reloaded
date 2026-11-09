@@ -52,7 +52,7 @@ colours:
   dcb $01,$02,$03,$04,$05,$06,$07,$08
 ```
 
-The table is **behind** `BRK`, because the processor should never execute it. In the **disassembly** panel (next to the monitor) you can pick `colours`: there the table is read as instructions, which you recognise by odd instructions that are not really instructions at all. Data and program cannot be told apart in memory; only the program flow decides.
+The table is **behind** `BRK`, because the processor should never execute it. In the **execution** view you can enter `colours` as the target and press **Show target**: there the table is read as instructions, which you recognise by odd instructions that are not really instructions at all. Data and program cannot be told apart in memory; only the program flow decides.
 
 Text works too, with quotation marks:
 

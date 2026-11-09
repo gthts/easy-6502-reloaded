@@ -128,7 +128,8 @@ button.primary { background: var(--accent-bg); color: var(--accent-text); border
    (Bildschirm und Register) höher, wächst der Ablauf mit; die Hinweiszeile bleibt am unteren Rand. */
 .flow-card { display: flex; flex-direction: column; }
 .flow-card #flow.flow { flex: 1 1 var(--flow-h, calc(24 * 1.55em)); height: auto; min-height: 120px; }
-#disasm.flow { height: calc(18 * 1.55em); }
+.flow:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+.flow .row.mid:not(.active) { box-shadow: inset 3px 0 0 var(--accent); }
 .flow .row { display: flex; gap: 10px; padding: 0 4px; white-space: pre; cursor: pointer; border-radius: 3px; }
 .flow .row:hover { background: var(--surface-2); }
 .flow .row.active { background: var(--warn-bg); color: var(--warn-text); }
@@ -310,9 +311,7 @@ table.opcodes td[class^="cat-"] { background: color-mix(in srgb, var(--cat) 18%,
 table.opcodes td[class^="cat-"]:hover { background: color-mix(in srgb, var(--cat) 40%, var(--surface)); }
 table.opcodes td.unused { color: var(--text-3); }
 
-/* Monitor und Disassemblierung nebeneinander, bei schmaler Mitte untereinander */
-.pair.md { grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); align-items: start; }
-@container (max-width: 900px) { .pair.md { grid-template-columns: minmax(0, 1fr); } }
+.pair.md { grid-template-columns: minmax(0, 1fr); align-items: start; }
 
 dialog#about { width: min(640px, calc(100vw - 24px)); max-height: calc(100vh - 48px); padding: 0; border: 1px solid var(--border-strong); border-radius: 12px; background: var(--surface); color: var(--text); overflow: auto; }
 dialog#about::backdrop { background: rgb(0 0 0 / 0.5); }
@@ -365,3 +364,6 @@ dialog#about::backdrop { background: rgb(0 0 0 / 0.5); }
 .keystate::before { content: '○ '; }
 .keystate.on { color: var(--ok); font-weight: 600; }
 .keystate.on::before { content: '● '; }
+
+/* Farbmuster der Bildschirmfarben in Tabellen */
+.swatch { display: inline-block; width: 1.6em; height: 1em; margin-right: 0.5em; vertical-align: -0.15em; border: 1px solid var(--border-strong); border-radius: 3px; }

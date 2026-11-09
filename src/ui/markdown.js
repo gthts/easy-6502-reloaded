@@ -5,7 +5,7 @@
 //   # bis ###### Überschriften · Absätze · - / * Listen · 1. Listen · > Zitate · | Tabellen |
 //   ```asm [nocheck] [expect=A:38,$0200:01] ... ``` Codeblöcke (Infozeile: Sprache und Merkmale)
 //   ::: hinweis|merke|aufgabe|loesung [Titel] ... :::   (Behälter, nicht verschachtelt)
-//   Inline: `code`, **fett**, *kursiv*, [Text](#kapitel-id), [Text](https://…)
+//   Inline: `code`, **fett**, *kursiv*, [Text](#kapitel-id), [Text](https://…), {farbe:5} (Farbmuster der Bildschirmfarbe 0 bis F)
 
 // ---- Inline ----------------------------------------------------------------------
 
@@ -28,6 +28,10 @@ export function parseInline(text) {
     if (ch === '*') {
       const end = text.indexOf('*', i + 1);
       if (end > i + 1 && text[i + 1] !== ' ') { flush(); out.push({ t: 'em', children: parseInline(text.slice(i + 1, end)) }); i = end + 1; continue; }
+    }
+    if (ch === '{') {
+      const m = /^\{farbe:([0-9a-fA-F])\}/.exec(text.slice(i));
+      if (m) { flush(); out.push({ t: 'swatch', index: parseInt(m[1], 16) }); i += m[0].length; continue; }
     }
     if (ch === '[') {
       const m = /^\[([^\]]+)\]\(([^)\s]+)\)/.exec(text.slice(i));

@@ -34,14 +34,14 @@ Es gibt 16 Farben:
 
 | Wert | Farbe | Wert | Farbe |
 |---|---|---|---|
-| `$00` | schwarz | `$08` | orange |
-| `$01` | weiß | `$09` | braun |
-| `$02` | dunkelrot | `$0A` | hellrot |
-| `$03` | hellcyan | `$0B` | dunkelgrau |
-| `$04` | violett | `$0C` | grau |
-| `$05` | grün | `$0D` | hellgrün |
-| `$06` | blau | `$0E` | hellblau |
-| `$07` | gelb | `$0F` | hellgrau |
+| `$00` | {farbe:0} schwarz | `$08` | {farbe:8} orange |
+| `$01` | {farbe:1} weiß | `$09` | {farbe:9} braun |
+| `$02` | {farbe:2} dunkelrot | `$0A` | {farbe:A} hellrot |
+| `$03` | {farbe:3} hellcyan | `$0B` | {farbe:B} dunkelgrau |
+| `$04` | {farbe:4} violett | `$0C` | {farbe:C} grau |
+| `$05` | {farbe:5} grün | `$0D` | {farbe:D} hellgrün |
+| `$06` | {farbe:6} blau | `$0E` | {farbe:E} hellblau |
+| `$07` | {farbe:7} gelb | `$0F` | {farbe:F} hellgrau |
 
 ## Dem Programm beim Arbeiten zusehen
 

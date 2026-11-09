@@ -19,11 +19,11 @@ Keys: `W`/arrow up `$77`, `A`/arrow left `$61`, `S`/arrow down `$73`, `D`/arrow 
 
 | `$0` | `$1` | `$2` | `$3` | `$4` | `$5` | `$6` | `$7` |
 |---|---|---|---|---|---|---|---|
-| black | white | dark red | light cyan | purple | green | blue | yellow |
+| {farbe:0} black | {farbe:1} white | {farbe:2} dark red | {farbe:3} light cyan | {farbe:4} purple | {farbe:5} green | {farbe:6} blue | {farbe:7} yellow |
 
 | `$8` | `$9` | `$A` | `$B` | `$C` | `$D` | `$E` | `$F` |
 |---|---|---|---|---|---|---|---|
-| orange | brown | light red | dark grey | grey | light green | light blue | light grey |
+| {farbe:8} orange | {farbe:9} brown | {farbe:A} light red | {farbe:B} dark grey | {farbe:C} grey | {farbe:D} light green | {farbe:E} light blue | {farbe:F} light grey |
 
 ## Source code notation
 
@@ -53,9 +53,9 @@ Instruction names may be written in upper or lower case; labels and constants ar
 | Source | `F9` | set or clear a breakpoint on the current line |
 | Source | `Escape`, then `Tab` | leave the editor with the keyboard (otherwise `Tab` inserts spaces) |
 | Line number | click | set or clear a breakpoint |
-| Execution, disassembly | click a line | breakpoint |
+| Execution | click a line | breakpoint |
 | Execution | double-click, or drag the highlighted line | move the program counter there |
-| Execution, disassembly | click the instruction name | open the instruction in the reference |
+| Execution | click the instruction name | open the instruction in the reference |
 | Monitor | click a byte, type two hex digits | overwrite the byte |
 | Monitor | click the text column, type characters | overwrite bytes with character codes |
 | Registers | type a value, click a flag | change the register or flag |

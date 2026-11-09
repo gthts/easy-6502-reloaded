@@ -9,7 +9,6 @@ import { createScreen } from './screen.js';
 import { Runner, SPEEDS } from './runner.js';
 import { createRegisters } from './registers.js';
 import { createFlow } from './flow.js';
-import { createDisasm } from './disasm.js';
 import { createMonitor } from './monitor.js';
 import { createEditor } from './editor.js';
 import { createFiles } from './files.js';
@@ -99,11 +98,8 @@ const regs = createRegisters($('regs'), machine, () => { rev++; updateStatus(); 
 const flow = createFlow($('flow'), machine, {
   onToggleBp: (addr) => toggleBp(addr),
   onJump: (addr) => jumpTo(addr),
-  ui: { input: $('flow-target'), select: $('flow-labels'), jumpBtn: $('flow-jump'), bpBtn: $('flow-bp'), prevBtn: $('flow-prev'), nextBtn: $('flow-next'), note: $('flow-note') },
+  ui: { input: $('flow-target'), select: $('flow-labels'), jumpBtn: $('flow-jump'), showBtn: $('flow-show'), pcBtn: $('flow-pc'), bpBtn: $('flow-bp'), prevBtn: $('flow-prev'), nextBtn: $('flow-next'), note: $('flow-note') },
 });
-const disasm = createDisasm($('disasm'), {
-  input: $('dis-goto'), select: $('dis-labels'), prevBtn: $('dis-prev'), nextBtn: $('dis-next'), follow: $('dis-follow'),
-}, machine, (addr) => toggleBp(addr));
 const monitor = createMonitor($('monitor'), {
   goto: $('mon-goto'), prev: $('mon-prev'), next: $('mon-next'),
   find: $('mon-find'), findBtn: $('mon-find-btn'), findNext: $('mon-find-next'), note: $('mon-note'),
@@ -201,7 +197,7 @@ const reference = createReference({
   onSend: sendToEditor,
   onSendRun: (code) => { sendToEditor(code); $('btn-run').click(); },
 });
-// Klick auf einen Befehlsnamen in Ablauf oder Disassemblierung öffnet die Referenz (statt den Haltepunkt zu schalten)
+// Klick auf einen Befehlsnamen im Ablauf öffnet die Referenz (statt den Haltepunkt zu schalten)
 document.addEventListener('click', (e) => {
   const mn = e.target.closest?.('.row .mn[data-mn]');
   if (!mn) return;
@@ -266,7 +262,6 @@ function assemble() {
     lastAssembled = { bytes, addr: machine.entry };
     syncBreakpoints();
     flow.refreshLabels();
-    disasm.refreshLabels();
     sourceDirty = false;
     assembledSource = editor.getValue();
     addrToLine = new Map(machine.lineMap.filter((l) => l.size > 0).map((l) => [l.addr, l.line]));
@@ -379,7 +374,6 @@ function retranslate() {
   about.reload();
   examples.relabel();
   flow.refreshLabels();
-  disasm.refreshLabels();
   updateButtons();
   updateStatus();
 }
@@ -395,7 +389,6 @@ function frame(now) {
   screen.draw();
   regs.update();
   flow.update(rev, memRev);
-  disasm.update(rev, memRev);
   updateMarkers();
   monitor.update(now);
   $('status-right').textContent = `PC $${hex4(machine.cpu.pc)}`;

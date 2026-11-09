@@ -34,14 +34,14 @@ There are 16 colours:
 
 | Value | Colour | Value | Colour |
 |---|---|---|---|
-| `$00` | black | `$08` | orange |
-| `$01` | white | `$09` | brown |
-| `$02` | dark red | `$0A` | light red |
-| `$03` | light cyan | `$0B` | dark grey |
-| `$04` | purple | `$0C` | grey |
-| `$05` | green | `$0D` | light green |
-| `$06` | blue | `$0E` | light blue |
-| `$07` | yellow | `$0F` | light grey |
+| `$00` | {farbe:0} black | `$08` | {farbe:8} orange |
+| `$01` | {farbe:1} white | `$09` | {farbe:9} brown |
+| `$02` | {farbe:2} dark red | `$0A` | {farbe:A} light red |
+| `$03` | {farbe:3} light cyan | `$0B` | {farbe:B} dark grey |
+| `$04` | {farbe:4} purple | `$0C` | {farbe:C} grey |
+| `$05` | {farbe:5} green | `$0D` | {farbe:D} light green |
+| `$06` | {farbe:6} blue | `$0E` | {farbe:E} light blue |
+| `$07` | {farbe:7} yellow | `$0F` | {farbe:F} light grey |
 
 ## Watching the program work
 

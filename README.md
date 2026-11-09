@@ -15,7 +15,7 @@ Status: version 0.1, working. Progress is tracked in [TODO.md](TODO.md) (in Germ
 
 - **Tutorial** in 19 chapters with an even learning curve (from “What is a processor?” to pointers and a small game), tasks with fold-away solutions, two exercise chapters and a “Send to emulator” button on every example
 - **Source editor** with line numbers, syntax highlighting, error display, breakpoints in the margin, files, quick slots and an example library
-- **Emulator** (all 151 official instructions, decimal mode, cycle counts) with an execution view (10 instructions before and after), disassembly, editable registers, stack, a 16-line monitor with search and overwrite, breakpoints that follow labels, and “set PC”
+- **Emulator** (all 151 official instructions, decimal mode, cycle counts) with a scrollable execution view (mouse wheel, pages, “Show target”), editable registers, stack, a 16-line monitor with search and overwrite, breakpoints that follow labels, and “set PC”
 - **Reference** with an overview, addressing modes, all instructions, an opcode table, and links from the tutorial, the execution view and the editor (`F1`)
 - Runs entirely in the browser; no accounts, no tracking, **no third-party libraries**
 
@@ -75,7 +75,7 @@ Status: Version 0.1, lauffähig. Den Fortschritt verfolgt [TODO.md](TODO.md).
 
 - **Lehrbuch** in 19 Kapiteln mit gleichmäßiger Lernkurve (von „Was ist ein Prozessor?“ bis zu Zeigern und einem kleinen Spiel), Aufgaben mit aufklappbaren Lösungen, zwei Übungskapiteln und „An Emulator senden“ bei jedem Beispiel
 - **Quelltexteditor** mit Zeilennummern, Syntaxhervorhebung, Fehleranzeige, Haltepunkten im Zeilenrand, Dateien, Schnellspeicherplätzen und Beispielbibliothek
-- **Emulator** (alle 151 offiziellen Befehle, Dezimalmodus, Takte) mit Ablaufansicht (10 Instruktionen davor und danach), Disassemblierung, Registern (editierbar), Stapel, 16-Zeilen-Monitor mit Suche und Überschreiben, Haltepunkten an Marken, „PC setzen“
+- **Emulator** (alle 151 offiziellen Befehle, Dezimalmodus, Takte) mit blätterbarer Ablaufansicht (Mausrad, Seiten, „Ziel zeigen“), Registern (editierbar), Stapel, 16-Zeilen-Monitor mit Suche und Überschreiben, Haltepunkten an Marken, „PC setzen“
 - **Referenz** mit Übersicht, Adressierungsarten, allen Befehlen, Opcode-Tabelle und Verweisen aus Lehrbuch, Ablauf und Editor (`F1`)
 - Läuft vollständig im Browser; keine Konten, keine Nachverfolgung, **keine Fremdbibliotheken**
 

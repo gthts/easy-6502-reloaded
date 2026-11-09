@@ -19,11 +19,11 @@ Tasten: `W`/Pfeil hoch `$77`, `A`/Pfeil links `$61`, `S`/Pfeil runter `$73`, `D`
 
 | `$0` | `$1` | `$2` | `$3` | `$4` | `$5` | `$6` | `$7` |
 |---|---|---|---|---|---|---|---|
-| schwarz | weiß | dunkelrot | hellcyan | violett | grün | blau | gelb |
+| {farbe:0} schwarz | {farbe:1} weiß | {farbe:2} dunkelrot | {farbe:3} hellcyan | {farbe:4} violett | {farbe:5} grün | {farbe:6} blau | {farbe:7} gelb |
 
 | `$8` | `$9` | `$A` | `$B` | `$C` | `$D` | `$E` | `$F` |
 |---|---|---|---|---|---|---|---|
-| orange | braun | hellrot | dunkelgrau | grau | hellgrün | hellblau | hellgrau |
+| {farbe:8} orange | {farbe:9} braun | {farbe:A} hellrot | {farbe:B} dunkelgrau | {farbe:C} grau | {farbe:D} hellgrün | {farbe:E} hellblau | {farbe:F} hellgrau |
 
 ## Schreibweise im Quelltext
 
@@ -53,9 +53,9 @@ Befehlsnamen dürfen groß oder klein geschrieben werden; Marken und Konstanten 
 | Quelltext | `F9` | Haltepunkt in der aktuellen Zeile setzen oder löschen |
 | Quelltext | `Escape`, dann `Tab` | den Editor mit der Tastatur verlassen (sonst fügt `Tab` Leerzeichen ein) |
 | Zeilennummer | Klick | Haltepunkt setzen oder löschen |
-| Ablauf, Disassemblierung | Klick auf eine Zeile | Haltepunkt |
+| Ablauf | Klick auf eine Zeile | Haltepunkt |
 | Ablauf | Doppelklick, oder die hervorgehobene Zeile ziehen | Programmzähler dorthin setzen |
-| Ablauf, Disassemblierung | Klick auf den Befehlsnamen | Befehl in der Referenz öffnen |
+| Ablauf | Klick auf den Befehlsnamen | Befehl in der Referenz öffnen |
 | Monitor | Byte anklicken, zwei Hexziffern tippen | Byte überschreiben |
 | Monitor | Textspalte anklicken, Zeichen tippen | Bytes mit Zeichencodes überschreiben |
 | Register | Wert eintippen, Flag anklicken | Register oder Flag ändern |

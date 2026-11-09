@@ -1,13 +1,13 @@
-// Ablaufansicht: aktive Instruktion hervorgehoben, davor und danach je bis zu 10 Instruktionen mit Marken.
+// Ablaufansicht: aktive Instruktion hervorgehoben, davor und danach Instruktionen mit Marken (so viele, wie das Fenster zeigt).
 // Bedienung: Klick auf eine Zeile = Haltepunkt; Doppelklick oder Ziehen der hervorgehobenen Zeile = Programmzähler dorthin;
-// Eingabefeld/Markenliste + „PC setzen“ / „Haltepunkt“; Pfeiltasten verschieben den Programmzähler um eine Instruktion.
+// Mausrad oder Pfeiltasten (nach Anklicken des Fensters) = blättern; „Ziel zeigen“ rückt eine Adresse in die Mitte;
+// „PC setzen“ und „Haltepunkt“ wirken auf das Ziel im Eingabefeld (Adresse oder Marke).
 import { disassembleBefore, disassembleRange, disassembleOne, hex2, hex4 } from '../core/disassembler.js';
 import { parseAddress } from '../core/search.js';
 import { t } from '../i18n/index.js';
 
 const CONTEXT = 10;
 
-// Gemeinsam mit der Disassemblierung genutzt
 export function buildRow(machine, ins, active) {
   const el = document.createElement('div');
   el.className = 'row' + (active ? ' active' : '');
@@ -63,6 +63,10 @@ export function fillLabelSelect(select, machine) {
 
 export function createFlow(root, machine, { onToggleBp, onJump, ui }) {
   let sig = '';
+  let center = null; // null: Ansicht folgt dem Programmzähler; sonst die Adresse in der Mitte
+  let lastPc = -1;
+  let lastCount = -1;
+  const read = (a) => machine.mem.peek(a);
 
   function target() {
     const addr = parseAddress(ui.input.value, machine.labels);
@@ -73,6 +77,35 @@ export function createFlow(root, machine, { onToggleBp, onJump, ui }) {
     ui.note.textContent = '';
     return addr;
   }
+
+  function knownStarts() {
+    const known = new Set(machine.lineMap.map((l) => l.addr));
+    for (const pc of machine.recentPcs()) known.add(pc);
+    return known;
+  }
+  function rowHeight() {
+    const r = root.querySelector('.row');
+    return r ? r.offsetHeight || 20 : 20;
+  }
+  function visibleRows() { return Math.max(4, Math.floor(root.clientHeight / rowHeight())); }
+  function middle() { return center ?? machine.cpu.pc; }
+
+  // Die Mitte der Ansicht um n Instruktionen verschieben (n < 0: zurück)
+  function shift(n) {
+    let a = middle();
+    if (n > 0) {
+      for (let i = 0; i < n && a < 0xffff; i++) a = Math.min(0xffff, a + disassembleOne(read, a).size);
+    } else if (n < 0) {
+      const before = disassembleBefore(read, a, -n, knownStarts());
+      if (before.length) a = before[0].addr; else a = 0;
+    }
+    center = a;
+    sig = '';
+    update(lastRev, lastMemRev);
+  }
+  function page(dir) { shift(dir * Math.max(1, visibleRows() - 2)); }
+  function showTarget(addr) { center = addr; sig = ''; update(lastRev, lastMemRev); }
+  function showPc() { center = null; sig = ''; update(lastRev, lastMemRev); }
 
   root.addEventListener('click', (e) => {
     const r = e.target.closest('.row');
@@ -97,61 +130,82 @@ export function createFlow(root, machine, { onToggleBp, onJump, ui }) {
     e.preventDefault();
     onJump(Number(r.dataset.addr));
   });
+  // Mausrad: drei Instruktionen je Raststufe; Pfeiltasten und Bild-Tasten blättern seitenweise
+  let wheelAcc = 0;
+  root.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    wheelAcc += e.deltaMode === 1 ? e.deltaY * 3 : e.deltaY / 33;
+    const n = Math.trunc(wheelAcc);
+    if (n) { wheelAcc -= n; shift(n); }
+  }, { passive: false });
+  root.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowDown' || e.key === 'PageDown') { e.preventDefault(); page(1); }
+    else if (e.key === 'ArrowUp' || e.key === 'PageUp') { e.preventDefault(); page(-1); }
+    else if (e.key === 'Home') { e.preventDefault(); showPc(); }
+  });
 
   ui.select.addEventListener('change', () => {
     if (ui.select.value) ui.input.value = ui.select.value;
   });
   ui.input.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') { const a = target(); if (a !== null) onJump(a); }
+    if (e.key === 'Enter') { const a = target(); if (a !== null) showTarget(a); }
   });
   ui.jumpBtn.addEventListener('click', () => { const a = target(); if (a !== null) onJump(a); });
   ui.bpBtn.addEventListener('click', () => { const a = target(); if (a !== null) onToggleBp(a); });
-  ui.prevBtn.addEventListener('click', () => {
-    const known = new Set(machine.lineMap.map((l) => l.addr));
-    for (const pc of machine.recentPcs()) known.add(pc);
-    const before = disassembleBefore((a) => machine.mem.peek(a), machine.cpu.pc, 1, known);
-    if (before.length) onJump(before[0].addr);
-  });
-  ui.nextBtn.addEventListener('click', () => {
-    onJump(machine.cpu.pc + disassembleOne((a) => machine.mem.peek(a), machine.cpu.pc).size);
-  });
+  ui.showBtn.addEventListener('click', () => { const a = target(); if (a !== null) showTarget(a); });
+  ui.pcBtn.addEventListener('click', showPc);
+  ui.prevBtn.addEventListener('click', () => page(-1));
+  ui.nextBtn.addEventListener('click', () => page(1));
+
+  let lastRev = 0;
+  let lastMemRev = 0;
+  function scrollToCenter() {
+    const mid = root.querySelector('.row.mid');
+    if (mid) root.scrollTop = Math.max(0, mid.offsetTop - (root.clientHeight - mid.offsetHeight) / 2);
+  }
 
   function update(rev, memRev) {
+    lastRev = rev;
+    lastMemRev = memRev;
     const cpu = machine.cpu;
-    const s = `${cpu.pc}|${machine.instructions}|${rev}|${memRev}`;
+    // Hat sich der Programmzähler bewegt (Schritt, Lauf, Setzen), folgt die Ansicht ihm wieder
+    if (cpu.pc !== lastPc || machine.instructions !== lastCount) {
+      if (lastPc !== -1) center = null;
+      lastPc = cpu.pc;
+      lastCount = machine.instructions;
+    }
+    const mid = center ?? cpu.pc;
+    const ctx = Math.max(CONTEXT, Math.ceil(visibleRows() / 2) + 2);
+    const s = `${cpu.pc}|${mid}|${ctx}|${machine.instructions}|${rev}|${memRev}`;
     if (s === sig) return;
     sig = s;
-    const read = (a) => machine.mem.peek(a);
     const names = machine.namesByAddr();
-    const known = new Set(machine.lineMap.map((l) => l.addr));
-    for (const pc of machine.recentPcs()) known.add(pc);
-    const before = disassembleBefore(read, cpu.pc, CONTEXT, known, null);
-    const after = disassembleRange(read, cpu.pc, CONTEXT + 1, null);
+    const known = knownStarts();
+    const before = disassembleBefore(read, mid, ctx, known, null);
+    const after = disassembleRange(read, mid, ctx + 1, null);
     const frag = document.createDocumentFragment();
-    const push = (ins, active) => {
+    const push = (ins, isMid) => {
       if (names[ins.addr] !== undefined) frag.append(buildLabelRow(names[ins.addr]));
-      frag.append(buildRow(machine, ins, active));
+      const row = buildRow(machine, ins, ins.addr === cpu.pc);
+      if (isMid) row.classList.add('mid');
+      frag.append(row);
     };
-    for (let i = before.length; i < CONTEXT; i++) {
+    for (let i = before.length; i < ctx; i++) {
       const pad = document.createElement('div');
       pad.className = 'gap';
-      pad.textContent = ' ';
+      pad.textContent = ' ';
       frag.append(pad);
     }
     before.forEach((i) => push(i, false));
     after.forEach((i, k) => push(i, k === 0));
     root.replaceChildren(frag);
-    // feste Höhe: die aktive Zeile in die Mitte rücken, statt das Feld wachsen oder schrumpfen zu lassen
-    const act = root.querySelector('.row.active');
-    if (act) root.scrollTop = Math.max(0, act.offsetTop - (root.clientHeight - act.offsetHeight) / 2);
+    // feste Höhe: die gewählte Mitte (sonst die aktive Zeile) in die Mitte rücken
+    scrollToCenter();
   }
 
-  // Ändert sich die Höhe des Fensters (Ziehen, Fenstergröße), die aktive Zeile wieder in die Mitte rücken
+  // Ändert sich die Höhe des Fensters (Ziehen, Fenstergröße), neu aufbauen und die Mitte wieder einrichten
   if (typeof ResizeObserver === 'function') {
-    new ResizeObserver(() => {
-      const act = root.querySelector('.row.active');
-      if (act) root.scrollTop = Math.max(0, act.offsetTop - (root.clientHeight - act.offsetHeight) / 2);
-    }).observe(root);
+    new ResizeObserver(() => { sig = ''; update(lastRev, lastMemRev); }).observe(root);
   }
 
   return { update, refreshLabels: () => fillLabelSelect(ui.select, machine) };
