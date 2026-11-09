@@ -209,4 +209,7 @@ export const en = {
   'flow.pc': 'To PC',
   'flow.pcTip': 'Show the active instruction again',
   'flow.listLabel': 'Execution: mouse wheel or arrow keys to scroll',
+  'ref.varRead': '**Cycles:** A “+” means: +1 cycle if adding `X`/`Y` moves the address to another page (different high byte), for example `$03F0` + `$20` = `$0410`. If it stays on the same page, the lower number applies.',
+  'ref.varBranch': '**Cycles:** 2 if the branch is not taken; 3 if taken and the target is on the same page as the following instruction; 4 if the target is on another page.',
+  'ref.fixedCycles': '**Cycles:** always the same, even when a page boundary is crossed.',
 };

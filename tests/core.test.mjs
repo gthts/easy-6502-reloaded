@@ -324,3 +324,21 @@ test('Skifahrer-Beispiel: übersetzt, startet bei $0600 und läuft weiter (kein 
   assert.equal(m.cpu.halted, false);
   assert.ok(m.cpu.pc >= 0x0600 && m.cpu.pc < 0x0c00, 'PC liegt im Programm: $' + m.cpu.pc.toString(16));
 });
+
+test('Taktzahlen wie in der Referenz beschrieben (Seitenwechsel, Verzweigungen)', () => {
+  const cyc = (src, setup = () => {}) => {
+    const m = new Machine();
+    assert.ok(m.assembleAndLoad(src).ok);
+    setup(m);
+    const c0 = m.cpu.cycles;
+    m.stepOnce();
+    return m.cpu.cycles - c0;
+  };
+  assert.equal(cyc('LDX #$20\nLDA $0310,X', (m) => { m.cpu.x = 0x20; m.cpu.pc = 0x0602; }), 4);
+  assert.equal(cyc('LDX #$20\nLDA $03F0,X', (m) => { m.cpu.x = 0x20; m.cpu.pc = 0x0602; }), 5);
+  assert.equal(cyc('STA $03F0,X', (m) => { m.cpu.x = 0x20; }), 5);
+  assert.equal(cyc('BNE x\nx: NOP', (m) => { m.cpu.z = 1; }), 2);
+  assert.equal(cyc('BNE x\nx: NOP', (m) => { m.cpu.z = 0; }), 3);
+  assert.equal(cyc('*=$05FD\nBNE $0600', (m) => { m.cpu.z = 0; m.cpu.pc = 0x05fd; }), 4);
+  assert.equal(cyc('*=$05FD\nBNE $05F0', (m) => { m.cpu.z = 0; m.cpu.pc = 0x05fd; }), 3);
+});

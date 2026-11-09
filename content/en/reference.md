@@ -77,7 +77,32 @@ The status register `P` consists of eight bits:
 
 ## Cycles
 
-The tables give the number of cycles per instruction. “+” means: one more cycle if adding `X`/`Y` to the address crosses a page boundary (reading instructions only). For branches, one cycle is added if the branch is taken, and one more if the target is on another page.
+Most instructions always take the same number of cycles. In two groups the number depends on the situation; the instruction tables then show a “+” after the number.
+
+**1. Reading instructions with indexed access: +1 cycle on a page crossing**
+
+This applies to `ADC`, `AND`, `CMP`, `EOR`, `LDA`, `LDX`, `LDY`, `ORA`, `SBC` in the addressing modes `abs,X`, `abs,Y` and `(zp),Y`. The processor first adds `X` or `Y` to the low address byte only. If the address stays on the same **page** (same high byte), the value is available immediately; if the low byte overflows, one extra cycle is needed to correct the high byte.
+
+| Instruction | `X`/`Y` | Address | Cycles |
+|---|---|---|---|
+| `LDA $0310,X` | `$20` | `$0330` (same page $03) | 4 |
+| `LDA $03F0,X` | `$20` | `$0410` (page $03 → $04) | 5 |
+| `LDA ($40),Y`, pointer `$03F0` | `$05` | `$03F5` (same page) | 5 |
+| `LDA ($40),Y`, pointer `$03F0` | `$20` | `$0410` (page change) | 6 |
+
+**2. Branches: 2, 3 or 4 cycles**
+
+| Case | Cycles |
+|---|---|
+| Condition false, execution simply continues | 2 |
+| Condition true, target on the same page as the **following** instruction | 3 |
+| Condition true, target on another page | 4 |
+
+What counts is the page of the address **after** the branch instruction, not of the instruction itself. Example: if `BNE` is at `$05FD`, the next instruction is at `$05FF`; a jump to `$0600` is a page change (4 cycles), a jump to `$05F0` is not (3 cycles).
+
+**Always the same length** are all storing instructions (`STA`, `STX`, `STY`) and all instructions that modify a value in memory (`ASL`, `LSR`, `ROL`, `ROR`, `INC`, `DEC`): they always take the full path, even with `abs,X`. The same holds for decimal mode (`D`): on the NMOS 6502 emulated here it costs no extra cycle (only the 65C02 needs one).
+
+To try it out: the “Cycles” field in the registers keeps count and shows the difference after a single step.
 
 ## Sources
 

@@ -77,7 +77,32 @@ Das Statusregister `P` besteht aus acht Bits:
 
 ## Takte
 
-Die Tabellen geben die Taktzahl je Befehl an. „+“ bedeutet: Ein Takt kommt dazu, wenn beim Addieren von `X`/`Y` zur Adresse eine Seitengrenze überschritten wird (nur bei lesenden Befehlen). Bei Verzweigungen kommt ein Takt dazu, wenn gesprungen wird, und noch einer, wenn das Ziel auf einer anderen Seite liegt.
+Die meisten Befehle brauchen immer gleich viele Takte. Bei zwei Gruppen hängt die Zahl vom Zustand ab; in den Tabellen der Befehle steht dann ein „+“ hinter der Zahl.
+
+**1. Lesende Befehle mit indiziertem Zugriff: +1 Takt bei Seitenüberschreitung**
+
+Betroffen sind `ADC`, `AND`, `CMP`, `EOR`, `LDA`, `LDX`, `LDY`, `ORA`, `SBC` in den Adressierungsarten `abs,X`, `abs,Y` und `(zp),Y`. Der Prozessor addiert `X` oder `Y` zuerst nur auf das niederwertige Adressbyte. Bleibt die Adresse dabei auf derselben **Seite** (gleiches höherwertiges Byte), ist der Wert sofort da; läuft das niederwertige Byte über, braucht er einen Takt, um das höherwertige Byte zu berichtigen.
+
+| Befehl | `X`/`Y` | Adresse | Takte |
+|---|---|---|---|
+| `LDA $0310,X` | `$20` | `$0330` (gleiche Seite $03) | 4 |
+| `LDA $03F0,X` | `$20` | `$0410` (Seite $03 → $04) | 5 |
+| `LDA ($40),Y`, Zeiger `$03F0` | `$05` | `$03F5` (gleiche Seite) | 5 |
+| `LDA ($40),Y`, Zeiger `$03F0` | `$20` | `$0410` (Seitenwechsel) | 6 |
+
+**2. Verzweigungen: 2, 3 oder 4 Takte**
+
+| Fall | Takte |
+|---|---|
+| Bedingung nicht erfüllt, es geht einfach weiter | 2 |
+| Bedingung erfüllt, Ziel auf derselben Seite wie der **folgende** Befehl | 3 |
+| Bedingung erfüllt, Ziel auf einer anderen Seite | 4 |
+
+Maßgeblich ist die Seite der Adresse **hinter** dem Verzweigungsbefehl, nicht die des Befehls selbst. Beispiel: Steht `BNE` auf `$05FD`, folgt der nächste Befehl auf `$05FF`; ein Sprung nach `$0600` ist dann ein Seitenwechsel (4 Takte), ein Sprung nach `$05F0` nicht (3 Takte).
+
+**Immer gleich lang** sind dagegen alle schreibenden Befehle (`STA`, `STX`, `STY`) und alle Befehle, die einen Wert im Speicher verändern (`ASL`, `LSR`, `ROL`, `ROR`, `INC`, `DEC`): Sie rechnen den vollen Weg immer durch, auch bei `abs,X`. Ebenso der Dezimalmodus (`D`): Er kostet beim hier nachgebildeten NMOS-6502 keinen zusätzlichen Takt (erst der 65C02 braucht einen).
+
+Zum Ausprobieren: Das Feld „Takte“ bei den Registern zählt mit und zeigt den Unterschied nach einem Einzelschritt.
 
 ## Herkunft
 

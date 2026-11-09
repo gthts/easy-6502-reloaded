@@ -209,4 +209,7 @@ export const de = {
   'flow.pc': 'Zum PC',
   'flow.pcTip': 'Wieder die aktive Instruktion zeigen',
   'flow.listLabel': 'Ablauf: Mausrad oder Pfeiltasten zum Blättern',
+  'ref.varRead': '**Taktzahl:** Ein „+“ bedeutet: +1 Takt, wenn die Adresse beim Addieren von `X`/`Y` auf eine andere Seite (anderes höherwertiges Byte) fällt, zum Beispiel `$03F0` + `$20` = `$0410`. Bleibt sie auf derselben Seite, gilt die kleinere Zahl.',
+  'ref.varBranch': '**Taktzahl:** 2 Takte, wenn nicht gesprungen wird; 3, wenn gesprungen wird und das Ziel auf derselben Seite wie der folgende Befehl liegt; 4, wenn das Ziel auf einer anderen Seite liegt.',
+  'ref.fixedCycles': '**Taktzahl:** immer gleich, auch bei Seitenüberschreitung.',
 };

@@ -2,7 +2,7 @@
 // Sprungmarken oben im Kopf; von überall kann `show('LDA')` den Befehl öffnen.
 import { parseMarkdown, parseInline } from './markdown.js';
 import { createRenderer } from './render.js';
-import { OPCODES, BY_MNEMONIC } from '../core/opcodes.js';
+import { OPCODES, BY_MNEMONIC, BRANCHES } from '../core/opcodes.js';
 import { CATEGORIES, META, MODE_INFO, MODE_ORDER, FLAG_ORDER, chapterFor, flagEffects } from '../reference/data.js';
 import { t, getLocale, availableLocales } from '../i18n/index.js';
 
@@ -205,6 +205,16 @@ export function createReference({ ui, reveal, onChapter, chapterTitle, onSend, o
     }
     wrap.append(tbl);
     detail.append(wrap);
+    // Wann welche Taktzahl gilt (nur wo sie schwankt oder Missverständnisse nahe liegen)
+    const infos = Object.values(modes).map((op) => OPCODES[op]);
+    const cyNote = BRANCHES.has(mn) ? 'ref.varBranch'
+      : infos.some((i) => i.pageCross) ? 'ref.varRead'
+      : infos.some((i) => ['abx', 'aby', 'izy'].includes(i.mode)) ? 'ref.fixedCycles' : null;
+    if (cyNote) {
+      const np = el('p', 'small');
+      inline(np, t(cyNote));
+      detail.append(np);
+    }
 
     // Kurzes Beispiel, mit „An Emulator senden“
     if (text.example) {
